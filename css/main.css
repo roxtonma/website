@@ -1,0 +1,641 @@
+/* ==========================================================================
+   main.css  — Revised with Dark Mode Integration
+   ========================================================================== */
+
+/* ───────────────────────────────────────────────────────────────────────────
+   1. BASE RESET + BOX-SIZING
+   ─────────────────────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Segoe UI', Verdana, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   2. CSS VARIABLES (Light / Dark)
+   ─────────────────────────────────────────────────────────────────────────── */
+:root {
+  /* Light-mode variables */
+  --color-bg: #f4f6f8;
+  --color-text: #2c3e50;
+
+  --color-header-bg: #2c3e50;
+  --color-header-text: #ecf0f1;
+
+  --color-btn-primary: #1abc9c;
+  --color-btn-primary-hover: #17a589;
+
+  --color-btn-secondary: #3498db;
+  --color-btn-secondary-hover: #21618c;
+
+  --color-section-intro-bg: #34495e;
+  --color-section-intro-text: #ecf0f1;
+
+  --color-project-card-bg: #ffffff;
+  --color-project-card-shadow: rgba(44, 62, 80, 0.1);
+
+  --color-form-border: #bdc3c7;
+  --color-form-status-success: #1abc9c;
+  --color-form-status-error: #e74c3c;
+
+  --color-footer-bg: #2c3e50;
+  --color-footer-text: #ecf0f1;
+
+  --color-scroll-btn-bg: #1abc9c;
+}
+
+[data-theme="dark"] {
+  /* Dark-mode overrides */
+  --color-bg: #1e1f21;
+  --color-text: #e0e0e0;
+
+  --color-header-bg: #121212;
+  --color-header-text: #e0e0e0;
+
+  --color-btn-primary: #2ecc71;
+  --color-btn-primary-hover: #27ae60;
+
+  --color-btn-secondary: #9b59b6;
+  --color-btn-secondary-hover: #8e44ad;
+
+  --color-section-intro-bg: #2c3e50;
+  --color-section-intro-text: #ecf0f1;
+
+  --color-project-card-bg: #2a2b2e;
+  --color-project-card-shadow: rgba(0, 0, 0, 0.4);
+
+  --color-form-border: #3e3f43;
+  --color-form-status-success: #2ecc71;
+  --color-form-status-error: #e74c3c;
+
+  --color-footer-bg: #121212;
+  --color-footer-text: #e0e0e0;
+
+  --color-scroll-btn-bg: #2ecc71;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   3. UTILITY CLASSES
+   ─────────────────────────────────────────────────────────────────────────── */
+.hidden {
+  display: none !important;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.btn {
+  display: inline-block;
+  text-decoration: none;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   4. DARK MODE TOGGLE BUTTON (in header)
+   ─────────────────────────────────────────────────────────────────────────── */
+#dark-mode-toggle {
+  background: none;
+  border: none;
+  color: var(--color-header-text);
+  font-size: 1.25rem;
+  margin-left: 1rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: transform 0.2s ease;
+}
+
+#dark-mode-toggle:hover {
+  transform: rotate(20deg);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   5. HEADER & NAVIGATION
+   ─────────────────────────────────────────────────────────────────────────── */
+#site-header {
+  background-color: var(--color-header-bg);
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+#site-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-header-text);
+  text-decoration: none;
+}
+
+#nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+  flex: 1;
+  transition: transform 0.3s ease;
+}
+
+/* Add left margin just to the “Home” item */
+#nav-links .nav-item:first-child {
+  margin-left: 1.5rem;
+}
+
+.nav-item .nav-link {
+  color: var(--color-header-text);
+  font-size: 1rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.nav-item .nav-link:hover {
+  color: var(--color-btn-primary);
+}
+
+#mobile-menu-toggle {
+  background: none;
+  border: none;
+  color: var(--color-header-text);
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  #nav-links {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--color-header-bg);
+    flex-direction: column;
+    width: 200px;
+    transform: translateX(100%);
+  }
+
+  #nav-links.nav-open {
+    transform: translateX(0);
+  }
+
+  #mobile-menu-toggle {
+    display: inline-flex;
+  }
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   6. SECTION: INTRODUCTION
+   ─────────────────────────────────────────────────────────────────────────── */
+.section-intro {
+  background-color: var(--color-section-intro-bg);
+  color: var(--color-section-intro-text);
+  padding: 8rem 2rem;
+  text-align: center;
+}
+
+.intro-title {
+  font-size: 2.75rem;
+  margin-bottom: 1rem;
+}
+
+.intro-subtitle {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.intro-buttons .btn-primary {
+  background-color: var(--color-btn-primary);
+  color: #ffffff;
+  padding: 0.75rem 1.5rem;
+}
+
+.intro-buttons .btn-primary:hover {
+  background-color: var(--color-btn-primary-hover);
+}
+
+.intro-buttons .btn-secondary {
+  background-color: var(--color-btn-secondary);
+  color: #ffffff;
+  padding: 0.75rem 1.5rem;
+}
+
+.intro-buttons .btn-secondary:hover {
+  background-color: var(--color-btn-secondary-hover);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   7. SECTION: ABOUT
+   ─────────────────────────────────────────────────────────────────────────── */
+.section-about {
+  background-color: var(--color-bg);
+  padding: 6rem 2rem;
+}
+
+.section-about .section-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: var(--color-text);
+}
+
+.about-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-photo-container {
+  flex: 1 1 250px;
+  text-align: center;
+}
+
+.about-photo {
+  max-width: 200px;
+  border-radius: 50%;
+}
+
+.about-text-container {
+  flex: 2 1 400px;
+}
+
+.about-paragraph {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: var(--color-text);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   8. SECTION: PROJECTS
+   ─────────────────────────────────────────────────────────────────────────── */
+.section-projects {
+  background-color: var(--color-bg);
+  padding: 6rem 2rem;
+}
+
+.section-projects .section-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: var(--color-text);
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.project-card {
+  background-color: var(--color-project-card-bg);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px var(--color-project-card-shadow);
+  transition: transform 0.2s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+}
+
+.project-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.project-thumbnail-container {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+}
+
+.project-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.project-info {
+  padding: 1rem;
+}
+
+.project-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
+}
+
+.project-description {
+  font-size: 0.95rem;
+  color: #7f8c8d; /* remains neutral in both themes */
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   9. SECTION: BLOG
+   ─────────────────────────────────────────────────────────────────────────── */
+.section-blog {
+  background-color: var(--color-bg);
+  padding: 6rem 2rem;
+}
+
+.section-blog .section-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: var(--color-text);
+}
+
+.blogs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 800px;
+  margin: 0 auto 2rem auto;
+}
+
+.blog-post-card {
+  padding: 1.5rem;
+  border-left: 4px solid var(--color-btn-primary);
+  background-color: var(--color-project-card-bg);
+  box-shadow: 0 1px 4px rgba(44, 62, 80, 0.05);
+}
+
+.blog-post-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.blog-post-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
+}
+
+.blog-post-excerpt {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #7f8c8d;
+}
+
+.blog-post-date {
+  font-size: 0.875rem;
+  color: #95a5a6;
+}
+
+.blog-cta {
+  text-align: center;
+  margin-top: 2rem; /* ensure it’s spaced below the post list */
+}
+
+.blog-cta .btn-secondary {
+  background-color: var(--color-btn-secondary);
+  color: #ffffff;
+  padding: 0.75rem 1.5rem;
+}
+
+.blog-cta .btn-secondary:hover {
+  background-color: var(--color-btn-secondary-hover);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   10. SECTION: CONTACT
+   ─────────────────────────────────────────────────────────────────────────── */
+.section-contact {
+  background-color: var(--color-bg);
+  padding: 6rem 2rem;
+}
+
+.section-contact .section-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: var(--color-text);
+}
+
+.contact-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.contact-info {
+  flex: 1 1 300px;
+}
+
+.contact-info-title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-text);
+}
+
+.contact-info-text {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: var(--color-text);
+}
+
+.contact-email {
+  color: var(--color-btn-primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.social-icon {
+  width: 24px;
+  height: 24px;
+  filter: invert(16%) sepia(76%) saturate(507%) hue-rotate(152deg) brightness(92%) contrast(87%);
+  /* Adjust filter or replace with direct-colored SVG for dark mode if needed */
+}
+
+.contact-form {
+  flex: 2 1 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  color: var(--color-text);
+}
+
+.form-input,
+.form-textarea {
+  padding: 0.75rem;
+  border: 1px solid var(--color-form-border);
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--color-btn-primary);
+}
+
+.form-submit-btn {
+  align-self: flex-start;
+  background-color: var(--color-btn-primary);
+  color: #ffffff;
+  padding: 0.75rem 1.5rem;
+}
+
+.form-submit-btn:hover {
+  background-color: var(--color-btn-primary-hover);
+}
+
+/* Status message under form */
+.form-status {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+
+/* Success uses --color-form-status-success; error uses --color-form-status-error */
+/* Example in JS: statusEl.style.color = varOrValue('--color-form-status-success'); */
+
+/* ───────────────────────────────────────────────────────────────────────────
+   11. FOOTER
+   ─────────────────────────────────────────────────────────────────────────── */
+.footer-container {
+  background-color: var(--color-footer-bg);
+  color: var(--color-footer-text);
+  text-align: center;
+  padding: 2rem;
+}
+
+.footer-text {
+  font-size: 0.9rem;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   12. SCROLL-TO-TOP BUTTON
+   ─────────────────────────────────────────────────────────────────────────── */
+.scroll-btn {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--color-scroll-btn-bg);
+  color: #ffffff;
+  font-size: 1.25rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  cursor: pointer;
+  z-index: 200;
+}
+
+.scroll-btn.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   13. MEDIA QUERIES
+   ─────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 992px) {
+  .about-content,
+  .contact-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .contact-form,
+  .about-text-container {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .intro-title {
+    font-size: 2rem;
+  }
+
+  .intro-subtitle {
+    font-size: 1rem;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   ICON COLOR (black in light mode, white in dark mode)
+   ─────────────────────────────────────────────────────────────────────────── */
+/* 1. Define --color-icon in light mode */
+:root {
+  --color-icon: #000000;
+}
+
+/* 2. Override --color-icon when theme="dark" */
+[data-theme="dark"] {
+  --color-icon: #ffffff;
+}
+
+/* 3. Apply var(--color-icon) to all Bootstrap Icon <i> elements you use */
+#dark-mode-toggle i,
+.social-link i,
+#scrollToTopBtn i {
+  color: var(--color-icon);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   In Dark Mode: Make “Get in Touch” a darker blue with same hover transition
+   ─────────────────────────────────────────────────────────────────────────── */
+[data-theme="dark"] .intro-buttons .btn-secondary {
+  background-color: #2c90d3;      /* darker blue under dark mode */
+  color: #ffffff;                 /* keep text white */
+  transition: background-color 0.3s ease; /* preserve existing animation */
+}
+
+[data-theme="dark"] .intro-buttons .btn-secondary:hover {
+  background-color: #1a5a83;      /* even darker on hover */
+}

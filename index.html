@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roxton | Website</title>
+
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="css/main.css" />
+
+  <!-- Bootstrap Icons v1.10.5 -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+  />
+
+  <!-- Favicon (optional) -->
+  <link rel="icon" href="assets/icons/favicon.ico" />
+</head>
+<body>
+  <!-- =======================
+       SITE HEADER + NAVIGATION
+  =========================== -->
+  <header id="site-header">
+    <nav id="site-nav" class="nav-container">
+      <div id="logo-container">
+        <a href="#" id="site-logo">Roxton</a>
+      </div>
+
+      <ul id="nav-links" class="nav-list">
+        <li class="nav-item"><a class="nav-link" href="#section-intro">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#section-about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#section-projects">Projects</a></li>
+        <li class="nav-item"><a class="nav-link" href="#section-blog">Blog</a></li>
+        <li class="nav-item"><a class="nav-link" href="#section-contact">Contact</a></li>
+      </ul>
+
+      <!-- Dark mode toggle button using Bootstrap Icons -->
+      <button
+        id="dark-mode-toggle"
+        class="btn-dark-toggle"
+        aria-label="Toggle Dark Mode"
+      >
+        <i class="bi bi-moon"></i>
+      </button>
+
+      <!-- Mobile nav toggle (unchanged) -->
+      <button
+        id="mobile-menu-toggle"
+        class="nav-toggle"
+        aria-label="Toggle navigation"
+      >
+        ☰
+      </button>
+    </nav>
+  </header>
+
+  <!-- =======================
+       MAIN CONTENT
+  =========================== -->
+  <main id="site-main">
+    <!-- -----------------------
+         INTRODUCTION SECTION
+    --------------------------- -->
+    <section id="section-intro" class="section section-intro">
+      <div class="intro-content">
+        <h1 class="intro-title">Hi, I’m Roxton</h1>
+        <p class="intro-subtitle">
+          AI / ML | Software Enthusiast | Programmer
+        </p>
+        <div class="intro-buttons">
+          <a class="btn btn-primary" href="#section-projects">My Projects</a>
+          <a class="btn btn-secondary" href="#section-contact">Get in Touch</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------
+         ABOUT SECTION
+    --------------------------- -->
+    <section id="section-about" class="section section-about">
+      <h2 class="section-title">About Me</h2>
+      <div class="about-content">
+        <figure class="about-photo-container">
+          <img
+            src="assets/images/your-photo.jpg"
+            alt="Profile image"
+            class="about-photo"
+          />
+        </figure>
+        <div class="about-text-container">
+          <p class="about-paragraph">
+            I’m a software developer specializing in building (and occasionally designing) workflows to improve productivity so you can spend more time doing the things you love more. Currently, I’m focused on testing the latest AI/ML models for analysis, content generation and more.
+          </p>
+          <p class="about-paragraph">
+            Outside of coding, I write blog posts about modern AI techniques and workflows and follow the latest development in AI/ML.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------
+         PROJECTS SECTION
+    --------------------------- -->
+    <section id="section-projects" class="section section-projects">
+      <h2 class="section-title">Projects</h2>
+      <div id="projects-grid" class="projects-grid">
+        <!-- Example project card (copy/paste and modify to add more) -->
+        <article class="project-card">
+          <a
+            href="https://github.com/username/project-1"
+            class="project-link"
+            target="_blank"
+            rel="noopener"
+          >
+            <figure class="project-thumbnail-container">
+              <img
+                src="assets/images/project-1-thumbnail.png"
+                alt="Project 1 Thumbnail"
+                class="project-thumbnail"
+              />
+            </figure>
+            <div class="project-info">
+              <h3 class="project-title">Project One</h3>
+              <p class="project-description">
+                A brief summary of what this project is about and which technologies are used.
+              </p>
+            </div>
+          </a>
+        </article>
+        <!-- Add more <article class="project-card">…</article> as needed -->
+      </div>
+    </section>
+
+    <!-- -----------------------
+         BLOG SECTION
+    --------------------------- -->
+    <section id="section-blog" class="section section-blog">
+      <h2 class="section-title">Blog</h2>
+      <div id="blogs-list" class="blogs-list">
+        <!-- Example blog post preview (copy/paste to add more) -->
+        <article class="blog-post-card">
+          <a href="blog/post-1.html" class="blog-post-link">
+            <h3 class="blog-post-title">Understanding CSS Grid Layout</h3>
+            <p class="blog-post-excerpt">
+              A short excerpt or teaser from your blog post—keep it engaging!
+            </p>
+            <time class="blog-post-date" datetime="2025-05-15">May 15, 2025</time>
+          </a>
+        </article>
+        <!-- Add more <article class="blog-post-card">…</article> as needed -->
+      </div>
+      <div class="blog-cta">
+        <a class="btn btn-secondary" href="blog/">Go to All Posts →</a>
+      </div>
+    </section>
+
+    <!-- -----------------------
+         CONTACT SECTION
+    --------------------------- -->
+    <section id="section-contact" class="section section-contact">
+      <h2 class="section-title">Contact Me</h2>
+      <div class="contact-container">
+        <div class="contact-info">
+          <h3 class="contact-info-title">Get in touch</h3>
+          <p class="contact-info-text">
+            Feel free to drop me a line at:
+            <a href="mailto:your.email@example.com" class="contact-email">
+              your.email@example.com
+            </a>
+          </p>
+          <div class="social-links">
+            <!-- GitHub icon -->
+            <a
+              href="https://github.com/roxtonma"
+              class="social-link"
+              target="_blank"
+              rel="noopener"
+              aria-label="GitHub"
+            >
+              <i class="bi bi-github"></i>
+            </a>
+
+            <!-- Twitter icon -->
+            <a
+              href="https://x.com/roxtonma"
+              class="social-link"
+              target="_blank"
+              rel="noopener"
+              aria-label="Twitter"
+            >
+              <i class="bi bi-twitter"></i>
+            </a>
+
+            <!-- LinkedIn icon -->
+            <a
+              href="https://www.linkedin.com/in/roxtonma/"
+              class="social-link"
+              target="_blank"
+              rel="noopener"
+              aria-label="LinkedIn"
+            >
+              <i class="bi bi-linkedin"></i>
+            </a>
+
+            <!-- Add more social links as needed (e.g., <i class="bi bi-envelope"></i> for email) -->
+          </div>
+        </div>
+
+        <!-- Contact form remains the same -->
+        <form
+          id="contact-form"
+          class="contact-form"
+          method="POST"
+          action="https://example.com/api/contact"
+        >
+          <label for="input-name" class="form-label">Name</label>
+          <input
+            type="text"
+            id="input-name"
+            class="form-input"
+            name="name"
+            placeholder="Your Name"
+            required
+          />
+
+          <label for="input-email" class="form-label">Email</label>
+          <input
+            type="email"
+            id="input-email"
+            class="form-input"
+            name="email"
+            placeholder="you@example.com"
+            required
+          />
+
+          <label for="input-message" class="form-label">Message</label>
+          <textarea
+            id="input-message"
+            class="form-textarea"
+            name="message"
+            rows="5"
+            placeholder="How can I help you?"
+            required
+          ></textarea>
+
+          <button type="submit" class="btn btn-primary form-submit-btn">
+            Send Message
+          </button>
+
+          <!-- Status message injected by JS -->
+          <p id="form-status-message" class="form-status hidden"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- =======================
+       SITE FOOTER
+  =========================== -->
+  <footer id="site-footer" class="footer-container">
+    <p class="footer-text">
+      © 2025 Your Name. All rights reserved.
+    </p>
+  </footer>
+
+  <!-- Scroll-to-top button -->
+  <button id="scrollToTopBtn" class="scroll-btn" aria-label="Scroll to Top">
+    <i class="bi bi-arrow-up"></i>
+  </button>
+
+  <!-- Main JavaScript -->
+  <script src="js/main.js"></script>
+</body>
+</html>
