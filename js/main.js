@@ -16,21 +16,48 @@
    MODULE: MOBILE NAVIGATION TOGGLE
    ========================================================================== */
 /**
- * Toggles the mobile navigation menu by adding/removing the 'nav-open' class.
+ * Toggles the mobile navigation menu and handles body scroll lock
  */
 function toggleMobileNav() {
   const navLinks = document.getElementById('nav-links');
+  const body = document.body;
+  
   navLinks.classList.toggle('nav-open');
+  body.classList.toggle('menu-open');
 }
 
 /**
  * Binds the click event to the mobile menu toggle button (#mobile-menu-toggle).
  */
 function bindMobileNavToggle() {
-  const mobileToggleBtn = document.getElementById('mobile-menu-toggle');
-  if (mobileToggleBtn) {
-    mobileToggleBtn.addEventListener('click', toggleMobileNav);
+  const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+  if (mobileMenuToggle) {
+    mobileMenuToggle.addEventListener('click', toggleMobileNav);
   }
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (event) => {
+    const navLinks = document.getElementById('nav-links');
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    
+    if (navLinks.classList.contains('nav-open') && 
+        !navLinks.contains(event.target) && 
+        !mobileMenuToggle.contains(event.target)) {
+      toggleMobileNav();
+    }
+  });
+
+  // Set header height CSS variable
+  function updateHeaderHeight() {
+    const header = document.getElementById('site-header');
+    if (header) {
+      document.documentElement.style.setProperty('--header-height', `${header.offsetHeight}px`);
+    }
+  }
+
+  // Update on load and resize
+  updateHeaderHeight();
+  window.addEventListener('resize', updateHeaderHeight);
 }
 
 /* ==========================================================================
@@ -72,16 +99,18 @@ function toggleDarkMode() {
 }
 
 /**
- * Updates the inner text of #dark-mode-toggle based on the current theme.
- * - If theme === 'dark', button shows ☀️ (sun)
- * - If theme === 'light', button shows 🌙 (moon)
+ * Updates the inner HTML of #dark-mode-toggle based on the current theme.
+ * - If theme === 'dark', button shows sun icon
+ * - If theme === 'light', button shows moon emoji
  *
  * @param {string} theme  'light' or 'dark'
  */
 function updateDarkToggleIcon(theme) {
   const toggleBtn = document.getElementById('dark-mode-toggle');
   if (!toggleBtn) return;
-  toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  toggleBtn.innerHTML = theme === 'dark'
+    ? '<i class="bi bi-sun" style="color: white;"></i>'
+    : '<i class="bi bi-moon" style="color: white;"></i>';
 }
 
 /**
@@ -155,42 +184,116 @@ function bindNavLinkSmoothScroll() {
 /* ==========================================================================
    MODULE: CONTACT FORM HANDLING (real backend)
    ========================================================================== */
+
+const FORM_CONFIG = {
+  minNameLength: 2,
+  maxNameLength: 50,
+  minMessageLength: 10,
+  maxMessageLength: 1000,
+  emailRegex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+};
+
+/**
+ * Validates a single form field in real-time
+ * @param {HTMLElement} input - The input element to validate
+ * @returns {boolean} - Whether the field is valid
+ */
+function validateField(input) {
+  const value = input.value.trim();
+  const fieldName = input.name;
+  let isValid = true;
+  let message = '';
+
+  switch (fieldName) {
+    case 'name':
+      if (value.length < FORM_CONFIG.minNameLength) {
+        isValid = false;
+        message = `Name must be at least ${FORM_CONFIG.minNameLength} characters`;
+      } else if (value.length > FORM_CONFIG.maxNameLength) {
+        isValid = false;
+        message = `Name must be less than ${FORM_CONFIG.maxNameLength} characters`;
+      }
+      break;
+
+    case 'email':
+      if (!FORM_CONFIG.emailRegex.test(value)) {
+        isValid = false;
+        message = 'Please enter a valid email address';
+      }
+      break;
+
+    case 'message':
+      if (value.length < FORM_CONFIG.minMessageLength) {
+        isValid = false;
+        message = `Message must be at least ${FORM_CONFIG.minMessageLength} characters`;
+      } else if (value.length > FORM_CONFIG.maxMessageLength) {
+        isValid = false;
+        message = `Message must be less than ${FORM_CONFIG.maxMessageLength} characters`;
+      }
+      break;
+  }
+
+  // Update validation UI
+  const validationMessage = input.nextElementSibling;
+  if (validationMessage && validationMessage.classList.contains('validation-message')) {
+    validationMessage.textContent = message;
+    validationMessage.classList.toggle('error', !isValid);
+    validationMessage.setAttribute('aria-hidden', isValid);
+  }
+
+  // Update input styling
+  input.classList.toggle('invalid', !isValid);
+  input.setAttribute('aria-invalid', !isValid);
+
+  return isValid;
+}
+
 /**
  * Handles submission of the contact form (#contact-form).
- * - Prevents default POST
- * - Shows "Sending…" status
- * - Sends JSON via fetch() to form action URL
- * - Displays success or error in #form-status-message
- *
+ * Includes validation, loading state, and error handling.
  * @param {Event} event
  */
 async function handleContactFormSubmission(event) {
   event.preventDefault();
 
-  const nameValue = document.getElementById('input-name').value.trim();
-  const emailValue = document.getElementById('input-email').value.trim();
-  const messageValue = document.getElementById('input-message').value.trim();
+  const form = event.target;
+  const submitBtn = form.querySelector('.form-submit-btn');
   const statusEl = document.getElementById('form-status-message');
   if (!statusEl) return;
 
-  // Basic validation
-  if (!nameValue || !emailValue || !messageValue) {
-    statusEl.textContent = 'Please fill in all fields.';
+  // Get form fields
+  const nameInput = document.getElementById('input-name');
+  const emailInput = document.getElementById('input-email');
+  const messageInput = document.getElementById('input-message');
+
+  // Validate all fields
+  const isNameValid = validateField(nameInput);
+  const isEmailValid = validateField(emailInput);
+  const isMessageValid = validateField(messageInput);
+
+  if (!isNameValid || !isEmailValid || !isMessageValid) {
+    statusEl.textContent = 'Please fix the errors in the form';
     statusEl.classList.remove('hidden');
-    statusEl.style.color = 'red';
+    statusEl.style.color = varOrValue('--color-form-status-error', '#e74c3c');
     return;
   }
 
-  // Show pending status
-  statusEl.textContent = 'Sending…';
+  // Show loading state
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<i class="bi bi-arrow-repeat spinning"></i> Sending...';
+  statusEl.textContent = 'Sending...';
   statusEl.classList.remove('hidden');
   statusEl.style.color = varOrValue('--color-text', '#2c3e50');
 
   // Prepare payload
-  const payload = { name: nameValue, email: emailValue, message: messageValue };
+  const payload = {
+    name: nameInput.value.trim(),
+    email: emailInput.value.trim(),
+    message: messageInput.value.trim()
+  };
 
   try {
-    const response = await fetch(event.target.action, {
+    const response = await fetch(form.action, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -206,26 +309,54 @@ async function handleContactFormSubmission(event) {
 
     if (result.success) {
       statusEl.textContent = result.message || 'Message sent successfully!';
-      statusEl.style.color = varOrValue('--color-btn-primary', '#1abc9c');
-      event.target.reset();
+      statusEl.style.color = varOrValue('--color-form-status-success', '#2ecc71');
+      form.reset();
+
+      // Reset validation UI
+      form.querySelectorAll('.form-input, .form-textarea').forEach(input => {
+        input.classList.remove('invalid');
+        input.setAttribute('aria-invalid', 'false');
+        const validationMessage = input.nextElementSibling;
+        if (validationMessage) {
+          validationMessage.textContent = '';
+          validationMessage.setAttribute('aria-hidden', 'true');
+        }
+      });
     } else {
       throw new Error(result.message || 'Unknown error');
     }
   } catch (error) {
     console.error('Contact form submission error:', error);
-    statusEl.textContent = 'Failed to send message. Please try again later.';
-    statusEl.style.color = 'red';
+    statusEl.textContent = 'Failed to send message. Please try again later or contact me via email.';
+    statusEl.style.color = varOrValue('--color-form-status-error', '#e74c3c');
+  } finally {
+    // Reset button state
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Send Message';
   }
 }
 
 /**
- * Binds the submit event listener to the contact form (#contact-form).
+ * Binds the submit event listener and real-time validation to the contact form.
  */
 function bindContactFormSubmit() {
   const contactForm = document.getElementById('contact-form');
-  if (contactForm) {
-    contactForm.addEventListener('submit', handleContactFormSubmission);
-  }
+  if (!contactForm) return;
+
+  // Add validation messages after each input
+  contactForm.querySelectorAll('.form-input, .form-textarea').forEach(input => {
+    const validationMessage = document.createElement('div');
+    validationMessage.className = 'validation-message';
+    validationMessage.setAttribute('aria-live', 'polite');
+    input.parentNode.insertBefore(validationMessage, input.nextSibling);
+
+    // Add real-time validation
+    input.addEventListener('input', () => validateField(input));
+    input.addEventListener('blur', () => validateField(input));
+  });
+
+  // Handle form submission
+  contactForm.addEventListener('submit', handleContactFormSubmission);
 }
 
 /* ==========================================================================
@@ -245,6 +376,233 @@ function varOrValue(varName, fallback) {
 }
 
 /* ==========================================================================
+   MODULE: CAROUSEL FUNCTIONALITY
+   ========================================================================== */
+const initCarousel = () => {
+  const carousel = document.querySelector('.about-carousel');
+  if (!carousel) return;
+
+  const slides = carousel.querySelectorAll('.carousel-slide');
+  const indicators = carousel.querySelectorAll('.indicator');
+  const prevBtn = carousel.querySelector('.carousel-btn.prev');
+  const nextBtn = carousel.querySelector('.carousel-btn.next');
+  let currentSlide = 0;
+  let autoAdvance;
+
+  const showSlide = (index) => {
+    // Remove active class from all slides and indicators
+    slides.forEach(slide => slide.classList.remove('active'));
+    indicators.forEach(indicator => indicator.classList.remove('active'));
+
+    // Add active class to current slide and indicator
+    slides[index].classList.add('active');
+    indicators[index].classList.add('active');
+  };
+
+  const nextSlide = () => {
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+  };
+
+  const prevSlide = () => {
+    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+    showSlide(currentSlide);
+  };
+
+  const startAutoAdvance = () => {
+    autoAdvance = setInterval(nextSlide, 8000);
+  };
+
+  const stopAutoAdvance = () => {
+    if (autoAdvance) {
+      clearInterval(autoAdvance);
+    }
+  };
+
+  // Event listeners
+  prevBtn.addEventListener('click', () => {
+    prevSlide();
+    stopAutoAdvance();
+    startAutoAdvance();
+  });
+
+  nextBtn.addEventListener('click', () => {
+    nextSlide();
+    stopAutoAdvance();
+    startAutoAdvance();
+  });
+
+  // Indicator clicks
+  indicators.forEach((indicator, index) => {
+    indicator.addEventListener('click', () => {
+      currentSlide = index;
+      showSlide(currentSlide);
+      stopAutoAdvance();
+      startAutoAdvance();
+    });
+  });
+
+  // Pause auto-advance on hover
+  carousel.addEventListener('mouseenter', stopAutoAdvance);
+  carousel.addEventListener('mouseleave', startAutoAdvance);
+
+  // Initialize first slide and start auto-advance
+  showSlide(0);
+  startAutoAdvance();
+};
+
+/* ==========================================================================
+   MODULE: INTRO BOKEH EFFECT
+   ========================================================================== */
+const initIntroBokehEffect = () => {
+  const introSection = document.getElementById('section-intro');
+  const bokehContainer = introSection.querySelector('.bokeh-container');
+  if (!introSection || !bokehContainer) return;
+
+  // Constants for orbital configuration
+  const ORBITAL_CONFIG = {
+    SPEEDS: [0.05, 0.045, 0.04, 0.035, 0.03, 0.025, 0.02, 0.015], // Mercury to Neptune
+    BASE_RADIUS: 100,
+    RADIUS_STEPS: [0, 40, 70, 100, 160, 220, 280, 340],
+    WOBBLE_SPEED: 0.002,
+    WOBBLE_RANGE: 30,
+    VERTICAL_RANGE: 7.5
+  };
+
+  // Create main bokeh light (sun)
+  const mainLight = document.createElement('div');
+  mainLight.className = 'bokeh-light main';
+  bokehContainer.appendChild(mainLight);
+
+  // Create orbital lights (planets)
+  const createOrbitalLight = (index) => {
+    const light = document.createElement('div');
+    light.className = 'bokeh-light orbital';
+    light.angle = Math.random() * Math.PI * 2;
+    light.speed = ORBITAL_CONFIG.SPEEDS[index];
+    light.radius = ORBITAL_CONFIG.BASE_RADIUS + ORBITAL_CONFIG.RADIUS_STEPS[index] + (Math.random() * 15 - 7.5);
+    light.wobble = Math.random() * Math.PI * 2;
+    light.wobbleSpeed = ORBITAL_CONFIG.WOBBLE_SPEED + Math.random() * ORBITAL_CONFIG.WOBBLE_SPEED;
+    light.verticalOffset = Math.random() * ORBITAL_CONFIG.VERTICAL_RANGE * 2 - ORBITAL_CONFIG.VERTICAL_RANGE;
+    return light;
+  };
+
+  // Add orbital lights (planets)
+  const orbitalLights = Array.from({ length: 8 }, (_, index) => {
+    const light = createOrbitalLight(index);
+    bokehContainer.appendChild(light);
+    return light;
+  });
+
+  // Liquid motion parameters
+  const liquid = {
+    current: { x: 0, y: 0 },
+    target: { x: 0, y: 0 },
+    previous: { x: 0, y: 0 },
+    points: Array(8).fill().map(() => ({ x: 0, y: 0 })),
+    ease: 0.15
+  };
+
+  const lerp = (start, end, t) => start * (1 - t) + end * t;
+
+  const updateLiquidMotion = () => {
+    liquid.previous.x = liquid.current.x;
+    liquid.previous.y = liquid.current.y;
+
+    // Update trail points
+    for (let i = liquid.points.length - 1; i > 0; i--) {
+      const weight = (liquid.points.length - i) / liquid.points.length;
+      liquid.points[i].x = lerp(liquid.points[i].x, liquid.points[i - 1].x, liquid.ease * weight);
+      liquid.points[i].y = lerp(liquid.points[i].y, liquid.points[i - 1].y, liquid.ease * weight);
+    }
+    
+    liquid.points[0].x = lerp(liquid.points[0].x, liquid.target.x, liquid.ease * 1.2);
+    liquid.points[0].y = lerp(liquid.points[0].y, liquid.target.y, liquid.ease * 1.2);
+
+    // Calculate weighted average position
+    let totalWeight = 0;
+    liquid.current.x = 0;
+    liquid.current.y = 0;
+    
+    liquid.points.forEach((point, i) => {
+      const weight = (liquid.points.length - i) / liquid.points.length;
+      totalWeight += weight;
+      liquid.current.x += point.x * weight;
+      liquid.current.y += point.y * weight;
+    });
+    
+    liquid.current.x /= totalWeight;
+    liquid.current.y /= totalWeight;
+
+    // Calculate motion parameters
+    const dx = liquid.current.x - liquid.previous.x;
+    const dy = liquid.current.y - liquid.previous.y;
+    const angle = Math.atan2(dy, dx);
+    const velocity = Math.hypot(dx, dy);
+    const distance = Math.hypot(
+      liquid.target.x - liquid.current.x,
+      liquid.target.y - liquid.current.y
+    );
+
+    // Calculate stretch effect
+    const maxStretch = 1.2;
+    const baseStretch = 1.05;
+    const stretchX = baseStretch + (Math.abs(dx) / 80) * (distance / 800);
+    const stretchY = baseStretch + (Math.abs(dy) / 80) * (distance / 800);
+    
+    // Apply transform with hardware acceleration
+    const transform = `translate3d(${liquid.current.x}px, ${liquid.current.y}px, 0) 
+                      rotate(${angle * (180 / Math.PI)}deg) 
+                      scale(${Math.min(stretchX, maxStretch)}, ${Math.min(stretchY, maxStretch)})`;
+    
+    mainLight.style.transform = transform;
+
+    return liquid.current;
+  };
+
+  const updateLights = () => {
+    const position = updateLiquidMotion();
+
+    // Update orbital lights
+    orbitalLights.forEach((light, index) => {
+      light.angle += light.speed * 0.02;
+      light.wobble += light.wobbleSpeed;
+      
+      const wobbleRadius = light.radius + Math.sin(light.wobble) * ORBITAL_CONFIG.WOBBLE_RANGE;
+      const x = position.x + Math.cos(light.angle) * wobbleRadius * 1.2;
+      const y = position.y + Math.sin(light.angle) * wobbleRadius * 0.8 +
+                Math.sin(light.wobble) * light.verticalOffset;
+      
+      // Use transform instead of left/top for better performance
+      light.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    });
+  };
+
+  // Event listener for mouse movement
+  introSection.addEventListener('mousemove', (e) => {
+    const rect = introSection.getBoundingClientRect();
+    liquid.target.x = e.clientX - rect.left;
+    liquid.target.y = e.clientY - rect.top;
+  });
+
+  // Animation loop
+  let animationFrame;
+  const animate = () => {
+    updateLights();
+    animationFrame = requestAnimationFrame(animate);
+  };
+
+  // Start animation
+  animate();
+
+  // Cleanup function
+  return () => {
+    cancelAnimationFrame(animationFrame);
+    introSection.removeEventListener('mousemove');
+  };
+};
+
+/* ==========================================================================
    MODULE: INITIALIZATION
    ========================================================================== */
 /**
@@ -255,6 +613,8 @@ function initializeAllModules() {
   bindScrollToTopButton();
   bindNavLinkSmoothScroll();
   bindContactFormSubmit();
+  initCarousel();
+  initIntroBokehEffect();
 
   /* Dark Mode must initialize early so CSS picks correct variables */
   applyInitialThemePreference();

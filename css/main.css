@@ -113,20 +113,39 @@ body {
 /* ───────────────────────────────────────────────────────────────────────────
    4. DARK MODE TOGGLE BUTTON (in header)
    ─────────────────────────────────────────────────────────────────────────── */
-#dark-mode-toggle {
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+}
+
+#dark-mode-toggle,
+#mobile-menu-toggle {
   background: none;
   border: none;
   color: var(--color-header-text);
-  font-size: 1.25rem;
-  margin-left: 1rem;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
-  transition: transform 0.2s ease;
+  padding: 0.5rem;
+  opacity: 0.9;
+  transition: all 0.2s ease;
 }
 
+#dark-mode-toggle:hover,
+#mobile-menu-toggle:hover {
+  opacity: 1;
+}
+
+#dark-mode-toggle i,
+#mobile-menu-toggle i {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+/* Keep the rotation effect only for the dark mode toggle */
 #dark-mode-toggle:hover {
   transform: rotate(20deg);
 }
@@ -136,7 +155,7 @@ body {
    ─────────────────────────────────────────────────────────────────────────── */
 #site-header {
   background-color: var(--color-header-bg);
-  padding: 1rem 2rem;
+  padding: 0;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -148,27 +167,283 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
+  gap: 1.5rem;
+  padding: 1rem 2rem;
+  position: relative;
+}
+
+#logo-container {
+  position: relative;
+  overflow: hidden;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  min-width: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #site-logo {
   font-size: 1.5rem;
   font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
   color: var(--color-header-text);
   text-decoration: none;
+  position: relative;
+  z-index: 2;
+  letter-spacing: 0.5px;
+}
+
+/* Ensure bokeh container stays behind the logo */
+#logo-container .bokeh-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  background-color: transparent;
+  overflow: hidden;
+}
+
+/* Light mode - single light effect */
+.bokeh-light {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(26, 188, 156, 0.15) 0%,
+    rgba(52, 152, 219, 0.1) 40%,
+    transparent 70%
+  );
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+/* Dark mode - solar system */
+[data-theme="dark"] .bokeh-container {
+  background-color: #000000;
+}
+
+[data-theme="dark"] .bokeh-light.orbital {
+  display: block;
+}
+
+/* Hide orbital lights in light mode */
+.bokeh-light.orbital {
+  display: none;
+}
+
+/* Light mode main light */
+.bokeh-light.main {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(
+    circle at center,
+    rgba(26, 188, 156, 0.15) 0%,
+    rgba(52, 152, 219, 0.1) 40%,
+    transparent 70%
+  );
+  filter: blur(30px);
+  z-index: 1;
+  will-change: transform;
+  transform-origin: center center;
+  position: absolute;
+  left: -150px;
+  top: -150px;
+}
+
+/* Dark mode main light (sun) */
+[data-theme="dark"] .bokeh-light.main {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 236, 184, 0.25) 20%,
+    rgba(255, 195, 77, 0.2) 40%,
+    rgba(255, 147, 41, 0.15) 70%,
+    transparent 90%
+  );
+  filter: blur(15px);
+  box-shadow: 
+    0 0 40px rgba(255, 236, 184, 0.25),
+    0 0 80px rgba(255, 195, 77, 0.15);
+  left: -100px;
+  top: -100px;
+  mix-blend-mode: screen;
+}
+
+/* Mercury - Closest to sun */
+.bokeh-light.orbital:nth-child(2) {
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(
+    circle at center,
+    rgba(169, 169, 169, 0.4) 0%,    /* Mercury grey */
+    rgba(128, 128, 128, 0.3) 30%,   /* Mercury dark grey */
+    rgba(105, 105, 105, 0.2) 60%,   /* Mercury darker grey */
+    transparent 80%
+  );
+  filter: blur(8px);
+  animation-duration: 3s;
+}
+
+/* Venus */
+.bokeh-light.orbital:nth-child(3) {
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 198, 73, 0.4) 0%,     /* Venus yellow */
+    rgba(255, 183, 77, 0.3) 30%,    /* Venus orange */
+    rgba(255, 160, 0, 0.2) 60%,     /* Venus dark orange */
+    transparent 80%
+  );
+  filter: blur(10px);
+  animation-duration: 4s;
+}
+
+/* Earth */
+.bokeh-light.orbital:nth-child(4) {
+  width: 85px;
+  height: 85px;
+  background: radial-gradient(
+    circle at center,
+    rgba(152, 251, 152, 0.4) 0%,    /* Earth green */
+    rgba(100, 149, 237, 0.3) 30%,   /* Earth blue */
+    rgba(0, 128, 128, 0.2) 60%,     /* Deep sea green */
+    transparent 80%
+  );
+  filter: blur(10px);
+  animation-duration: 5s;
+}
+
+/* Mars */
+.bokeh-light.orbital:nth-child(5) {
+  width: 70px;
+  height: 70px;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 99, 71, 0.4) 0%,      /* Mars red */
+    rgba(205, 92, 92, 0.3) 30%,     /* Mars dark red */
+    rgba(178, 34, 34, 0.2) 60%,     /* Mars deeper red */
+    transparent 80%
+  );
+  filter: blur(9px);
+  animation-duration: 6s;
+}
+
+/* Jupiter */
+.bokeh-light.orbital:nth-child(6) {
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 222, 173, 0.4) 0%,    /* Jupiter beige */
+    rgba(210, 180, 140, 0.3) 30%,   /* Jupiter tan */
+    rgba(184, 134, 11, 0.2) 60%,    /* Jupiter brown */
+    transparent 80%
+  );
+  filter: blur(12px);
+  animation-duration: 7s;
+}
+
+/* Saturn */
+.bokeh-light.orbital:nth-child(7) {
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(
+    circle at center,
+    rgba(238, 232, 205, 0.4) 0%,    /* Saturn pale gold */
+    rgba(218, 165, 32, 0.3) 30%,    /* Saturn gold */
+    rgba(184, 134, 11, 0.2) 60%,    /* Saturn dark gold */
+    transparent 80%
+  );
+  filter: blur(12px);
+  animation-duration: 8s;
+}
+
+/* Uranus */
+.bokeh-light.orbital:nth-child(8) {
+  width: 110px;
+  height: 110px;
+  background: radial-gradient(
+    circle at center,
+    rgba(173, 216, 230, 0.4) 0%,    /* Uranus light blue */
+    rgba(135, 206, 235, 0.3) 30%,   /* Uranus sky blue */
+    rgba(0, 191, 255, 0.2) 60%,     /* Uranus deep blue */
+    transparent 80%
+  );
+  filter: blur(11px);
+  animation-duration: 9s;
+}
+
+/* Neptune */
+.bokeh-light.orbital:nth-child(9) {
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(
+    circle at center,
+    rgba(0, 127, 255, 0.4) 0%,      /* Neptune blue */
+    rgba(25, 25, 112, 0.3) 30%,     /* Neptune dark blue */
+    rgba(0, 0, 128, 0.2) 60%,       /* Neptune deep blue */
+    transparent 80%
+  );
+  filter: blur(11px);
+  animation-duration: 10s;
+}
+
+/* Base orbital styles */
+.bokeh-light.orbital {
+  opacity: 1;
+  mix-blend-mode: screen;
+  z-index: 2;
+}
+
+/* Twinkle animation */
+@keyframes twinkle {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+.bokeh-light.orbital {
+  animation: twinkle 3s infinite ease-in-out;
+}
+
+/* Stagger the animations */
+.bokeh-light.orbital:nth-child(2) { animation-delay: -0.5s; }
+.bokeh-light.orbital:nth-child(3) { animation-delay: -1.0s; }
+.bokeh-light.orbital:nth-child(4) { animation-delay: -1.5s; }
+.bokeh-light.orbital:nth-child(5) { animation-delay: -2.0s; }
+.bokeh-light.orbital:nth-child(6) { animation-delay: -2.5s; }
+.bokeh-light.orbital:nth-child(7) { animation-delay: -3.0s; }
+.bokeh-light.orbital:nth-child(8) { animation-delay: -3.5s; }
+.bokeh-light.orbital:nth-child(9) { animation-delay: -4.0s; }
+
+#logo-container:hover .bokeh-light {
+  opacity: 1;
 }
 
 #nav-links {
   list-style: none;
   display: flex;
-  gap: 1.5rem;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
   flex: 1;
-  transition: transform 0.3s ease;
+  justify-content: center;
 }
 
-/* Add left margin just to the “Home” item */
+/* Remove the left margin from Home item since we're centering the nav */
 #nav-links .nav-item:first-child {
-  margin-left: 1.5rem;
+  margin-left: 0;
 }
 
 .nav-item .nav-link {
@@ -176,10 +451,13 @@ body {
   font-size: 1rem;
   text-decoration: none;
   transition: color 0.2s ease;
+  font-weight: 500;
+  opacity: 0.9;
 }
 
 .nav-item .nav-link:hover {
   color: var(--color-btn-primary);
+  opacity: 1;
 }
 
 #mobile-menu-toggle {
@@ -196,18 +474,58 @@ body {
 }
 
 @media (max-width: 768px) {
+  .nav-container {
+    padding: 0.5rem 1rem;
+  }
+
+  #logo-container {
+    min-width: auto;
+    padding: 0.5rem 0.75rem;
+  }
+
+  #site-logo {
+    font-size: 1.25rem;
+  }
+
   #nav-links {
-    position: absolute;
-    top: 100%;
+    position: fixed;
+    top: var(--header-height, 60px); /* Use CSS variable for header height */
     right: 0;
+    bottom: 0;
     background-color: var(--color-header-bg);
     flex-direction: column;
     width: 200px;
+    padding: 1rem 0;
     transform: translateX(100%);
+    transition: transform 0.3s ease;
+    gap: 0;
+    height: calc(100vh - var(--header-height, 60px));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
   }
 
   #nav-links.nav-open {
     transform: translateX(0);
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Prevent body scroll when menu is open */
+  body.menu-open {
+    overflow: hidden;
+  }
+
+  .nav-item {
+    width: 100%;
+  }
+
+  .nav-item .nav-link {
+    padding: 0.75rem 1.5rem;
+    display: block;
+    width: 100%;
+  }
+
+  .nav-item .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
   }
 
   #mobile-menu-toggle {
@@ -223,6 +541,41 @@ body {
   color: var(--color-section-intro-text);
   padding: 8rem 2rem;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.bokeh-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.intro-content {
+  position: relative;
+  z-index: 2;
+}
+
+.bokeh-light {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(26, 188, 156, 0.15) 0%,
+    rgba(52, 152, 219, 0.1) 40%,
+    transparent 70%
+  );
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+  filter: blur(20px);
+  pointer-events: none;
 }
 
 .intro-title {
@@ -286,6 +639,9 @@ body {
 .about-photo {
   max-width: 200px;
   border-radius: 50%;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
 }
 
 .about-text-container {
@@ -296,6 +652,147 @@ body {
   margin-bottom: 1rem;
   font-size: 1rem;
   color: var(--color-text);
+}
+
+/* About Section Carousel Styles */
+.about-carousel {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow: hidden;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.carousel-container {
+  position: relative;
+  width: 100%;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  text-align: center;
+}
+
+.carousel-slide.active {
+  opacity: 1;
+  visibility: visible;
+  position: relative;
+}
+
+.about-photo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.about-text-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .about-carousel {
+    min-height: 300px;
+  }
+
+  .carousel-container {
+    min-height: 300px;
+  }
+
+  .carousel-slide {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 4rem;
+    padding: 0 2rem;
+  }
+
+  .about-photo-container {
+    flex: 0 0 45%;
+    max-width: 45%;
+  }
+
+  .about-text-container {
+    flex: 0 0 50%;
+    max-width: 50%;
+    text-align: left;
+    align-items: flex-start;
+  }
+}
+
+/* Ensure images maintain aspect ratio */
+.about-photo {
+  max-width: 200px;
+  border-radius: 50%;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.carousel-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.carousel-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-color);
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.carousel-btn:hover {
+  color: var(--primary-color);
+}
+
+.carousel-indicators {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--text-color);
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.3s ease;
+}
+
+.indicator.active {
+  background-color: var(--text-color);
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
@@ -393,6 +890,12 @@ body {
   border-left: 4px solid var(--color-btn-primary);
   background-color: var(--color-project-card-bg);
   box-shadow: 0 1px 4px rgba(44, 62, 80, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.blog-post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(44, 62, 80, 0.1);
 }
 
 .blog-post-link {
@@ -419,7 +922,7 @@ body {
 
 .blog-cta {
   text-align: center;
-  margin-top: 2rem; /* ensure it’s spaced below the post list */
+  margin-top: 2rem; /* ensure it's spaced below the post list */
 }
 
 .blog-cta .btn-secondary {
@@ -628,7 +1131,7 @@ body {
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   In Dark Mode: Make “Get in Touch” a darker blue with same hover transition
+   In Dark Mode: Make "Get in Touch" a darker blue with same hover transition
    ─────────────────────────────────────────────────────────────────────────── */
 [data-theme="dark"] .intro-buttons .btn-secondary {
   background-color: #2c90d3;      /* darker blue under dark mode */
@@ -638,4 +1141,91 @@ body {
 
 [data-theme="dark"] .intro-buttons .btn-secondary:hover {
   background-color: #1a5a83;      /* even darker on hover */
+}
+
+[data-theme="dark"] .blog-cta .btn-secondary {
+  background-color: #2c90d3;      /* darker blue under dark mode */
+  color: #ffffff;                 /* keep text white */
+  transition: background-color 0.3s ease; /* preserve existing animation */
+}
+
+[data-theme="dark"] .blog-cta .btn-secondary:hover {
+  background-color: #1a5a83;      /* even darker on hover */
+}
+
+/* Form validation and loading states */
+.form-input.invalid,
+.form-textarea.invalid {
+  border-color: var(--color-form-status-error);
+  background-color: rgba(231, 76, 60, 0.05);
+}
+
+.validation-message {
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  min-height: 1rem;
+  color: var(--color-form-status-error);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.validation-message.error {
+  opacity: 1;
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+/* Form focus states */
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--color-btn-primary);
+  box-shadow: 0 0 0 2px rgba(26, 188, 156, 0.2);
+}
+
+[data-theme="dark"] .form-input:focus,
+[data-theme="dark"] .form-textarea:focus {
+  box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.2);
+}
+
+/* Disabled state for submit button */
+.form-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Form field character count */
+.form-input,
+.form-textarea {
+  position: relative;
+}
+
+.char-count {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--color-text);
+  opacity: 0.7;
+}
+
+/* Improve form field spacing */
+.contact-form {
+  gap: 1.25rem;
+}
+
+.form-group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
