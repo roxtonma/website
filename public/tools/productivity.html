@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Productivity Tools | Roxton</title>
+
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="../css/main.css" />
+
+  <!-- Bootstrap Icons v1.10.5 -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+  />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+
+  <!-- Favicon (optional) -->
+  <link rel="icon" href="../assets/icons/favicon.ico" />
+  
+  <!-- The styles are now in the external CSS file -->
+  <!-- CSS is now in /css/components/productivity-tools.css -->
+</head>
+<body>
+  <!-- =======================
+       SITE HEADER + NAVIGATION
+  =========================== -->
+  <header id="site-header">
+    <nav id="site-nav" class="nav-container">
+      <div id="logo-container">
+        <a href="../index.html" id="site-logo">ROXTON</a>
+        <div class="bokeh-container"></div>
+      </div>
+
+      <ul id="nav-links" class="nav-list">
+        <li class="nav-item"><a class="nav-link" href="../index.html#section-intro">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="../index.html#section-about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="../index.html#section-projects">Projects</a></li>
+        <li class="nav-item"><a class="nav-link" href="../index.html#section-blog">Blog</a></li>
+        <li class="nav-item"><a class="nav-link" href="../index.html#section-contact">Contact</a></li>
+        <li class="nav-item dropdown">
+          <button class="nav-link dropdown-toggle" aria-expanded="false">
+            Tools <i class="bi bi-chevron-down"></i>
+          </button>
+          <ul class="dropdown-menu" aria-label="Tools submenu">
+            <li><a class="dropdown-item" href="ai-playground.html">AI Playground</a></li>
+            <li><a class="dropdown-item" href="code-analyzer.html">Code Analyzer</a></li>
+            <li><a class="dropdown-item" href="data-visualizer.html">Data Visualizer</a></li>
+            <li><a class="dropdown-item" href="ml-models.html">ML Models</a></li>
+            <li><a class="dropdown-item" href="productivity.html">Productivity Tools</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <div class="nav-controls">
+        <!-- Dark mode toggle button using Bootstrap Icons -->
+        <button
+          id="dark-mode-toggle"
+          class="btn-dark-toggle"
+          aria-label="Toggle Dark Mode"
+        >
+          <i class="bi bi-moon"></i>
+        </button>
+
+        <!-- Mobile nav toggle -->
+        <button
+          id="mobile-menu-toggle"
+          class="nav-toggle"
+          aria-label="Toggle navigation"
+        >
+          <i class="bi bi-list"></i>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- =======================
+       MAIN CONTENT
+  =========================== -->
+  <main id="site-main">
+    <!-- -----------------------
+         TOOL SECTION
+    --------------------------- -->
+    <section class="section tool-section">
+      <h1 class="section-title">Productivity Tools</h1>
+      
+      <div class="tool-description">
+        <p>
+          A collection of handy tools to boost your productivity. All tools work in your browser - no data is sent to any server.
+        </p>
+      </div>
+      
+      <div class="productivity-tools">
+        <!-- QR Code Generator -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <i class="bi bi-qr-code tool-icon"></i>
+            <h3 class="tool-title">QR Code Generator</h3>
+          </div>
+          <div class="tool-content">
+            <p class="tool-description">
+              Create QR codes for URLs, text, contact information, or Wi-Fi credentials.
+            </p>
+            <div class="tool-action">
+              <button class="tool-btn" id="open-qr-generator">
+                <i class="bi bi-arrow-right-circle"></i> Open Tool
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Image Resizer -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <i class="bi bi-image tool-icon"></i>
+            <h3 class="tool-title">Image Resizer</h3>
+          </div>
+          <div class="tool-content">
+            <p class="tool-description">
+              Resize images quickly without losing quality. Supports JPG, PNG, and SVG formats.
+            </p>
+            <div class="tool-action">
+              <button class="tool-btn" id="open-image-resizer">
+                <i class="bi bi-arrow-right-circle"></i> Open Tool
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Text Formatter -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <i class="bi bi-text-paragraph tool-icon"></i>
+            <h3 class="tool-title">Text Formatter</h3>
+          </div>
+          <div class="tool-content">
+            <p class="tool-description">
+              Format, clean, and transform text. Convert case, remove duplicates, and more.
+            </p>
+            <div class="tool-action">
+              <button class="tool-btn" id="open-text-formatter">
+                <i class="bi bi-arrow-right-circle"></i> Open Tool
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Color Picker -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <i class="bi bi-palette tool-icon"></i>
+            <h3 class="tool-title">Color Tools</h3>
+          </div>
+          <div class="tool-content">
+            <p class="tool-description">
+              Pick colors, generate palettes, and convert between color formats (HEX, RGB, HSL).
+            </p>
+            <div class="tool-action">
+              <button class="tool-btn" id="open-color-tools">
+                <i class="bi bi-arrow-right-circle"></i> Open Tool
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Markdown Editor -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <i class="bi bi-markdown tool-icon"></i>
+            <h3 class="tool-title">Markdown Editor</h3>
+          </div>
+          <div class="tool-content">
+            <p class="tool-description">
+              Write and preview Markdown with a side-by-side editor. Export to HTML or PDF.
+            </p>
+            <div class="tool-action">
+              <button class="tool-btn" id="open-markdown-editor">
+                <i class="bi bi-arrow-right-circle"></i> Open Tool
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- JSON Formatter -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <i class="bi bi-braces tool-icon"></i>
+            <h3 class="tool-title">JSON Formatter</h3>
+          </div>
+          <div class="tool-content">
+            <p class="tool-description">
+              Format, validate, and beautify JSON data. Convert JSON to CSV or YAML.
+            </p>
+            <div class="tool-action">
+              <button class="tool-btn" id="open-json-formatter">
+                <i class="bi bi-arrow-right-circle"></i> Open Tool
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Unit Converter -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <i class="bi bi-calculator tool-icon"></i>
+            <h3 class="tool-title">Unit Converter</h3>
+          </div>
+          <div class="tool-content">
+            <p class="tool-description">
+              Convert between different units of measurement: length, weight, temperature, etc.
+            </p>
+            <div class="tool-action">
+              <button class="tool-btn" id="open-unit-converter">
+                <i class="bi bi-arrow-right-circle"></i> Open Tool
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Tool Modals -->
+    <!-- Text Formatter Modal -->
+    <div id="text-formatter-modal" class="tool-modal">
+      <div class="modal-content">
+        <button class="close-modal">&times;</button>
+        <div class="modal-header">
+          <h2 class="modal-title"><i class="bi bi-text-paragraph"></i> Text Formatter</h2>
+        </div>
+        <div class="modal-body">
+          <form class="tool-form" id="text-formatter-form">
+            <label for="text-input">Enter your text:</label>
+            <textarea id="text-input" class="tool-input" rows="6" placeholder="Type or paste your text here..."></textarea>
+            
+            <label>Choose an operation:</label>
+            <select id="text-operation" class="tool-input">
+              <option value="uppercase">UPPERCASE</option>
+              <option value="lowercase">lowercase</option>
+              <option value="capitalize">Capitalize Each Word</option>
+              <option value="reverse">Reverse Text</option>
+              <option value="remove-extra-spaces">Remove Extra Spaces</option>
+              <option value="remove-lines">Remove Empty Lines</option>
+              <option value="count">Count Characters & Words</option>
+            </select>
+            
+            <button type="submit" class="tool-btn">
+              <i class="bi bi-magic"></i> Format Text
+            </button>
+          </form>
+          
+          <div id="text-result" class="tool-result"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- QR Code Generator Modal -->
+    <div id="qr-generator-modal" class="tool-modal">
+      <div class="modal-content">
+        <button class="close-modal">&times;</button>
+        <div class="modal-header">
+          <h2 class="modal-title"><i class="bi bi-qr-code"></i> QR Code Generator</h2>
+        </div>
+        <div class="modal-body">
+          <form class="tool-form" id="qr-generator-form">
+            <label for="qr-content-type">Content Type:</label>
+            <select id="qr-content-type" class="tool-input">
+              <option value="url">URL</option>
+              <option value="text">Text</option>
+              <option value="email">Email</option>
+              <option value="wifi">Wi-Fi Credentials</option>
+              <option value="phone">Phone Number</option>
+            </select>
+            
+            <div id="qr-url-input" class="qr-input-section">
+              <label for="qr-url">URL:</label>
+              <input type="url" id="qr-url" class="tool-input" placeholder="https://example.com">
+            </div>
+            
+            <div id="qr-text-input" class="qr-input-section" style="display: none;">
+              <label for="qr-text">Text:</label>
+              <textarea id="qr-text" class="tool-input" rows="3" placeholder="Enter your text here..."></textarea>
+            </div>
+            
+            <div id="qr-email-input" class="qr-input-section" style="display: none;">
+              <label for="qr-email">Email:</label>
+              <input type="email" id="qr-email" class="tool-input" placeholder="example@example.com">
+              <label for="qr-email-subject">Subject (optional):</label>
+              <input type="text" id="qr-email-subject" class="tool-input" placeholder="Subject line">
+              <label for="qr-email-body">Body (optional):</label>
+              <textarea id="qr-email-body" class="tool-input" rows="3" placeholder="Email body text..."></textarea>
+            </div>
+            
+            <div id="qr-wifi-input" class="qr-input-section" style="display: none;">
+              <label for="qr-wifi-ssid">Network Name (SSID):</label>
+              <input type="text" id="qr-wifi-ssid" class="tool-input" placeholder="Network name">
+              <label for="qr-wifi-type">Security Type:</label>
+              <select id="qr-wifi-type" class="tool-input">
+                <option value="WPA">WPA/WPA2</option>
+                <option value="WEP">WEP</option>
+                <option value="nopass">No Password</option>
+              </select>
+              <label for="qr-wifi-password">Password:</label>
+              <input type="password" id="qr-wifi-password" class="tool-input" placeholder="Wi-Fi password">
+              <div class="wifi-hidden-option">
+                <input type="checkbox" id="qr-wifi-hidden" class="wifi-hidden-checkbox">
+                <label for="qr-wifi-hidden">Hidden Network</label>
+              </div>
+            </div>
+            
+            <div id="qr-phone-input" class="qr-input-section" style="display: none;">
+              <label for="qr-phone">Phone Number:</label>
+              <input type="tel" id="qr-phone" class="tool-input" placeholder="+1234567890">
+            </div>
+            
+            <button type="submit" class="tool-btn" style="margin-top: 1rem;">
+              <i class="bi bi-qr-code"></i> Generate QR Code
+            </button>
+          </form>
+          
+          <div id="qr-result" class="tool-result"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Color Tools Modal -->
+    <div id="color-tools-modal" class="tool-modal">
+      <div class="modal-content">
+        <button class="close-modal">&times;</button>
+        <div class="modal-header">
+          <h2 class="modal-title"><i class="bi bi-palette"></i> Color Tools</h2>
+        </div>
+        <div class="modal-body">
+          <form class="tool-form" id="color-tools-form">
+            <label for="color-picker">Pick a color:</label>
+            <input type="color" id="color-picker" class="tool-input">
+            
+            <div id="color-info">
+              <div class="color-info-row">
+                <div>
+                  <label>HEX:</label>
+                  <input type="text" id="hex-value" class="tool-input" readonly>
+                </div>
+                <div>
+                  <label>RGB:</label>
+                  <input type="text" id="rgb-value" class="tool-input" readonly>
+                </div>
+                <div>
+                  <label>HSL:</label>
+                  <input type="text" id="hsl-value" class="tool-input" readonly>
+                </div>
+              </div>
+            </div>
+            
+            <div class="palette-options">
+              <label>Generate color palette:</label>
+              <div class="palette-button-group">
+                <button type="button" id="generate-analogous" class="tool-btn">Analogous</button>
+                <button type="button" id="generate-complementary" class="tool-btn">Complementary</button>
+                <button type="button" id="generate-triadic" class="tool-btn">Triadic</button>
+              </div>
+            </div>
+          </form>
+          
+          <div id="color-palette"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- =======================
+       SITE FOOTER
+  =========================== -->
+  <footer id="site-footer" class="footer-container">
+    <p class="footer-text">
+      © 2025 Roxton Ma. All rights reserved.
+    </p>
+  </footer>
+
+  <!-- Scroll-to-top button -->
+  <button id="scrollToTopBtn" class="scroll-btn" aria-label="Scroll to Top">
+    <i class="bi bi-arrow-up"></i>
+  </button>
+
+  <!-- Main JavaScript -->
+  <script src="../js/main.js"></script>
+  
+  <!-- QR Code Library -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+  
+  <!-- Productivity Tools JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Modal functionality
+      const openModal = (modalId) => {
+        document.getElementById(modalId).style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // Prevent scrolling
+      };
+      
+      const closeAllModals = () => {
+        const modals = document.querySelectorAll('.tool-modal');
+        modals.forEach(modal => {
+          modal.style.display = 'none';
+        });
+        document.body.style.overflow = ''; // Restore scrolling
+      };
+      
+      // Setup close buttons
+      const closeButtons = document.querySelectorAll('.close-modal');
+      closeButtons.forEach(button => {
+        button.addEventListener('click', closeAllModals);
+      });
+      
+      // Close modal when clicking outside
+      document.querySelectorAll('.tool-modal').forEach(modal => {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            closeAllModals();
+          }
+        });
+      });
+      
+      // Open specific modals
+      document.getElementById('open-text-formatter').addEventListener('click', () => {
+        openModal('text-formatter-modal');
+      });
+      
+      document.getElementById('open-color-tools').addEventListener('click', () => {
+        openModal('color-tools-modal');
+        updateColorInfo(); // Initialize with default color
+      });
+      
+      document.getElementById('open-qr-generator').addEventListener('click', () => {
+        openModal('qr-generator-modal');
+      });
+      
+      // Text Formatter Logic
+      const textFormatterForm = document.getElementById('text-formatter-form');
+      const textResult = document.getElementById('text-result');
+      
+      textFormatterForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const text = document.getElementById('text-input').value;
+        const operation = document.getElementById('text-operation').value;
+        let result = '';
+        
+        switch (operation) {
+          case 'uppercase':
+            result = text.toUpperCase();
+            break;
+          case 'lowercase':
+            result = text.toLowerCase();
+            break;
+          case 'capitalize':
+            result = text.replace(/\b\w/g, char => char.toUpperCase());
+            break;
+          case 'reverse':
+            result = text.split('').reverse().join('');
+            break;
+          case 'remove-extra-spaces':
+            result = text.replace(/\s+/g, ' ').trim();
+            break;
+          case 'remove-lines':
+            result = text.replace(/^\s*[\r\n]/gm, '');
+            break;
+          case 'count':
+            const charCount = text.length;
+            const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+            result = `Characters: ${charCount}, Words: ${wordCount}`;
+            break;
+          default:
+            result = text;
+        }
+        
+        textResult.innerHTML = operation === 'count' 
+          ? result 
+          : `<textarea class="tool-input" rows="6" readonly>${result}</textarea>
+             <div class="copy-result-action">
+               <button id="copy-text-result" class="tool-btn">
+                 <i class="bi bi-clipboard"></i> Copy
+               </button>
+             </div>`;
+             
+        textResult.style.display = 'block';
+        
+        // Add copy functionality
+        const copyButton = document.getElementById('copy-text-result');
+        if (copyButton) {
+          copyButton.addEventListener('click', () => {
+            const resultText = textResult.querySelector('textarea').value;
+            navigator.clipboard.writeText(resultText).then(() => {
+              copyButton.innerHTML = '<i class="bi bi-check"></i> Copied!';
+              setTimeout(() => {
+                copyButton.innerHTML = '<i class="bi bi-clipboard"></i> Copy';
+              }, 2000);
+            });
+          });
+        }
+      });
+      
+      // Color Tools Logic
+      const colorPicker = document.getElementById('color-picker');
+      const hexValue = document.getElementById('hex-value');
+      const rgbValue = document.getElementById('rgb-value');
+      const hslValue = document.getElementById('hsl-value');
+      const colorPalette = document.getElementById('color-palette');
+      
+      // Update color information when color is picked
+      colorPicker.addEventListener('input', updateColorInfo);
+      
+      function updateColorInfo() {
+        const color = colorPicker.value;
+        
+        // Update HEX value
+        hexValue.value = color.toUpperCase();
+        
+        // Convert to RGB
+        const r = parseInt(color.substr(1, 2), 16);
+        const g = parseInt(color.substr(3, 2), 16);
+        const b = parseInt(color.substr(5, 2), 16);
+        rgbValue.value = `rgb(${r}, ${g}, ${b})`;
+        
+        // Convert to HSL
+        const hsl = rgbToHsl(r, g, b);
+        hslValue.value = `hsl(${Math.round(hsl[0])}, ${Math.round(hsl[1])}%, ${Math.round(hsl[2])}%)`;
+      }
+      
+      // Generate color palettes
+      document.getElementById('generate-analogous').addEventListener('click', () => {
+        const color = colorPicker.value;
+        const r = parseInt(color.substr(1, 2), 16);
+        const g = parseInt(color.substr(3, 2), 16);
+        const b = parseInt(color.substr(5, 2), 16);
+        const hsl = rgbToHsl(r, g, b);
+        
+        const colors = [];
+        for (let i = -2; i <= 2; i++) {
+          if (i === 0) {
+            colors.push(colorPicker.value);
+            continue;
+          }
+          
+          let newHue = (hsl[0] + i * 30) % 360;
+          if (newHue < 0) newHue += 360;
+          
+          const rgb = hslToRgb(newHue, hsl[1], hsl[2]);
+          const hex = rgbToHex(rgb[0], rgb[1], rgb[2]);
+          colors.push(hex);
+        }
+        
+        displayColorPalette(colors);
+      });
+      
+      document.getElementById('generate-complementary').addEventListener('click', () => {
+        const color = colorPicker.value;
+        const r = parseInt(color.substr(1, 2), 16);
+        const g = parseInt(color.substr(3, 2), 16);
+        const b = parseInt(color.substr(5, 2), 16);
+        const hsl = rgbToHsl(r, g, b);
+        
+        const complementaryHue = (hsl[0] + 180) % 360;
+        const rgb = hslToRgb(complementaryHue, hsl[1], hsl[2]);
+        const complementaryColor = rgbToHex(rgb[0], rgb[1], rgb[2]);
+        
+        displayColorPalette([colorPicker.value, complementaryColor]);
+      });
+      
+      document.getElementById('generate-triadic').addEventListener('click', () => {
+        const color = colorPicker.value;
+        const r = parseInt(color.substr(1, 2), 16);
+        const g = parseInt(color.substr(3, 2), 16);
+        const b = parseInt(color.substr(5, 2), 16);
+        const hsl = rgbToHsl(r, g, b);
+        
+        const colors = [colorPicker.value];
+        
+        for (let i = 1; i <= 2; i++) {
+          const newHue = (hsl[0] + i * 120) % 360;
+          const rgb = hslToRgb(newHue, hsl[1], hsl[2]);
+          const hex = rgbToHex(rgb[0], rgb[1], rgb[2]);
+          colors.push(hex);
+        }
+        
+        displayColorPalette(colors);
+      });
+      
+      function displayColorPalette(colors) {
+        colorPalette.innerHTML = '';
+        
+        colors.forEach(color => {
+          const colorBox = document.createElement('div');
+          colorBox.className = 'color-box';
+          colorBox.style.width = `${100 / colors.length}%`;
+          colorBox.style.backgroundColor = color;
+          
+          const colorLabel = document.createElement('div');
+          colorLabel.className = 'color-label';
+          colorLabel.textContent = color.toUpperCase();
+          
+          colorBox.appendChild(colorLabel);
+          
+          // Copy color on click
+          colorBox.addEventListener('click', () => {
+            navigator.clipboard.writeText(color.toUpperCase()).then(() => {
+              const originalText = colorLabel.textContent;
+              colorLabel.textContent = 'Copied!';
+              setTimeout(() => {
+                colorLabel.textContent = originalText;
+              }, 1000);
+            });
+          });
+          
+          colorPalette.appendChild(colorBox);
+        });
+      }
+      
+      // RGB to HSL conversion
+      function rgbToHsl(r, g, b) {
+        r /= 255;
+        g /= 255;
+        b /= 255;
+        
+        const max = Math.max(r, g, b);
+        const min = Math.min(r, g, b);
+        let h, s, l = (max + min) / 2;
+        
+        if (max === min) {
+          h = s = 0; // achromatic
+        } else {
+          const d = max - min;
+          s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+          
+          switch (max) {
+            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+            case g: h = (b - r) / d + 2; break;
+            case b: h = (r - g) / d + 4; break;
+          }
+          
+          h /= 6;
+        }
+        
+        return [h * 360, s * 100, l * 100];
+      }
+      
+      // HSL to RGB conversion
+      function hslToRgb(h, s, l) {
+        h /= 360;
+        s /= 100;
+        l /= 100;
+        
+        let r, g, b;
+        
+        if (s === 0) {
+          r = g = b = l; // achromatic
+        } else {
+          const hue2rgb = (p, q, t) => {
+            if (t < 0) t += 1;
+            if (t > 1) t -= 1;
+            if (t < 1/6) return p + (q - p) * 6 * t;
+            if (t < 1/2) return q;
+            if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+            return p;
+          };
+          
+          const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+          const p = 2 * l - q;
+          
+          r = hue2rgb(p, q, h + 1/3);
+          g = hue2rgb(p, q, h);
+          b = hue2rgb(p, q, h - 1/3);
+        }
+        
+        return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+      }
+      
+      // RGB to HEX conversion
+      function rgbToHex(r, g, b) {
+        return `#${componentToHex(r)}${componentToHex(g)}${componentToHex(b)}`;
+      }
+      
+      function componentToHex(c) {
+        const hex = c.toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+      }
+      
+      // QR Code Generator Logic
+      const qrContentType = document.getElementById('qr-content-type');
+      const qrGeneratorForm = document.getElementById('qr-generator-form');
+      const qrResult = document.getElementById('qr-result');
+      
+      // Show/hide different input sections based on selected content type
+      qrContentType.addEventListener('change', function() {
+        const contentType = this.value;
+        
+        // Hide all input sections first
+        document.querySelectorAll('.qr-input-section').forEach(section => {
+          section.style.display = 'none';
+        });
+        
+        // Show the relevant section
+        document.getElementById(`qr-${contentType}-input`).style.display = 'block';
+      });
+      
+      qrGeneratorForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const contentType = qrContentType.value;
+        let qrContent = '';
+        
+        // Build QR code content based on type
+        switch (contentType) {
+          case 'url':
+            qrContent = document.getElementById('qr-url').value;
+            if (!qrContent.startsWith('http')) {
+              qrContent = 'https://' + qrContent;
+            }
+            break;
+            
+          case 'text':
+            qrContent = document.getElementById('qr-text').value;
+            break;
+            
+          case 'email':
+            const email = document.getElementById('qr-email').value;
+            const subject = document.getElementById('qr-email-subject').value;
+            const body = document.getElementById('qr-email-body').value;
+            
+            qrContent = 'mailto:' + email;
+            
+            if (subject || body) {
+              qrContent += '?';
+              if (subject) qrContent += 'subject=' + encodeURIComponent(subject);
+              if (subject && body) qrContent += '&';
+              if (body) qrContent += 'body=' + encodeURIComponent(body);
+            }
+            break;
+            
+          case 'wifi':
+            const ssid = document.getElementById('qr-wifi-ssid').value;
+            const type = document.getElementById('qr-wifi-type').value;
+            const password = document.getElementById('qr-wifi-password').value;
+            const hidden = document.getElementById('qr-wifi-hidden').checked;
+            
+            qrContent = 'WIFI:S:' + ssid + ';T:' + type + ';';
+            if (password && type !== 'nopass') qrContent += 'P:' + password + ';';
+            if (hidden) qrContent += 'H:true;';
+            qrContent += ';';
+            break;
+            
+          case 'phone':
+            qrContent = 'tel:' + document.getElementById('qr-phone').value;
+            break;
+        }
+        
+        if (!qrContent) {
+          alert('Please fill in the required fields');
+          return;
+        }
+        
+        // Generate QR code
+        try {
+          const typeNumber = 0; // Auto-detect
+          const errorCorrectionLevel = 'L'; // Low
+          const qr = qrcode(typeNumber, errorCorrectionLevel);
+          qr.addData(qrContent);
+          qr.make();
+          
+          // Create QR code image
+          const qrImage = qr.createImgTag(5); // Cell size: 5px
+          
+          qrResult.innerHTML = `
+            <div>${qrImage}</div>
+            <p class="qr-instructions">
+              Scan with a QR code reader app
+            </p>
+            <button id="download-qr" class="tool-btn download-qr-btn">
+              <i class="bi bi-download"></i> Download QR Code
+            </button>
+          `;
+          
+          qrResult.style.display = 'block';
+          
+          // Add download functionality
+          document.getElementById('download-qr').addEventListener('click', function() {
+            // Create a temporary canvas to convert QR code to image
+            const img = qrResult.querySelector('img');
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas size
+            canvas.width = img.width;
+            canvas.height = img.height;
+            
+            // Draw the QR code image on the canvas
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+            
+            // Create a download link
+            const link = document.createElement('a');
+            link.download = 'qrcode.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+          });
+        } catch (error) {
+          qrResult.innerHTML = `
+            <div class="error-message">
+              <i class="bi bi-exclamation-triangle"></i>
+              Error generating QR code. Please check your input.
+            </div>
+          `;
+          qrResult.style.display = 'block';
+          console.error(error);
+        }
+      });
+    });
+  </script>
+</body>
+</html> 

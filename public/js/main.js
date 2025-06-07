@@ -80,6 +80,9 @@ function applyInitialThemePreference() {
     htmlEl.setAttribute('data-theme', systemTheme);
     updateDarkToggleIcon(systemTheme);
   }
+  
+  // Log theme application for debugging
+  console.log('Theme applied:', htmlEl.getAttribute('data-theme'));
 }
 
 /**
@@ -93,9 +96,16 @@ function toggleDarkMode() {
   const currentTheme = htmlEl.getAttribute('data-theme') || 'light';
   const newTheme = currentTheme === 'light' ? 'dark' : 'light';
 
+  console.log(`Toggling theme from ${currentTheme} to ${newTheme}`);
+  
   htmlEl.setAttribute('data-theme', newTheme);
   localStorage.setItem('preferred-theme', newTheme);
+  
+  console.log('Theme saved to localStorage');
+  
   updateDarkToggleIcon(newTheme);
+  
+  console.log('Dark mode toggle complete');
 }
 
 /**
@@ -118,8 +128,18 @@ function updateDarkToggleIcon(theme) {
  */
 function bindDarkModeToggle() {
   const toggleBtn = document.getElementById('dark-mode-toggle');
-  if (!toggleBtn) return;
+  if (!toggleBtn) {
+    console.warn('Dark mode toggle button not found');
+    return;
+  }
+  
+  // Remove any existing event listeners to prevent duplicates
+  toggleBtn.removeEventListener('click', toggleDarkMode);
+  
+  // Add the event listener
   toggleBtn.addEventListener('click', toggleDarkMode);
+  
+  console.log('Dark mode toggle button bound successfully');
 }
 
 /* ==========================================================================
@@ -410,24 +430,28 @@ const initCarousel = () => {
   };
 
   const startAutoAdvance = () => {
+    if (autoAdvance) clearInterval(autoAdvance);
     autoAdvance = setInterval(nextSlide, 8000);
   };
 
   const stopAutoAdvance = () => {
     if (autoAdvance) {
       clearInterval(autoAdvance);
+      autoAdvance = null;
     }
   };
 
   // Event listeners
   prevBtn.addEventListener('click', () => {
     prevSlide();
+    // Restart autoplay
     stopAutoAdvance();
     startAutoAdvance();
   });
 
   nextBtn.addEventListener('click', () => {
     nextSlide();
+    // Restart autoplay
     stopAutoAdvance();
     startAutoAdvance();
   });
@@ -437,6 +461,7 @@ const initCarousel = () => {
     indicator.addEventListener('click', () => {
       currentSlide = index;
       showSlide(currentSlide);
+      // Restart autoplay
       stopAutoAdvance();
       startAutoAdvance();
     });
@@ -609,17 +634,187 @@ const initIntroBokehEffect = () => {
  * Initializes all interactive modules once the DOM is fully loaded.
  */
 function initializeAllModules() {
+  console.log('Initializing all modules...');
+  
+  // Try to initialize all modules, but only if they exist on the page
   bindMobileNavToggle();
   bindScrollToTopButton();
   bindNavLinkSmoothScroll();
-  bindContactFormSubmit();
-  initCarousel();
-  initIntroBokehEffect();
+  
+  // Only initialize these if the relevant elements exist
+  if (document.getElementById('contact-form')) {
+    bindContactFormSubmit();
+  }
+  
+  if (document.querySelector('.carousel-container')) {
+    initCarousel();
+  }
+  
+  if (document.querySelector('#section-intro')) {
+    initIntroBokehEffect();
+  }
 
   /* Dark Mode must initialize early so CSS picks correct variables */
   applyInitialThemePreference();
   bindDarkModeToggle();
+  
+  // Initialize dropdown menus
+  initDropdownMenus();
+  
+  // Initialize project filters if they exist
+  if (document.querySelector('.filter-btn')) {
+    initProjectFilters();
+  }
+  
+  console.log('All modules initialized.');
 }
 
 // Run initialization on DOMContentLoaded
 document.addEventListener('DOMContentLoaded', initializeAllModules);
+
+/**
+ * Initializes dropdown menu functionality
+ */
+function initDropdownMenus() {
+  const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+  if (!dropdownToggles.length) {
+    console.log('No dropdown toggles found on this page');
+    return;
+  }
+
+  console.log('Initializing dropdown menus');
+  
+  // First, let's create a safer way to get the dropdown menu for a toggle
+  const getDropdownMenu = (toggle) => {
+    if (!toggle) return null;
+    const menu = toggle.nextElementSibling;
+    if (menu && menu.classList && menu.classList.contains('dropdown-menu')) {
+      return menu;
+    }
+    return null;
+  };
+  
+  // Process each dropdown toggle
+  dropdownToggles.forEach(toggle => {
+    // Make sure this toggle actually has a dropdown menu
+    const dropdown = getDropdownMenu(toggle);
+    if (!dropdown) return;
+    
+    // Remove existing listeners to prevent duplicates
+    const newToggle = toggle.cloneNode(true);
+    toggle.parentNode.replaceChild(newToggle, toggle);
+    
+    newToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const dropdown = getDropdownMenu(newToggle);
+      if (!dropdown) return;
+      
+      const isExpanded = newToggle.getAttribute('aria-expanded') === 'true';
+      
+      // Close all other dropdowns
+      dropdownToggles.forEach(otherToggle => {
+        if (otherToggle !== newToggle) {
+          const otherMenu = getDropdownMenu(otherToggle);
+          if (otherToggle && otherMenu) {
+            otherToggle.setAttribute('aria-expanded', 'false');
+            otherMenu.classList.remove('show');
+          }
+        }
+      });
+
+      // Toggle current dropdown
+      newToggle.setAttribute('aria-expanded', !isExpanded);
+      dropdown.classList.toggle('show');
+    });
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.dropdown')) {
+      dropdownToggles.forEach(toggle => {
+        const dropdown = getDropdownMenu(toggle);
+        if (toggle && dropdown) {
+          toggle.setAttribute('aria-expanded', 'false');
+          dropdown.classList.remove('show');
+        }
+      });
+    }
+  });
+
+  // Handle keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      dropdownToggles.forEach(toggle => {
+        const dropdown = getDropdownMenu(toggle);
+        if (toggle && dropdown) {
+          toggle.setAttribute('aria-expanded', 'false');
+          dropdown.classList.remove('show');
+        }
+      });
+    }
+  });
+  
+  // Highlight current page in dropdown if we're on a tool page
+  const currentPath = window.location.pathname;
+  const filename = currentPath.substring(currentPath.lastIndexOf('/') + 1);
+  
+  if (filename && filename !== '') {
+    const currentPageLink = document.querySelector(`.dropdown-item[href$="${filename}"]`);
+    if (currentPageLink) {
+      currentPageLink.classList.add('active');
+      currentPageLink.setAttribute('aria-current', 'page');
+      console.log('Current page highlighted in dropdown:', filename);
+    }
+  }
+}
+
+// Dropdown menus are initialized in initializeAllModules function
+// No need for a separate event listener here
+
+/**
+ * Initializes project filtering functionality
+ */
+function initProjectFilters() {
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const projectCards = document.querySelectorAll('.project-card');
+
+  if (!filterBtns.length || !projectCards.length) {
+    console.log('Project filters not initialized (elements not found)');
+    return;
+  }
+
+  console.log('Initializing project filters');
+
+  filterBtns.forEach(btn => {
+    // Remove existing listeners to prevent duplicates
+    const newBtn = btn.cloneNode(true);
+    btn.parentNode.replaceChild(newBtn, btn);
+    
+    newBtn.addEventListener('click', () => {
+      // Update active button
+      filterBtns.forEach(b => b.classList.remove('active'));
+      newBtn.classList.add('active');
+
+      const filterValue = newBtn.getAttribute('data-filter');
+      console.log('Filtering projects by:', filterValue);
+
+      // Filter projects
+      projectCards.forEach(card => {
+        if (filterValue === 'all') {
+          card.style.display = 'block';
+        } else {
+          const cardCategory = card.getAttribute('data-category');
+          if (cardCategory === filterValue) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        }
+      });
+    });
+  });
+}
+
+
