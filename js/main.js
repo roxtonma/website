@@ -817,4 +817,26 @@ function initProjectFilters() {
   });
 }
 
-
+// Add this to your existing JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+  // Make only overflowing tool descriptions expandable
+  const descriptions = document.querySelectorAll('.tool-description');
+  
+  descriptions.forEach(description => {
+    // Check if description has overflow
+    const hasOverflow = description.scrollHeight > description.clientHeight;
+    
+    if (hasOverflow) {
+      // Add indicator class for styling
+      description.classList.add('has-overflow');
+      
+      // Add click handler only to descriptions with overflow
+      description.addEventListener('click', function() {
+        this.classList.toggle('expanded');
+      });
+    } else {
+      // Remove pointer cursor for non-overflowing descriptions
+      description.style.cursor = 'default';
+    }
+  });
+});
