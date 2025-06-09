@@ -13,7 +13,8 @@
 @import 'components/blog.css';
 @import 'components/contact.css';
 @import 'components/buttons.css';
-@import 'components/productivity-tools.css';
+@import 'components/utility-tools.css';
+@import 'components/playground.css';
 
 /* ==========================================================================
    main.css  — Revised with Dark Mode Integration
@@ -605,6 +606,25 @@ body {
 
   #mobile-menu-toggle {
     display: inline-flex;
+  }
+
+  #site-header {
+    margin-bottom: 0;
+  }
+  
+  #section-intro {
+    margin-top: -20px; /* Negative margin to pull it up */
+  }
+  
+  /* Remove any additional space that might be in the main container */
+  #site-main {
+    padding-top: 0;
+    margin-top: 0;
+  }
+  
+  /* Make sure header doesn't have extra padding */
+  #site-header {
+    padding-bottom: 0;
   }
 }
 

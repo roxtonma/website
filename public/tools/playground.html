@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Playground | Roxton</title>
+
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="../css/main.css" />
+
+  <!-- Bootstrap Icons v1.10.5 -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+  />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+
+  <!-- Favicon (optional) -->
+  <link rel="icon" href="../assets/icons/favicon.ico" />
+</head>
+<body>
+  <!-- =======================
+       SITE HEADER + NAVIGATION
+  =========================== -->
+  <header id="site-header">
+    <nav id="site-nav" class="nav-container">
+      <div id="logo-container">
+        <a href="../index" id="site-logo">ROXTON</a>
+        <div class="bokeh-container"></div>
+      </div>
+
+      <ul id="nav-links" class="nav-list">
+        <li class="nav-item"><a class="nav-link" href="../index">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="../index">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="../index">Projects</a></li>
+        <li class="nav-item"><a class="nav-link" href="../index">Blog</a></li>
+        <li class="nav-item"><a class="nav-link" href="../index">Contact</a></li>
+        <li class="nav-item dropdown">
+          <button class="nav-link dropdown-toggle" aria-expanded="false">
+            Tools <i class="bi bi-chevron-down"></i>
+          </button>
+          <ul class="dropdown-menu" aria-label="Tools submenu">
+            <li><a class="dropdown-item" href="playground">Playground</a></li>
+            <li><a class="dropdown-item" href="code-analyzer">Code Analyzer</a></li>
+            <li><a class="dropdown-item" href="data-visualizer">Data Visualizer</a></li>
+            <li><a class="dropdown-item" href="ml-models">ML Models</a></li>
+            <li><a class="dropdown-item" href="productivity">Productivity Tools</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <div class="nav-controls">
+        <!-- Dark mode toggle button using Bootstrap Icons -->
+        <button
+          id="dark-mode-toggle"
+          class="btn-dark-toggle"
+          aria-label="Toggle Dark Mode"
+        >
+          <i class="bi bi-moon"></i>
+        </button>
+
+        <!-- Mobile nav toggle -->
+        <button
+          id="mobile-menu-toggle"
+          class="nav-toggle"
+          aria-label="Toggle navigation"
+        >
+          <i class="bi bi-list"></i>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- =======================
+       MAIN CONTENT
+  =========================== -->
+  <main id="site-main">
+    <!-- -----------------------
+         TOOL SECTION
+    --------------------------- -->
+    <section class="section playground-section">
+      <h1 class="section-title">Developer Playground</h1>
+      
+      <div class="tool-description">
+        <p>
+          A collection of useful developer tools to test, visualize, and experiment with code and data. All tools run in your browser - no server processing required.
+        </p>
+      </div>
+      
+      <div class="playground-tools">
+        <!-- Regex Tester -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <i class="bi bi-regex tool-icon"></i>
+            <h3 class="tool-title">Regex Tester</h3>
+          </div>
+          <div class="tool-content">
+            <p class="tool-description">
+              Test and debug regular expressions with live highlighting, match details, and common pattern templates.
+            </p>
+            <div class="tool-action">
+              <button class="tool-btn" data-modal="regex-tester-modal">
+                <i class="bi bi-arrow-right-circle"></i> Open Tool
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- HTTP Request Tester -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <i class="bi bi-cloud-arrow-up-down tool-icon"></i>
+            <h3 class="tool-title">HTTP Request Tester</h3>
+          </div>
+          <div class="tool-content">
+            <p class="tool-description">
+              Send and test HTTP requests with different methods, custom headers, and request bodies. View formatted responses.
+            </p>
+            <div class="tool-action">
+              <button class="tool-btn" data-modal="http-tester-modal">
+                <i class="bi bi-arrow-right-circle"></i> Open Tool
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- SVG Editor -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <i class="bi bi-bezier2 tool-icon"></i>
+            <h3 class="tool-title">SVG Editor</h3>
+          </div>
+          <div class="tool-content">
+            <p class="tool-description">
+              Create and edit SVG graphics with a simple code editor and live preview. Download or copy your SVG code.
+            </p>
+            <div class="tool-action">
+              <button class="tool-btn" data-modal="svg-editor-modal">
+                <i class="bi bi-arrow-right-circle"></i> Open Tool
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Mock Data Generator -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <i class="bi bi-database-fill-gear tool-icon"></i>
+            <h3 class="tool-title">Mock Data Generator</h3>
+          </div>
+          <div class="tool-content">
+            <p class="tool-description">
+              Generate realistic mock data for testing and development. Create user profiles, products, and more in various formats.
+            </p>
+            <div class="tool-action">
+              <button class="tool-btn" data-modal="mock-data-modal">
+                <i class="bi bi-arrow-right-circle"></i> Open Tool
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Algorithm Visualizer -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <i class="bi bi-diagram-3 tool-icon"></i>
+            <h3 class="tool-title">Algorithm Visualizer</h3>
+          </div>
+          <div class="tool-content">
+            <p class="tool-description">
+              Visualize sorting, searching, and pathfinding algorithms with step-by-step animation and explanation.
+            </p>
+            <div class="tool-action">
+              <button class="tool-btn" data-modal="algorithm-visualizer-modal">
+                <i class="bi bi-arrow-right-circle"></i> Open Tool
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Tool Modals -->
+    <!-- Regex Tester Modal -->
+    <div id="regex-tester-modal" class="tool-modal">
+      <div class="modal-content">
+        <button class="close-modal">&times;</button>
+        <div class="modal-header">
+          <h2 class="modal-title"><i class="bi bi-regex"></i> Regex Tester</h2>
+        </div>
+        <div class="modal-body">
+          <div class="regex-container">
+            <div class="regex-input-section">
+              <label for="regex-pattern">Regular Expression:</label>
+              <div class="regex-pattern-row">
+                <input type="text" id="regex-pattern" class="tool-input regex-pattern-input" placeholder="Enter regex pattern...">
+              </div>
+              
+              <div class="regex-flags">
+                <label>Flags: <span class="flag-help-text">(modify how the regex behaves)</span></label>
+                <div class="regex-flag-container">
+                  <div class="regex-flag-checkbox">
+                    <input type="checkbox" id="flag-g" class="regex-flag" value="g" checked>
+                    <label for="flag-g" title="Global - find all matches rather than stopping after the first match">g (global)</label>
+                  </div>
+                  <div class="regex-flag-checkbox">
+                    <input type="checkbox" id="flag-i" class="regex-flag" value="i">
+                    <label for="flag-i" title="Case insensitive - ignore case when matching (A=a)">i (case insensitive)</label>
+                  </div>
+                  <div class="regex-flag-checkbox">
+                    <input type="checkbox" id="flag-m" class="regex-flag" value="m">
+                    <label for="flag-m" title="Multiline - ^ and $ match start/end of line instead of start/end of string">m (multiline)</label>
+                  </div>
+                  <div class="regex-flag-checkbox">
+                    <input type="checkbox" id="flag-s" class="regex-flag" value="s">
+                    <label for="flag-s" title="Dot matches newline - allows . to match newline characters">s (dotall)</label>
+                  </div>
+                </div>
+                <div class="flag-explanation">
+                  <button type="button" id="show-flag-info" class="text-btn"><i class="bi bi-info-circle"></i> What are flags?</button>
+                  <div id="flag-info-panel" class="flag-info-panel" style="display: none;">
+                    <p>Regex flags modify how pattern matching works:</p>
+                    <ul>
+                      <li><strong>g (global)</strong>: Find all matches, not just the first one</li>
+                      <li><strong>i (case insensitive)</strong>: Ignore case differences when matching</li>
+                      <li><strong>m (multiline)</strong>: ^ and $ match start/end of lines, not just whole string</li>
+                      <li><strong>s (dotall)</strong>: Allow . to match newline characters</li>
+                    </ul>
+                    <p>Example: <code>/pattern/gi</code> would match all occurrences (g) case-insensitively (i)</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="regex-test-string">
+                <label for="test-string">Test String:</label>
+                <textarea id="test-string" class="tool-input" rows="6" placeholder="Enter text to test against..."></textarea>
+              </div>
+            </div>
+            
+            <div class="regex-results-section">
+              <label>Results:</label>
+              <div id="regex-results" class="regex-results"></div>
+              
+              <label>Matches:</label>
+              <ul id="regex-match-list" class="regex-match-list"></ul>
+            </div>
+            
+            <div class="regex-common-patterns">
+              <label>Common Patterns:</label>
+              <div class="pattern-buttons">
+                <button type="button" class="tool-btn pattern-btn" data-pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">Email</button>
+                <button type="button" class="tool-btn pattern-btn" data-pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$">IP Address</button>
+                <button type="button" class="tool-btn pattern-btn" data-pattern="^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$">URL</button>
+                <button type="button" class="tool-btn pattern-btn" data-pattern="^\d{3}-\d{3}-\d{4}$">Phone (US)</button>
+                <button type="button" class="tool-btn pattern-btn" data-pattern="^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$">Phone (India)</button>
+                <button type="button" class="tool-btn pattern-btn" data-pattern="^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$">UUID</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Other tool modals will be added here later -->
+    
+  </main>
+
+  <!-- =======================
+       SITE FOOTER
+  =========================== -->
+  <footer id="site-footer" class="footer-container">
+    <p class="footer-text">
+      © 2025 Roxton Ma. All rights reserved.
+    </p>
+  </footer>
+
+  <!-- Scroll-to-top button -->
+  <button id="scrollToTopBtn" class="scroll-btn" aria-label="Scroll to Top">
+    <i class="bi bi-arrow-up"></i>
+  </button>
+
+  <!-- Main JavaScript -->
+  <script src="../js/main.js"></script>
+  
+  <!-- Playground JavaScript -->
+  <script src="../js/components/playground.js"></script>
+</body>
+</html> 

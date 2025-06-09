@@ -1,4 +1,4 @@
-// Productivity Tools JavaScript
+// Utility Tools JavaScript
 
 document.addEventListener('DOMContentLoaded', function() {
     // Modal functionality
