@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Productivity Tools | Roxton</title>
+  <title>Utility Tools | Roxton</title>
 
   <!-- Main stylesheet -->
   <link rel="stylesheet" href="../css/main.css" />
@@ -21,9 +21,6 @@
 
   <!-- Favicon (optional) -->
   <link rel="icon" href="../assets/icons/favicon.ico" />
-  
-  <!-- The styles are now in the external CSS file -->
-  <!-- CSS is now in /css/components/productivity-tools.css -->
 </head>
 <body>
   <!-- =======================
@@ -47,11 +44,11 @@
             Tools <i class="bi bi-chevron-down"></i>
           </button>
           <ul class="dropdown-menu" aria-label="Tools submenu">
-            <li><a class="dropdown-item" href="ai-playground">AI Playground</a></li>
+            <li><a class="dropdown-item" href="playground">Playground</a></li>
             <li><a class="dropdown-item" href="code-analyzer">Code Analyzer</a></li>
             <li><a class="dropdown-item" href="data-visualizer">Data Visualizer</a></li>
             <li><a class="dropdown-item" href="ml-models">ML Models</a></li>
-            <li><a class="dropdown-item" href="productivity">Productivity Tools</a></li>
+            <li><a class="dropdown-item" href="utility">Utility Tools</a></li>
           </ul>
         </li>
       </ul>
@@ -86,7 +83,7 @@
          TOOL SECTION
     --------------------------- -->
     <section class="section tool-section">
-      <h1 class="section-title">Productivity Tools</h1>
+      <h1 class="section-title">Utility Tools</h1>
       
       <div class="tool-description">
         <p>
@@ -94,7 +91,7 @@
         </p>
       </div>
       
-      <div class="productivity-tools">
+      <div class="utility-tools">
         <!-- QR Code Generator -->
         <div class="tool-card">
           <div class="tool-header">
@@ -125,6 +122,24 @@
             </p>
             <div class="tool-action">
               <button class="tool-btn" id="open-image-resizer">
+                <i class="bi bi-arrow-right-circle"></i> Open Tool
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Image Compressor -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <i class="bi bi-file-earmark-zip tool-icon"></i>
+            <h3 class="tool-title">Image Compressor</h3>
+          </div>
+          <div class="tool-content">
+            <p class="tool-description">
+              Compress images to a specific file size. Ideal for optimizing images for web use.
+            </p>
+            <div class="tool-action">
+              <button class="tool-btn" id="open-image-compressor">
                 <i class="bi bi-arrow-right-circle"></i> Open Tool
               </button>
             </div>
@@ -211,7 +226,7 @@
           </div>
           <div class="tool-content">
             <p class="tool-description">
-              Convert between different units of measurement: length, weight, temperature, etc. Lorem
+              Convert between different units of measurement: length, weight, temperature, etc.
             </p>
             <div class="tool-action">
               <button class="tool-btn" id="open-unit-converter">
@@ -244,8 +259,8 @@
               <option value="reverse">Reverse Text</option>
               <option value="remove-extra-spaces">Remove Extra Spaces</option>
               <option value="remove-lines">Remove Empty Lines</option>
-              <option value="remove-duplicate-words">Remove Duplicate Words</option>
               <option value="remove-duplicates">Remove Duplicate Lines</option>
+              <option value="remove-duplicate-words">Remove Duplicate Words</option>
               <option value="count">Count Characters & Words</option>
             </select>
             
@@ -427,65 +442,66 @@
       </div>
     </div>
 
-    <!-- Markdown Editor Modal -->
-    <div id="markdown-editor-modal" class="tool-modal">
+    <!-- Image Compressor Modal -->
+    <div id="image-compressor-modal" class="tool-modal">
       <div class="modal-content">
         <button class="close-modal">&times;</button>
         <div class="modal-header">
-          <h2 class="modal-title"><i class="bi bi-markdown"></i> Markdown Editor</h2>
+          <h2 class="modal-title"><i class="bi bi-file-earmark-zip"></i> Image Compressor</h2>
         </div>
         <div class="modal-body">
-          <div class="markdown-container">
-            <div class="editor-preview-tabs">
-              <button class="tab-btn active" data-tab="write">Write</button>
-              <button class="tab-btn" data-tab="preview">Preview</button>
+          <form class="tool-form" id="image-compressor-form">
+            <label for="compress-image-upload">Upload an image:</label>
+            <input type="file" id="compress-image-upload" class="tool-input" accept="image/*">
+            
+            <div id="compress-image-preview-container" style="display: none; margin: 1rem 0;">
+              <label>Original Image:</label>
+              <div id="compress-image-preview" style="max-width: 100%; text-align: center; margin: 0.5rem 0;"></div>
+              <div id="compress-original-size" style="font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: 1rem;"></div>
             </div>
             
-            <div id="write-tab" class="tab-content active">
-              <textarea id="markdown-input" class="tool-input" rows="12" placeholder="# Heading
-              
-## Subheading
-
-- List item
-- *Italic text*
-- **Bold text**
-
-[Link](https://example.com)"></textarea>
-              
-              <div class="markdown-toolbar">
-                <button type="button" class="tool-btn markdown-btn" data-markdown="heading" title="Heading">
-                  <i class="bi bi-type-h1"></i>
-                </button>
-                <button type="button" class="tool-btn markdown-btn" data-markdown="bold" title="Bold">
-                  <i class="bi bi-type-bold"></i>
-                </button>
-                <button type="button" class="tool-btn markdown-btn" data-markdown="italic" title="Italic">
-                  <i class="bi bi-type-italic"></i>
-                </button>
-                <button type="button" class="tool-btn markdown-btn" data-markdown="link" title="Link">
-                  <i class="bi bi-link-45deg"></i>
-                </button>
-                <button type="button" class="tool-btn markdown-btn" data-markdown="list" title="List">
-                  <i class="bi bi-list-ul"></i>
-                </button>
-                <button type="button" class="tool-btn markdown-btn" data-markdown="code" title="Code">
-                  <i class="bi bi-code"></i>
-                </button>
+            <div id="compress-options" style="display: none;">
+              <label>Compression Options:</label>
+              <div class="compress-input-group">
+                <label for="target-size-input">Target Size (KB):</label>
+                <input type="number" id="target-size-input" class="tool-input" value="100" min="10" max="1000">
               </div>
+              
+              <div class="quality-slider-container">
+                <label for="quality-slider">Quality: <span id="quality-value">90</span>%</label>
+                <input type="range" id="quality-slider" class="quality-slider" min="10" max="100" value="90">
+              </div>
+              
+              <div class="format-options">
+                <label>Output Format:</label>
+                <div class="format-options-group">
+                  <label class="format-option">
+                    <input type="radio" name="output-format" value="jpeg" checked> JPEG
+                  </label>
+                  <label class="format-option">
+                    <input type="radio" name="output-format" value="png"> PNG
+                  </label>
+                  <label class="format-option">
+                    <input type="radio" name="output-format" value="webp"> WebP
+                  </label>
+                </div>
+              </div>
+              
+              <button type="button" id="compress-button" class="tool-btn">
+                <i class="bi bi-file-earmark-zip"></i> Compress Image
+              </button>
             </div>
-            
-            <div id="preview-tab" class="tab-content">
-              <div id="markdown-preview" class="markdown-preview"></div>
-            </div>
-          </div>
+          </form>
           
-          <div class="markdown-actions">
-            <button type="button" id="copy-markdown-html" class="tool-btn">
-              <i class="bi bi-clipboard"></i> Copy HTML
-            </button>
-            <button type="button" id="download-markdown" class="tool-btn">
-              <i class="bi bi-download"></i> Download
-            </button>
+          <div id="compressed-result" class="tool-result">
+            <div id="compressed-image-container" style="text-align: center; margin-bottom: 1rem;"></div>
+            <div id="compressed-size" style="font-size: 0.9rem; color: var(--color-text-muted); margin-bottom: 1rem;"></div>
+            <div class="compression-info" style="margin-bottom: 1rem;"></div>
+            <div class="copy-result-action">
+              <button id="download-compressed" class="tool-btn">
+                <i class="bi bi-download"></i> Download
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -503,7 +519,7 @@
             <label for="json-input">Enter JSON:</label>
             <textarea id="json-input" class="tool-input" rows="10" placeholder='{"example": "Paste your JSON here", "array": [1, 2, 3], "nested": {"key": "value"}}'></textarea>
             
-            <div class="json-options" style="margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+            <div class="json-options">
               <div>
                 <label for="json-indent">Indentation:</label>
                 <select id="json-indent" class="tool-input">
@@ -597,6 +613,68 @@
         </div>
       </div>
     </div>
+
+    <!-- Markdown Editor Modal -->
+    <div id="markdown-editor-modal" class="tool-modal">
+      <div class="modal-content">
+        <button class="close-modal">&times;</button>
+        <div class="modal-header">
+          <h2 class="modal-title"><i class="bi bi-markdown"></i> Markdown Editor</h2>
+        </div>
+        <div class="modal-body">
+          <div class="editor-preview-tabs">
+            <button class="tab-btn active" data-tab="write">Write</button>
+            <button class="tab-btn" data-tab="preview">Preview</button>
+          </div>
+          
+          <div id="write-tab" class="tab-content active">
+            <textarea id="markdown-input" class="tool-input" rows="12" placeholder="# Heading
+            
+## Subheading
+
+- List item
+- *Italic text*
+- **Bold text**
+
+[Link](https://example.com)"></textarea>
+            
+            <div class="markdown-toolbar">
+              <button type="button" class="tool-btn markdown-btn" data-markdown="heading" title="Heading">
+                <i class="bi bi-type-h1"></i>
+              </button>
+              <button type="button" class="tool-btn markdown-btn" data-markdown="bold" title="Bold">
+                <i class="bi bi-type-bold"></i>
+              </button>
+              <button type="button" class="tool-btn markdown-btn" data-markdown="italic" title="Italic">
+                <i class="bi bi-type-italic"></i>
+              </button>
+              <button type="button" class="tool-btn markdown-btn" data-markdown="link" title="Link">
+                <i class="bi bi-link-45deg"></i>
+              </button>
+              <button type="button" class="tool-btn markdown-btn" data-markdown="list" title="List">
+                <i class="bi bi-list-ul"></i>
+              </button>
+              <button type="button" class="tool-btn markdown-btn" data-markdown="code" title="Code">
+                <i class="bi bi-code"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div id="preview-tab" class="tab-content">
+            <div id="markdown-preview" class="markdown-preview"></div>
+          </div>
+          
+          <div class="markdown-actions">
+            <button type="button" id="copy-markdown-html" class="tool-btn">
+              <i class="bi bi-clipboard"></i> Copy HTML
+            </button>
+            <button type="button" id="download-markdown" class="tool-btn">
+              <i class="bi bi-download"></i> Download
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 
   <!-- =======================
@@ -619,7 +697,7 @@
   <!-- QR Code Library -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
   
-  <!-- Productivity Tools JavaScript -->
-  <script src="../js/components/productivity-tools.js"></script>
+  <!-- Utility Tools JavaScript -->
+  <script src="../js/components/utility-tools.js"></script>
 </body>
-</html> 
+</html>

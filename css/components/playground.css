@@ -1,0 +1,330 @@
+/* Playground Styles */
+.playground-section {
+  padding: 2rem 0;
+}
+
+.playground-tools {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.tool-card {
+  background-color: var(--color-bg-alt);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 6px var(--color-shadow);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tool-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px var(--color-shadow);
+}
+
+.tool-header {
+  padding: 1.25rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.tool-icon {
+  font-size: 1.5rem;
+  color: var(--color-btn-primary);
+}
+
+.tool-title {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--color-heading);
+}
+
+.tool-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.tool-description {
+  color: var(--color-text);
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+  max-height: 4.5em;
+  overflow: hidden;
+  position: relative;
+}
+
+.tool-description.has-overflow {
+  cursor: pointer;
+}
+
+.tool-description.has-overflow::after {
+  content: "...";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding-left: 0.5rem;
+  background: var(--color-bg-alt);
+}
+
+.tool-description.expanded {
+  max-height: none;
+}
+
+.tool-description.expanded::after {
+  display: none;
+}
+
+.tool-action {
+  text-align: center;
+  margin-top: auto;
+}
+
+.tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--color-btn-primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.tool-btn:hover {
+  background-color: var(--color-btn-primary-hover);
+}
+
+/* Tool Modals */
+.tool-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: var(--color-bg);
+  border-radius: 8px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 1.5rem;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.close-modal {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition: color 0.2s ease;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.close-modal:hover {
+  color: var(--color-text);
+}
+
+.modal-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--color-heading);
+}
+
+/* Regex Tester Styles */
+.regex-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.regex-input-section, 
+.regex-results-section {
+  width: 100%;
+}
+
+.regex-test-string {
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.regex-test-string textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 120px;
+}
+
+.regex-results {
+  margin-top: 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 1rem;
+  min-height: 120px;
+  background-color: var(--color-bg-alt);
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  overflow-y: auto;
+}
+
+.regex-match {
+  background-color: rgba(46, 204, 113, 0.3);
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+.regex-match-list {
+  margin-top: 1rem;
+  padding-left: 1.5rem;
+}
+
+.regex-match-item {
+  margin-bottom: 0.5rem;
+  font-family: monospace;
+}
+
+.regex-no-match {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.regex-error {
+  color: #e74c3c;
+  font-weight: 500;
+}
+
+.regex-common-patterns {
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.pattern-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.pattern-btn {
+  font-size: 0.9rem;
+  padding: 0.3rem 0.5rem;
+}
+
+/* Desktop layout - side by side with proper alignment */
+@media (min-width: 768px) {
+  .regex-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .regex-input-section {
+    flex: 1;
+    min-width: 300px;
+    padding-right: 15px;
+  }
+  
+  .regex-results-section {
+    flex: 1;
+    min-width: 300px;
+    padding-left: 15px;
+  }
+  
+  .regex-common-patterns {
+    width: 100%;
+    margin-top: 2rem;
+  }
+}
+
+/* Add to the existing CSS file */
+.flag-help-text {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  font-weight: normal;
+}
+
+.regex-flag-container {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.regex-flag-checkbox label {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  font-family: monospace;
+}
+
+.text-btn {
+  background: none;
+  border: none;
+  color: var(--color-btn-primary);
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.text-btn:hover {
+  text-decoration: underline;
+}
+
+.flag-explanation {
+  margin-top: 0.75rem;
+}
+
+.flag-info-panel {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  background-color: var(--color-bg-alt);
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.flag-info-panel p {
+  margin: 0.5rem 0;
+}
+
+.flag-info-panel ul {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.flag-info-panel code {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  font-family: monospace;
+}

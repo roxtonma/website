@@ -1,10 +1,14 @@
-/* Productivity Tools Styles */
+/* Utility Tools Styles */
 
-.productivity-tools {
+.utility-tools {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
   margin-top: 2rem;
+}
+
+.utility-section {
+  padding: 2rem 0;
 }
 
 .tool-card {
@@ -13,7 +17,8 @@
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 4px 6px var(--color-shadow);
-  height: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .tool-card:hover {
@@ -273,7 +278,7 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .productivity-tools {
+  .utility-tools {
     grid-template-columns: 1fr;
   }
   
@@ -289,6 +294,18 @@
   
   .palette-button-group {
     flex-wrap: wrap;
+  }
+  
+  .tool-description, 
+  .tool-description.has-overflow {
+    max-height: none;
+    overflow: visible;
+    cursor: default;
+  }
+  
+  .tool-description::after,
+  .tool-description.has-overflow::after {
+    display: none;
   }
 }
 
