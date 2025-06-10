@@ -61,6 +61,15 @@ document.addEventListener('DOMContentLoaded', function() {
       openModal('unit-converter-modal');
       setupUnitConverter();
     });
+
+    document.getElementById('open-image-compressor').addEventListener('click', () => {
+      openModal('image-compressor-modal');
+    });
+    
+    document.getElementById('open-currency-converter').addEventListener('click', () => {
+      openModal('currency-converter-modal');
+      initCurrencyConverter();
+    });
     
     // Make only overflowing tool descriptions expandable
     const descriptions = document.querySelectorAll('.tool-description');
@@ -1297,5 +1306,540 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Highlight the formula for clarity
       conversionFormula.innerHTML = `<strong>${formula}</strong>`;
+    }
+
+    function initImageCompressor() {
+      const fileInput = document.getElementById('compress-image-upload');
+      const previewContainer = document.getElementById('compress-image-preview-container');
+      const previewElement = document.getElementById('compress-image-preview');
+      const originalSizeElement = document.getElementById('compress-original-size');
+      const compressOptions = document.getElementById('compress-options');
+      const compressButton = document.getElementById('compress-button');
+      const compressedResult = document.getElementById('compressed-result');
+      const compressedImageContainer = document.getElementById('compressed-image-container');
+      const compressedSizeElement = document.getElementById('compressed-size');
+      const compressionInfoElement = document.querySelector('.compression-info');
+      const downloadButton = document.getElementById('download-compressed');
+      const qualitySlider = document.getElementById('quality-slider');
+      const qualityValue = document.getElementById('quality-value');
+      
+      let originalImage = null;
+      let originalFile = null;
+      
+      // Update quality value display
+      qualitySlider.addEventListener('input', () => {
+        qualityValue.textContent = qualitySlider.value;
+      });
+      
+      // Handle file selection
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+          originalFile = e.target.files[0];
+          const reader = new FileReader();
+          
+          reader.onload = (event) => {
+            // Display preview
+            originalImage = new Image();
+            originalImage.src = event.target.result;
+            
+            originalImage.onload = () => {
+              previewElement.innerHTML = '';
+              const img = document.createElement('img');
+              img.src = event.target.result;
+              img.style.maxWidth = '100%';
+              img.style.maxHeight = '300px';
+              previewElement.appendChild(img);
+              
+              // Show file size
+              const fileSizeMB = (originalFile.size / (1024 * 1024)).toFixed(2);
+              originalSizeElement.textContent = `Original Size: ${fileSizeMB} MB (${originalFile.size.toLocaleString()} bytes)`;
+              
+              // Show compression options
+              previewContainer.style.display = 'block';
+              compressOptions.style.display = 'block';
+              compressedResult.style.display = 'none';
+            };
+          };
+          
+          reader.readAsDataURL(originalFile);
+        }
+      });
+      
+      // Compress image
+      compressButton.addEventListener('click', () => {
+        if (!originalImage) return;
+        
+        const targetSize = parseInt(document.getElementById('target-size-input').value) * 1024; // Convert KB to bytes
+        const initialQuality = parseInt(qualitySlider.value) / 100;
+        const outputFormat = document.querySelector('input[name="output-format"]:checked').value;
+        
+        compressImage(originalImage, targetSize, initialQuality, outputFormat);
+      });
+      
+      // Function to compress image
+      function compressImage(image, targetSize, quality, format) {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas dimensions to match image
+        canvas.width = image.width;
+        canvas.height = image.height;
+        
+        // Draw image to canvas
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        
+        // Binary search to find the optimal quality
+        compressBinarySearch(canvas, targetSize, 0.01, quality, format, 15);
+      }
+      
+      // Binary search for optimal compression
+      function compressBinarySearch(canvas, targetSize, min, max, format, attempts) {
+        const mid = (min + max) / 2;
+        const quality = Math.max(0.01, Math.min(1.0, mid)); // Lower minimum quality to 0.01
+        
+        const dataUrl = canvas.toDataURL(`image/${format}`, quality);
+        const blob = dataURItoBlob(dataUrl);
+        
+        // Increase max attempts to 15
+        if (attempts <= 0 || Math.abs(max - min) < 0.001) { // Smaller threshold
+          displayCompressedImage(dataUrl, blob, quality, format);
+          return;
+        }
+        
+        // Reduce tolerance to 2%
+        if (Math.abs(blob.size - targetSize) < targetSize * 0.02) {
+          displayCompressedImage(dataUrl, blob, quality, format);
+        } else if (blob.size > targetSize) {
+          compressBinarySearch(canvas, targetSize, min, mid, format, attempts - 1);
+        } else {
+          compressBinarySearch(canvas, targetSize, mid, max, format, attempts - 1);
+        }
+      }
+      
+      // Display compressed image results
+      function displayCompressedImage(dataUrl, blob, quality, format) {
+        const compressedImage = new Image();
+        compressedImage.src = dataUrl;
+        
+        compressedImage.onload = () => {
+          // Show the compressed image
+          compressedImageContainer.innerHTML = '';
+          const img = document.createElement('img');
+          img.src = dataUrl;
+          img.style.maxWidth = '100%';
+          img.style.maxHeight = '300px';
+          compressedImageContainer.appendChild(img);
+          
+          // Show size info
+          const originalSizeMB = (originalFile.size / (1024 * 1024)).toFixed(2);
+          const compressedSizeMB = (blob.size / (1024 * 1024)).toFixed(2);
+          const compressionRatio = ((1 - (blob.size / originalFile.size)) * 100).toFixed(1);
+          
+          compressedSizeElement.textContent = `Compressed Size: ${compressedSizeMB} MB (${blob.size.toLocaleString()} bytes)`;
+          compressionInfoElement.innerHTML = `
+            <strong>Compression Results:</strong><br>
+            Original: ${originalSizeMB} MB | Compressed: ${compressedSizeMB} MB<br>
+            Compression Ratio: ${compressionRatio}%<br>
+            Quality: ${Math.round(quality * 100)}% | Format: ${format.toUpperCase()}
+          `;
+          
+          // Setup download button
+          downloadButton.onclick = () => {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `compressed_image.${format}`;
+            link.click();
+          };
+          
+          // Show results
+          compressedResult.style.display = 'block';
+        };
+      }
+      
+      // Convert Data URI to Blob
+      function dataURItoBlob(dataURI) {
+        const byteString = atob(dataURI.split(',')[1]);
+        const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        
+        for (let i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+        }
+        
+        return new Blob([ab], { type: mimeString });
+      }
+
+      // Add reset button
+      const resetButton = document.getElementById('reset-compressor');
+      if (resetButton) {
+        resetButton.addEventListener('click', () => {
+          // Clear image and reset UI
+          fileInput.value = '';
+          originalImage = null;
+          originalFile = null;
+          previewElement.innerHTML = '';
+          originalSizeElement.textContent = '';
+          previewContainer.style.display = 'none';
+          compressOptions.style.display = 'none';
+          compressedResult.style.display = 'none';
+        });
+      }
+    }
+    
+    // Initialize all tools that need setup
+    initImageCompressor();
+    setupUnitConverter();
+
+    function initCurrencyConverter() {
+      const fromCurrency = document.getElementById('from-currency');
+      const toCurrency = document.getElementById('to-currency');
+      const amount = document.getElementById('amount');
+      const convertBtn = document.getElementById('convert-currency');
+      const swapBtn = document.getElementById('swap-currencies');
+      const resultDiv = document.getElementById('conversion-result');
+      const resultAmount = document.getElementById('result-amount');
+      const exchangeRate = document.getElementById('exchange-rate');
+      const lastUpdated = document.getElementById('last-updated');
+      const apiError = document.getElementById('api-error');
+      
+      // API details - using ExchangeRate-API's free tier
+      const apiUrl = 'https://open.er-api.com/v6/latest/';
+      
+      // Common currencies to show at the top
+      const commonCurrencies = ['USD', 'EUR', 'GBP', 'JPY', 'CAD', 'AUD', 'CHF', 'CNY', 'INR'];
+      
+      // Cached exchange rates data
+      let ratesData = null;
+      let lastFetchTime = null;
+      
+      // Populate currency dropdowns
+      function populateCurrencyDropdowns() {
+        fetch(apiUrl + 'USD')
+          .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+          })
+          .then(data => {
+            if (data.result !== 'success') {
+              throw new Error('API returned an error');
+            }
+            
+            ratesData = data;
+            lastFetchTime = new Date(data.time_last_update_utc);
+            
+            // Get all available currencies
+            const currencies = Object.keys(data.rates);
+            
+            // Create an array of currency objects with code and name
+            const currencyObjects = currencies.map(code => ({
+              code,
+              name: getCurrencyName(code),
+              isCommon: commonCurrencies.includes(code)
+            }));
+            
+            // Sort currencies: first by common status, then alphabetically by name
+            currencyObjects.sort((a, b) => {
+              // First sort by common status
+              if (a.isCommon && !b.isCommon) return -1;
+              if (!a.isCommon && b.isCommon) return 1;
+              
+              // Then sort alphabetically by name
+              return a.name.localeCompare(b.name);
+            });
+            
+            // Clear existing options
+            fromCurrency.innerHTML = '';
+            toCurrency.innerHTML = '';
+            
+            // Add options for each currency
+            currencyObjects.forEach(currency => {
+              const fromOption = document.createElement('option');
+              fromOption.value = currency.code;
+              fromOption.textContent = `${currency.code} - ${currency.name}`;
+              fromCurrency.appendChild(fromOption);
+              
+              const toOption = document.createElement('option');
+              toOption.value = currency.code;
+              toOption.textContent = `${currency.code} - ${currency.name}`;
+              toCurrency.appendChild(toOption);
+            });
+            
+            // Set default selections
+            fromCurrency.value = 'USD';
+            toCurrency.value = 'EUR';
+            
+            // Hide error message if it was shown
+            apiError.style.display = 'none';
+            
+            // Initial conversion
+            convertCurrency();
+          })
+          .catch(error => {
+            console.error('Error fetching currency data:', error);
+            apiError.textContent = `Error loading currency data: ${error.message}`;
+            apiError.style.display = 'block';
+          });
+      }
+      
+      // Convert currency
+      function convertCurrency() {
+        const from = fromCurrency.value;
+        const to = toCurrency.value;
+        const amountValue = parseFloat(amount.value) || 1;
+        
+        // Check if we need to fetch fresh data (if base currency changed or data is old)
+        const shouldRefetch = !ratesData || ratesData.base_code !== from || 
+          (new Date() - lastFetchTime > 60 * 60 * 1000); // Refetch if older than 1 hour
+        
+        if (shouldRefetch) {
+          fetch(apiUrl + from)
+            .then(response => {
+              if (!response.ok) throw new Error('Network response was not ok');
+              return response.json();
+            })
+            .then(data => {
+              if (data.result !== 'success') {
+                throw new Error('API returned an error');
+              }
+                
+              ratesData = data;
+              lastFetchTime = new Date(data.time_last_update_utc);
+              calculateAndDisplayResult(from, to, amountValue);
+              
+              // Hide error message if it was shown
+              apiError.style.display = 'none';
+            })
+            .catch(error => {
+              console.error('Error fetching currency data:', error);
+              apiError.textContent = `Error: ${error.message}`;
+              apiError.style.display = 'block';
+              resultDiv.style.display = 'none';
+            });
+        } else {
+          calculateAndDisplayResult(from, to, amountValue);
+        }
+      }
+      
+      // Calculate and display the conversion result
+      function calculateAndDisplayResult(from, to, amountValue) {
+        if (!ratesData || !ratesData.rates[to]) {
+          apiError.textContent = 'Error: Currency rate not available';
+          apiError.style.display = 'block';
+          resultDiv.style.display = 'none';
+          return;
+        }
+        
+        const rate = ratesData.rates[to];
+        const convertedAmount = amountValue * rate;
+        
+        const fromName = getCurrencyName(from);
+        const toName = getCurrencyName(to);
+        
+        resultAmount.textContent = `${amountValue.toLocaleString()} ${from} = ${convertedAmount.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        })} ${to}`;
+        
+        exchangeRate.textContent = `1 ${from} (${fromName}) = ${rate.toFixed(6)} ${to} (${toName})`;
+        lastUpdated.textContent = `Last updated: ${new Date(ratesData.time_last_update_utc).toLocaleString()}`;
+        
+        resultDiv.style.display = 'block';
+        apiError.style.display = 'none';
+      }
+      
+      // Helper function to get currency names
+      function getCurrencyName(code) {
+        const currencyNames = {
+          AED: 'United Arab Emirates Dirham',
+          AFN: 'Afghan Afghani',
+          ALL: 'Albanian Lek',
+          AMD: 'Armenian Dram',
+          ANG: 'Netherlands Antillean Guilder',
+          AOA: 'Angolan Kwanza',
+          ARS: 'Argentine Peso',
+          AUD: 'Australian Dollar',
+          AWG: 'Aruban Florin',
+          AZN: 'Azerbaijani Manat',
+          BAM: 'Bosnia-Herzegovina Convertible Mark',
+          BBD: 'Barbadian Dollar',
+          BDT: 'Bangladeshi Taka',
+          BGN: 'Bulgarian Lev',
+          BHD: 'Bahraini Dinar',
+          BIF: 'Burundian Franc',
+          BMD: 'Bermudan Dollar',
+          BND: 'Brunei Dollar',
+          BOB: 'Bolivian Boliviano',
+          BRL: 'Brazilian Real',
+          BSD: 'Bahamian Dollar',
+          BTC: 'Bitcoin',
+          BTN: 'Bhutanese Ngultrum',
+          BWP: 'Botswanan Pula',
+          BYN: 'Belarusian Ruble',
+          BZD: 'Belize Dollar',
+          CAD: 'Canadian Dollar',
+          CDF: 'Congolese Franc',
+          CHF: 'Swiss Franc',
+          CLF: 'Chilean Unit of Account (UF)',
+          CLP: 'Chilean Peso',
+          CNH: 'Chinese Yuan (Offshore)',
+          CNY: 'Chinese Yuan',
+          COP: 'Colombian Peso',
+          CRC: 'Costa Rican Colón',
+          CUC: 'Cuban Convertible Peso',
+          CUP: 'Cuban Peso',
+          CVE: 'Cape Verdean Escudo',
+          CZK: 'Czech Republic Koruna',
+          DJF: 'Djiboutian Franc',
+          DKK: 'Danish Krone',
+          DOP: 'Dominican Peso',
+          DZD: 'Algerian Dinar',
+          EGP: 'Egyptian Pound',
+          ERN: 'Eritrean Nakfa',
+          ETB: 'Ethiopian Birr',
+          EUR: 'Euro',
+          FJD: 'Fijian Dollar',
+          FKP: 'Falkland Islands Pound',
+          GBP: 'British Pound Sterling',
+          GEL: 'Georgian Lari',
+          GGP: 'Guernsey Pound',
+          GHS: 'Ghanaian Cedi',
+          GIP: 'Gibraltar Pound',
+          GMD: 'Gambian Dalasi',
+          GNF: 'Guinean Franc',
+          GTQ: 'Guatemalan Quetzal',
+          GYD: 'Guyanaese Dollar',
+          HKD: 'Hong Kong Dollar',
+          HNL: 'Honduran Lempira',
+          HRK: 'Croatian Kuna',
+          HTG: 'Haitian Gourde',
+          HUF: 'Hungarian Forint',
+          IDR: 'Indonesian Rupiah',
+          ILS: 'Israeli New Shekel',
+          IMP: 'Manx Pound',
+          INR: 'Indian Rupee',
+          IQD: 'Iraqi Dinar',
+          IRR: 'Iranian Rial',
+          ISK: 'Icelandic Króna',
+          JEP: 'Jersey Pound',
+          JMD: 'Jamaican Dollar',
+          JOD: 'Jordanian Dinar',
+          JPY: 'Japanese Yen',
+          KES: 'Kenyan Shilling',
+          KGS: 'Kyrgystani Som',
+          KHR: 'Cambodian Riel',
+          KMF: 'Comorian Franc',
+          KPW: 'North Korean Won',
+          KRW: 'South Korean Won',
+          KWD: 'Kuwaiti Dinar',
+          KYD: 'Cayman Islands Dollar',
+          KZT: 'Kazakhstani Tenge',
+          LAK: 'Laotian Kip',
+          LBP: 'Lebanese Pound',
+          LKR: 'Sri Lankan Rupee',
+          LRD: 'Liberian Dollar',
+          LSL: 'Lesotho Loti',
+          LYD: 'Libyan Dinar',
+          MAD: 'Moroccan Dirham',
+          MDL: 'Moldovan Leu',
+          MGA: 'Malagasy Ariary',
+          MKD: 'Macedonian Denar',
+          MMK: 'Myanma Kyat',
+          MNT: 'Mongolian Tugrik',
+          MOP: 'Macanese Pataca',
+          MRU: 'Mauritanian Ouguiya',
+          MUR: 'Mauritian Rupee',
+          MVR: 'Maldivian Rufiyaa',
+          MWK: 'Malawian Kwacha',
+          MXN: 'Mexican Peso',
+          MYR: 'Malaysian Ringgit',
+          MZN: 'Mozambican Metical',
+          NAD: 'Namibian Dollar',
+          NGN: 'Nigerian Naira',
+          NIO: 'Nicaraguan Córdoba',
+          NOK: 'Norwegian Krone',
+          NPR: 'Nepalese Rupee',
+          NZD: 'New Zealand Dollar',
+          OMR: 'Omani Rial',
+          PAB: 'Panamanian Balboa',
+          PEN: 'Peruvian Nuevo Sol',
+          PGK: 'Papua New Guinean Kina',
+          PHP: 'Philippine Peso',
+          PKR: 'Pakistani Rupee',
+          PLN: 'Polish Złoty',
+          PYG: 'Paraguayan Guarani',
+          QAR: 'Qatari Rial',
+          RON: 'Romanian Leu',
+          RSD: 'Serbian Dinar',
+          RUB: 'Russian Ruble',
+          RWF: 'Rwandan Franc',
+          SAR: 'Saudi Riyal',
+          SBD: 'Solomon Islands Dollar',
+          SCR: 'Seychellois Rupee',
+          SDG: 'Sudanese Pound',
+          SEK: 'Swedish Krona',
+          SGD: 'Singapore Dollar',
+          SHP: 'Saint Helena Pound',
+          SLL: 'Sierra Leonean Leone',
+          SOS: 'Somali Shilling',
+          SRD: 'Surinamese Dollar',
+          SSP: 'South Sudanese Pound',
+          STN: 'São Tomé and Príncipe Dobra',
+          SVC: 'Salvadoran Colón',
+          SYP: 'Syrian Pound',
+          SZL: 'Swazi Lilangeni',
+          THB: 'Thai Baht',
+          TJS: 'Tajikistani Somoni',
+          TMT: 'Turkmenistani Manat',
+          TND: 'Tunisian Dinar',
+          TOP: 'Tongan Paʻanga',
+          TRY: 'Turkish Lira',
+          TTD: 'Trinidad and Tobago Dollar',
+          TWD: 'New Taiwan Dollar',
+          TZS: 'Tanzanian Shilling',
+          UAH: 'Ukrainian Hryvnia',
+          UGX: 'Ugandan Shilling',
+          USD: 'United States Dollar',
+          UYU: 'Uruguayan Peso',
+          UZS: 'Uzbekistan Som',
+          VES: 'Venezuelan Bolívar Soberano',
+          VND: 'Vietnamese Dong',
+          VUV: 'Vanuatu Vatu',
+          WST: 'Samoan Tala',
+          XAF: 'CFA Franc BEAC',
+          XAG: 'Silver Ounce',
+          XAU: 'Gold Ounce',
+          XCD: 'East Caribbean Dollar',
+          XDR: 'Special Drawing Rights',
+          XOF: 'CFA Franc BCEAO',
+          XPD: 'Palladium Ounce',
+          XPF: 'CFP Franc',
+          XPT: 'Platinum Ounce',
+          YER: 'Yemeni Rial',
+          ZAR: 'South African Rand',
+          ZMW: 'Zambian Kwacha',
+          ZWL: 'Zimbabwean Dollar'
+        };
+        
+        return currencyNames[code] || 'Unknown Currency';
+      }
+      
+      // Event listeners
+      convertBtn.addEventListener('click', convertCurrency);
+      
+      swapBtn.addEventListener('click', function() {
+        const temp = fromCurrency.value;
+        fromCurrency.value = toCurrency.value;
+        toCurrency.value = temp;
+        convertCurrency();
+      });
+      
+      // Also convert when input changes
+      amount.addEventListener('input', convertCurrency);
+      fromCurrency.addEventListener('change', convertCurrency);
+      toCurrency.addEventListener('change', convertCurrency);
+      
+      // Initialize
+      populateCurrencyDropdowns();
     }
 });

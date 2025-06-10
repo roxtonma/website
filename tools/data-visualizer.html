@@ -3,10 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Data Visualizer | Roxton</title>
+  <title>Data Structures & Algorithms Visualizer | Roxton</title>
 
   <!-- Main stylesheet -->
   <link rel="stylesheet" href="../css/main.css" />
+  
+  <!-- Data Visualizer specific stylesheet -->
+  <link rel="stylesheet" href="../css/components/data-visualizer.css" />
 
   <!-- Bootstrap Icons v1.10.5 -->
   <link
@@ -44,11 +47,12 @@
             Tools <i class="bi bi-chevron-down"></i>
           </button>
           <ul class="dropdown-menu" aria-label="Tools submenu">
-            <li><a class="dropdown-item" href="ai-playground">AI Playground</a></li>
-            <li><a class="dropdown-item" href="code-analyzer">Code Analyzer</a></li>
+            <!-- <li><a class="dropdown-item" href="ai-playground">AI Playground</a></li> -->
+            <li><a class="dropdown-item" href="playground">Playground</a></li>
+            <!-- <li><a class="dropdown-item" href="code-analyzer">Code Analyzer</a></li> -->
             <li><a class="dropdown-item" href="data-visualizer">Data Visualizer</a></li>
-            <li><a class="dropdown-item" href="ml-models">ML Models</a></li>
-            <li><a class="dropdown-item" href="productivity">Productivity Tools</a></li>
+            <!-- <li><a class="dropdown-item" href="ml-models">ML Models</a></li> -->
+            <li><a class="dropdown-item" href="utility">Utility Tools</a></li>
           </ul>
         </li>
       </ul>
@@ -83,25 +87,76 @@
          TOOL SECTION
     --------------------------- -->
     <section class="section tool-section">
-      <h1 class="section-title">Data Visualizer</h1>
+      <h1 class="section-title">Data Structures & Algorithms Visualizer</h1>
       
       <div class="tool-content">
         <div class="tool-description">
           <p>
-            Transform your raw data into beautiful, interactive visualizations with our Data Visualizer tool.
-          </p>
-          <p>
-            This is a placeholder page. In the future, this area will contain data visualization tools, chart generators, and analytics dashboards.
+            Explore interactive visualizations of fundamental data structures and algorithms to deepen your computer science knowledge.
           </p>
         </div>
         
+        <div class="visualizer-container">
+          <div class="visualizer-controls">
+            <div class="control-group">
+              <h3>Select a Data Structure or Algorithm</h3>
+              <div class="tabs">
+                <button class="tab-btn active" data-tab="data-structures">Data Structures</button>
+                <button class="tab-btn" data-tab="algorithms">Algorithms</button>
+              </div>
+            </div>
+            
+            <div class="selection-panel" id="data-structures-panel">
+              <h4>Data Structures</h4>
+              <ul class="visualization-list">
+                <li><button class="viz-btn" data-viz="array">Arrays</button></li>
+                <li><button class="viz-btn" data-viz="linked-list">Linked Lists</button></li>
+                <li><button class="viz-btn" data-viz="stack">Stacks</button></li>
+                <li><button class="viz-btn" data-viz="queue">Queues</button></li>
+                <li><button class="viz-btn" data-viz="tree">Trees</button></li>
+                <li><button class="viz-btn" data-viz="graph">Graphs</button></li>
+                <li><button class="viz-btn" data-viz="hash-table">Hash Tables</button></li>
+              </ul>
+            </div>
+            
+            <div class="selection-panel hidden" id="algorithms-panel">
+              <h4>Algorithms</h4>
+              <ul class="visualization-list">
+                <li><button class="viz-btn" data-viz="sorting">Sorting Algorithms</button></li>
+                <li><button class="viz-btn" data-viz="searching">Searching Algorithms</button></li>
+                <li><button class="viz-btn" data-viz="graph-traversal">Graph Traversal</button></li>
+                <li><button class="viz-btn" data-viz="path-finding">Path Finding</button></li>
+                <li><button class="viz-btn" data-viz="dynamic-programming">Dynamic Programming</button></li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="visualization-display">
+            <div class="visualization-title">Select a data structure or algorithm</div>
+            <div id="visualization-canvas">
+              <!-- Visualization will be rendered here -->
+              <div class="placeholder-message">
+                <i class="bi bi-diagram-3"></i>
+                <p>Choose a data structure or algorithm from the left panel to start</p>
+              </div>
+            </div>
+            <div class="explanation-panel">
+              <h3>How It Works</h3>
+              <div id="explanation-content">
+                <p>Select a visualization to see detailed explanations and code samples.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
         <div class="tool-features">
-          <h2>Coming Soon</h2>
+          <h2>Features</h2>
           <ul>
-            <li><i class="bi bi-check-circle"></i> Interactive chart creation</li>
-            <li><i class="bi bi-check-circle"></i> CSV/JSON data import</li>
-            <li><i class="bi bi-check-circle"></i> Real-time data visualization</li>
-            <li><i class="bi bi-check-circle"></i> Dashboard creation and sharing</li>
+            <li><i class="bi bi-check-circle"></i> Interactive visualizations of common data structures</li>
+            <li><i class="bi bi-check-circle"></i> Step-by-step algorithm execution</li>
+            <li><i class="bi bi-check-circle"></i> Detailed explanations and time complexity analysis</li>
+            <li><i class="bi bi-check-circle"></i> Code examples in multiple programming languages</li>
+            <li><i class="bi bi-check-circle"></i> Custom input options for testing different scenarios</li>
           </ul>
         </div>
       </div>
@@ -124,5 +179,8 @@
 
   <!-- Main JavaScript -->
   <script src="../js/main.js"></script>
+  
+  <!-- Data Visualizer specific JavaScript -->
+  <script src="../js/components/data-visualizer.js"></script>
 </body>
 </html>
