@@ -487,3 +487,81 @@
 [data-theme="dark"] .graph-legend-text {
   fill: #fff;
 }
+
+/* Mobile responsiveness improvements */
+@media (max-width: 768px) {
+  /* Improve SVG visualization scaling */
+  .graph-container svg {
+    height: 300px;
+  }
+  
+  /* Make nodes and text more readable on small screens */
+  .graph-node {
+    r: 18;
+  }
+  
+  .graph-text, .traversal-legend text {
+    font-size: 14px;
+  }
+  
+  /* Make arrays and hash table more readable */
+  .array-element, .hash-item {
+    min-width: 40px;
+    font-size: 14px;
+  }
+  
+  /* Improve code blocks readability */
+  pre code {
+    font-size: 12px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  
+  /* Better spacing for touch targets */
+  .viz-btn {
+    padding: 10px 15px;
+    margin-bottom: 8px;
+  }
+  
+  /* Better path info display */
+  .path-info {
+    font-size: 14px;
+    padding: 8px 4px;
+  }
+  
+  /* Tree visualization */
+  .tree-node {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+  
+  /* DP table */
+  .dp-table {
+    width: 90%;
+    font-size: 14px;
+  }
+  
+  .dp-table th, .dp-table td {
+    padding: 6px;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+  .graph-container svg {
+    height: 250px;
+  }
+  
+  .tree-level {
+    gap: 20px;
+  }
+  
+  pre code {
+    font-size: 11px;
+  }
+  
+  .visualization-title {
+    font-size: 1.2rem;
+  }
+}
