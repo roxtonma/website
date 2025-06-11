@@ -1,6 +1,13 @@
 /* Playground Styles */
 .playground-section {
-  padding: 2rem 0;
+  padding: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .playground-tools {
@@ -8,6 +15,7 @@
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
   margin-top: 2rem;
+  width: 100%;
 }
 
 .tool-card {
@@ -54,15 +62,19 @@
 
 .tool-description {
   color: var(--color-text);
-  margin-bottom: 1.25rem;
+  margin: 0 auto 1.25rem;
   line-height: 1.5;
-  max-height: 4.5em;
-  overflow: hidden;
-  position: relative;
+  max-width: fit-content;
+  text-align: center;
+  height: fit-content;
+  overflow: visible;
 }
 
 .tool-description.has-overflow {
   cursor: pointer;
+  position: relative;
+  max-height: 4.5em;
+  overflow: hidden;
 }
 
 .tool-description.has-overflow::after {
@@ -76,6 +88,7 @@
 
 .tool-description.expanded {
   max-height: none;
+  overflow: visible;
 }
 
 .tool-description.expanded::after {
@@ -120,15 +133,13 @@
 }
 
 .modal-content {
-  background-color: var(--color-bg);
-  border-radius: 8px;
+  max-width: 90%;
   width: 90%;
-  max-width: 800px;
   max-height: 90vh;
-  overflow-y: auto;
   padding: 1.5rem;
-  position: relative;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .close-modal {
@@ -184,16 +195,23 @@
   min-height: 120px;
 }
 
+.regex-results-section {
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+  max-height: 400px;
+  margin-bottom: 20px;
+}
+
 .regex-results {
-  margin-top: 0.5rem;
+  flex: 1;
+  min-height: 100px;
+  max-height: 200px;
+  overflow-y: auto;
   border: 1px solid var(--color-border);
   border-radius: 4px;
-  padding: 1rem;
-  min-height: 120px;
+  padding: 10px;
   background-color: var(--color-bg-alt);
-  overflow-wrap: break-word;
-  white-space: pre-wrap;
-  overflow-y: auto;
 }
 
 .regex-match {
@@ -203,8 +221,15 @@
 }
 
 .regex-match-list {
-  margin-top: 1rem;
-  padding-left: 1.5rem;
+  flex: 1;
+  min-height: 80px;
+  max-height: 150px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background-color: var(--color-bg-alt);
 }
 
 .regex-match-item {
@@ -228,15 +253,37 @@
 }
 
 .pattern-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+  width: 100%;
 }
 
 .pattern-btn {
-  font-size: 0.9rem;
-  padding: 0.3rem 0.5rem;
+  min-height: 40px;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  transition: background-color 0.2s, color 0.2s;
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* When active, use a background color change rather than size change */
+.pattern-btn:active,
+.pattern-btn:focus {
+  transform: none;
+  box-shadow: 0 0 0 2px rgba(62, 155, 205, 0.3);
+}
+
+/* Maintain consistent spacing */
+.regex-common-patterns {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid var(--color-border);
 }
 
 /* Desktop layout - side by side with proper alignment */
@@ -327,4 +374,957 @@
   padding: 0.1rem 0.3rem;
   border-radius: 3px;
   font-family: monospace;
+}
+
+/* HTTP Request Tester Styles */
+.postman-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* Request URL bar */
+.request-url-bar {
+  display: flex;
+  padding: 8px;
+  background-color: #f6f6f6;
+  border-bottom: 1px solid #e0e0e0;
+  gap: 0;
+}
+
+.http-method-select {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  background-color: white;
+  font-weight: 500;
+  width: 100px;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.url-input {
+  flex-grow: 1;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-left: none;
+  border-right: none;
+  margin: 0;
+  font-size: 14px;
+}
+
+.send-btn {
+  padding: 8px 16px;
+  background-color: #FF6C37;
+  color: white;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.send-btn:hover {
+  background-color: #E05A2B;
+}
+
+/* Request options */
+.simple-request-options {
+  padding: 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.simple-headers, .simple-body {
+  margin-bottom: 20px;
+}
+
+.simple-headers h4, .simple-body h4 {
+  font-size: 14px;
+  margin: 0 0 10px 0;
+  color: #555;
+}
+
+.simple-header-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.header-key {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+
+.header-value {
+  flex: 2;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+
+.add-header {
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+#body-content-type {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  width: 200px;
+}
+
+#request-body {
+  width: 100%;
+  min-height: 100px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 13px;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+/* Response section */
+.postman-response {
+  background-color: #f6f6f6;
+  padding: 16px;
+}
+
+.response-container {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.response-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.response-status {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.response-time {
+  font-size: 12px;
+  color: #777;
+}
+
+.response-body {
+  background-color: white;
+  padding: 12px;
+  font-family: monospace;
+  font-size: 13px;
+  white-space: pre-wrap;
+  overflow-x: auto;
+  min-height: 150px;
+  max-height: 400px;
+  overflow-y: auto;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Example endpoints */
+.example-endpoints {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.example-endpoints h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 15px;
+  color: #555;
+}
+
+.endpoint-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.example-endpoint-btn {
+  padding: 6px 12px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.example-endpoint-btn:hover {
+  background-color: #e6e6e6;
+}
+
+/* Dark mode support */
+[data-theme="dark"] .request-url-bar,
+[data-theme="dark"] .postman-response {
+  background-color: #333;
+  border-color: #444;
+}
+
+[data-theme="dark"] .response-header {
+  background-color: #444;
+  border-color: #555;
+}
+
+[data-theme="dark"] .http-method-select,
+[data-theme="dark"] .url-input,
+[data-theme="dark"] #body-content-type,
+[data-theme="dark"] #request-body,
+[data-theme="dark"] .header-key,
+[data-theme="dark"] .header-value {
+  background-color: #333;
+  color: #e0e0e0;
+  border-color: #555;
+}
+
+[data-theme="dark"] .response-body {
+  background-color: #222;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .example-endpoints {
+  background-color: #333;
+  border-color: #444;
+}
+
+[data-theme="dark"] .example-endpoint-btn {
+  background-color: #444;
+  border-color: #555;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .example-endpoint-btn:hover {
+  background-color: #555;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .postman-container {
+    flex-direction: row;
+  }
+  
+  .postman-request,
+  .postman-response {
+    flex: 1;
+    max-height: 600px;
+    overflow-y: auto;
+  }
+  
+  .postman-request {
+    border-right: 1px solid #e0e0e0;
+  }
+}
+
+@media (max-width: 767px) {
+  .request-url-bar {
+    flex-wrap: wrap;
+  }
+  
+  .http-method-select {
+    width: 100%;
+    border-radius: 4px 4px 0 0;
+  }
+  
+  .url-input {
+    width: 100%;
+    border-radius: 0;
+    border-top: none;
+    border-left: 1px solid #ccc;
+  }
+  
+  .send-btn {
+    width: 100%;
+    border-radius: 0 0 4px 4px;
+  }
+  
+  .simple-header-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .header-key,
+  .header-value {
+    width: 100%;
+  }
+  
+  .add-header {
+    align-self: flex-end;
+    margin-top: 8px;
+  }
+  
+  .example-endpoint-btn {
+    flex-grow: 1;
+    text-align: center;
+  }
+}
+
+/* Common Tool Section Styles */
+.section {
+  padding: 5rem 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Fix alignment for all tool sections */
+.playground-section,
+.visualizer-section,
+.utility-section {
+  padding: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Fix the tool description alignment */
+.tool-description {
+  max-width: 800px;
+  margin: 0 auto 1.5rem;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* Ensure tool grids align properly */
+.playground-tools,
+.utility-tools {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+/* Modal content container fixes */
+.modal-content {
+  background-color: var(--color-bg);
+  border-radius: 8px;
+  width: 90%;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 2rem;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  margin: 0 auto;
+}
+
+/* Fix content inside modals */
+.regex-container,
+.http-container,
+.postman-container,
+.mock-data-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* Input and control styling */
+.tool-input,
+.mock-select,
+.mock-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Fix alignment of row elements in tools */
+.request-url-bar,
+.simple-header-row,
+.regex-pattern-row {
+  display: flex;
+  width: 100%;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Proper spacing for tool sections */
+.simple-headers,
+.simple-body,
+.regex-flags,
+.control-group {
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+/* Mock Data Generator Styles */
+.mock-data-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.mock-data-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--color-bg-alt);
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 150px;
+  flex: 1;
+}
+
+.mock-btn {
+  padding: 0.5rem 1rem;
+  background-color: var(--color-btn-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: auto;
+}
+
+.mock-btn.secondary {
+  background-color: #6c757d;
+}
+
+.mock-data-output {
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.result-area {
+  width: 100%;
+  min-height: 300px;
+  padding: 1rem;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  overflow-x: auto;
+  box-sizing: border-box;
+}
+
+.mock-data-options {
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.option-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.75rem;
+}
+
+/* Better responsive layouts */
+@media (min-width: 768px) {
+  .regex-container,
+  .mock-data-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .regex-input-section,
+  .mock-data-controls {
+    flex: 1;
+    min-width: 300px;
+  }
+  
+  .regex-results-section,
+  .mock-data-output {
+    flex: 1;
+    min-width: 300px;
+  }
+  
+  .regex-common-patterns,
+  .mock-data-options {
+    width: 100%;
+  }
+
+  .postman-container {
+    flex-direction: row;
+  }
+  
+  .postman-request,
+  .postman-response {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+/* Adjustments for small screens */
+@media (max-width: 767px) {
+  .playground-section,
+  .visualizer-section,
+  .utility-section {
+    padding: 1.5rem;
+  }
+  
+  .playground-tools,
+  .utility-tools {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal-content {
+    padding: 1.5rem;
+    width: 95%;
+  }
+  
+  .request-url-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .http-method-select,
+  .url-input,
+  .send-btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  
+  .mock-data-controls {
+    flex-direction: column;
+  }
+  
+  .control-group {
+    width: 100%;
+  }
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .result-area,
+[data-theme="dark"] .tool-input,
+[data-theme="dark"] .mock-select,
+[data-theme="dark"] .mock-input {
+  background-color: #333;
+  color: #f5f5f5;
+  border-color: #555;
+}
+
+/* Improved mobile responsiveness */
+@media (max-width: 767px) {
+  /* Adjust section padding for mobile */
+  .playground-section {
+    padding: 1rem;
+  }
+  
+  /* Make section title smaller on mobile */
+  .playground-section .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Make the tool description more compact */
+  .tool-description {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 0.8rem;
+  }
+  
+  /* Better fit tool cards on mobile */
+  .playground-tools {
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  /* Adjust card padding and font sizes */
+  .tool-card .tool-header {
+    padding: 1rem;
+  }
+  
+  .tool-card .tool-content {
+    padding: 1rem;
+  }
+  
+  .tool-title {
+    font-size: 1.1rem;
+  }
+  
+  .tool-icon {
+    font-size: 1.2rem;
+  }
+  
+  /* Make modal content more mobile-friendly */
+  .modal-content {
+    padding: 1rem;
+    max-height: 85vh;
+    width: 95%;
+  }
+  
+  .modal-title {
+    font-size: 1.3rem;
+  }
+  
+  /* Stack elements vertically on mobile */
+  .request-url-bar,
+  .simple-header-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .http-method-select,
+  .url-input,
+  .send-btn,
+  .header-key,
+  .header-value,
+  .add-header {
+    width: 100%;
+    margin-right: 0;
+  }
+  
+  /* Ensure buttons are properly sized */
+  .tool-btn,
+  .mock-btn,
+  .send-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Add this to ensure footer stays at bottom */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Full viewport height */
+}
+
+#site-main {
+  flex: 1 0 auto; /* Makes main content area expand to fill available space */
+}
+
+.footer-container {
+  flex-shrink: 0; /* Prevents footer from shrinking */
+  width: 100%;
+  padding: 2rem; /* Changed from 1rem to 2rem to match main site */
+  background-color: var(--color-footer-bg);
+  color: var(--color-footer-text);
+  text-align: center;
+  border-top: 1px solid var(--color-border);
+  margin-top: auto; /* Pushes footer to bottom */
+}
+
+.footer-text {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Ensure responsive behavior */
+@media (max-width: 768px) {
+  .playground-section {
+    padding: 1.5rem;
+  }
+  
+  .playground-tools {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Algorithm Visualization Responsive Styles */
+
+/* Base styles for algorithm visualizations */
+.array-container, .sorting-container, .searching-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  padding: 1rem 0;
+  overflow-x: auto;
+}
+
+/* Graph and tree containers */
+.graph-container, .tree-container {
+  width: 100%;
+  max-height: 400px;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Make SVG responsive */
+.graph-container svg {
+  width: 100%;
+  height: auto;
+  max-height: 350px;
+}
+
+/* Path info styles */
+.path-info {
+  width: 100%;
+  max-width: 100%;
+  text-align: center;
+  font-size: 0.9rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  padding: 0.75rem;
+  margin-top: 1rem;
+  border-radius: 4px;
+}
+
+/* Responsive array elements */
+.array-element {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+/* Make sorting visualization more responsive */
+.sorting-container .array-element {
+  height: 60px;
+  min-width: 30px;
+  font-size: 0.9rem;
+}
+
+/* Tree visualization responsiveness */
+.tree-container {
+  gap: 20px;
+}
+
+.tree-level {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.tree-node {
+  width: 36px;
+  height: 36px;
+  font-size: 0.9rem;
+}
+
+/* Graph visualization improvements */
+.graph-node {
+  r: 20;
+  transition: r 0.3s ease;
+}
+
+.graph-text {
+  font-size: 14px;
+  transition: font-size 0.3s ease;
+}
+
+.graph-edge {
+  stroke-width: 2;
+}
+
+/* DP table responsiveness */
+.dp-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0;
+  overflow-x: auto; /* Allow horizontal scroll if needed */
+}
+
+.dp-table {
+  border-collapse: collapse;
+  margin: 0 auto;
+  width: auto; /* Let content determine width */
+  max-width: 100%;
+  table-layout: fixed; /* Better control over cell sizing */
+}
+
+.dp-table th, 
+.dp-table td {
+  border: 1px solid var(--border-color);
+  padding: 8px;
+  text-align: center;
+  min-width: 40px; /* Ensure cells don't get too small */
+}
+
+.dp-table th {
+  background-color: var(--primary-color-light);
+  font-weight: bold;
+  white-space: nowrap; /* Prevent header text wrapping */
+}
+
+/* Improved zebra striping */
+.dp-table tr:nth-child(even) {
+  background-color: var(--surface-color-alt);
+}
+
+.dp-table tr:hover {
+  background-color: var(--hover-color);
+}
+
+/* Screen size adjustments */
+@media (max-width: 768px) {
+  .dp-table {
+    font-size: 0.9rem;
+  }
+  
+  .dp-table th, 
+  .dp-table td {
+    padding: 6px;
+    min-width: 35px;
+  }
+}
+
+@media (max-width: 576px) {
+  .dp-container {
+    padding: 5px 0;
+  }
+  
+  .dp-table {
+    font-size: 0.8rem;
+  }
+  
+  .dp-table th, 
+  .dp-table td {
+    padding: 4px;
+    min-width: 30px;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 400px) {
+  .dp-table {
+    font-size: 0.7rem;
+  }
+  
+  .dp-table th, 
+  .dp-table td {
+    padding: 3px;
+    min-width: 25px;
+  }
+}
+
+/* Ensure proper dark mode support */
+[data-theme="dark"] .dp-table th {
+  background-color: var(--primary-color-dark);
+  color: white;
+}
+
+[data-theme="dark"] .dp-table tr:nth-child(even) {
+  background-color: #333;
+}
+
+[data-theme="dark"] .dp-table tr:hover {
+  background-color: #444;
+}
+
+[data-theme="dark"] .dp-table th, 
+[data-theme="dark"] .dp-table td {
+  border-color: #555;
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) {
+  .array-element, 
+  .tree-node,
+  .graph-node,
+  .stack-element,
+  .queue-element,
+  .hash-item {
+    cursor: pointer;
+  }
+  
+  .viz-btn {
+    padding: 10px 12px;
+    margin-bottom: 8px;
+  }
+  
+  .tab-btn {
+    padding: 10px 15px;
+  }
+}
+
+/* Dark mode improvements */
+[data-theme="dark"] .path-info {
+  background-color: #333;
+  color: #f5f5f5;
+  border-color: #555;
+}
+
+[data-theme="dark"] .graph-text {
+  fill: #f5f5f5;
+}
+
+[data-theme="dark"] .graph-edge {
+  stroke: #aaa;
+}
+
+/* Fix for light mode active tab text */
+@media (prefers-color-scheme: light), 
+       (not (prefers-color-scheme: dark)), 
+       html:not([data-theme="dark"]) {
+  .tab-btn.active {
+    color: white !important; /* Force white text in active tabs */
+    background-color: #3E9BCD; /* Medium blue background */
+    font-weight: 600; /* Make text bolder */
+    text-shadow: 0 1px 1px rgba(0,0,0,0.2); /* Add slight shadow for better readability */
+  }
+}
+
+/* Alternative approach if the above doesn't work */
+body:not([data-theme="dark"]) .tab-btn.active {
+  color: white !important;
+  background-color: #3E9BCD;
+  font-weight: 600;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+}
+
+/* Last resort approach */
+.tab-btn.active {
+  color: white !important;
+  background-color: #3E9BCD;
+  font-weight: 600;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.2);
 }

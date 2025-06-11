@@ -2,214 +2,392 @@
 
 document.addEventListener('DOMContentLoaded', function() {
   // Modal functionality
-  const openModal = (modalId) => {
-    document.getElementById(modalId).style.display = 'flex';
-    document.body.style.overflow = 'hidden'; // Prevent scrolling
-  };
-  
-  const closeAllModals = () => {
-    const modals = document.querySelectorAll('.tool-modal');
-    modals.forEach(modal => {
-      modal.style.display = 'none';
-    });
-    document.body.style.overflow = ''; // Restore scrolling
-  };
-  
-  // Setup close buttons
+  const toolButtons = document.querySelectorAll('.tool-btn[data-modal]');
+  const modals = document.querySelectorAll('.tool-modal');
   const closeButtons = document.querySelectorAll('.close-modal');
-  closeButtons.forEach(button => {
-    button.addEventListener('click', closeAllModals);
-  });
   
-  // Close modal when clicking outside
-  document.querySelectorAll('.tool-modal').forEach(modal => {
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        closeAllModals();
-      }
-    });
-  });
-  
-  // Open specific modals
-  const toolButtons = document.querySelectorAll('[data-modal]');
   toolButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      const modalId = this.getAttribute('data-modal');
-      openModal(modalId);
-      
-      // Initialize specific tool if needed
-      if (modalId === 'regex-tester-modal') {
-        initRegexTester();
+    button.addEventListener('click', () => {
+      const modalId = button.getAttribute('data-modal');
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.style.display = 'flex';
       }
     });
   });
   
-  // Make only overflowing tool descriptions expandable
-  const descriptions = document.querySelectorAll('.tool-description');
+  closeButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const modal = button.closest('.tool-modal');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    });
+  });
   
-  descriptions.forEach(description => {
-    // Ensure the description has content
-    if (!description.textContent.trim()) return;
-    
-    // More accurate overflow detection
-    const isOverflowing = description.scrollHeight > description.clientHeight + 5; // 5px buffer
-    
-    if (isOverflowing) {
-      // Add indicator class for styling
-      description.classList.add('has-overflow');
-      
-      // Add click handler only to descriptions with overflow
-      description.addEventListener('click', function() {
-        this.classList.toggle('expanded');
-      });
-    } else {
-      // Remove has-overflow class if previously added
-      description.classList.remove('has-overflow');
-      
-      // Remove pointer cursor for non-overflowing descriptions
-      description.style.cursor = 'default';
+  window.addEventListener('click', (event) => {
+    if (event.target.classList.contains('tool-modal')) {
+      event.target.style.display = 'none';
     }
   });
   
-  // Regex Tester Logic
-  function initRegexTester() {
-    const regexPattern = document.getElementById('regex-pattern');
-    const regexFlags = document.querySelectorAll('.regex-flag');
-    const testString = document.getElementById('test-string');
-    const regexResults = document.getElementById('regex-results');
-    const regexMatchList = document.getElementById('regex-match-list');
-    const patternButtons = document.querySelectorAll('.pattern-btn');
+  // Regex Tester functionality
+  if (document.getElementById('regex-tester-modal')) {
+    initRegexTester();
+  }
+  
+  // HTTP Request Tester functionality
+  if (document.getElementById('http-tester-modal')) {
+    initHttpTester();
+  }
+  
+  // Other tool initializations will go here
+});
+
+// Regex Tester Initialization
+function initRegexTester() {
+  const regexPattern = document.getElementById('regex-pattern');
+  const testString = document.getElementById('test-string');
+  const regexFlags = document.querySelectorAll('.regex-flag');
+  const regexResults = document.getElementById('regex-results');
+  const regexMatchList = document.getElementById('regex-match-list');
+  const patternButtons = document.querySelectorAll('.pattern-btn');
+  const showFlagInfoBtn = document.getElementById('show-flag-info');
+  const flagInfoPanel = document.getElementById('flag-info-panel');
+  
+  // Show/hide flag info panel
+  if (showFlagInfoBtn && flagInfoPanel) {
+    showFlagInfoBtn.addEventListener('click', () => {
+      if (flagInfoPanel.style.display === 'none') {
+        flagInfoPanel.style.display = 'block';
+        showFlagInfoBtn.innerHTML = '<i class="bi bi-dash-circle"></i> Hide flag info';
+      } else {
+        flagInfoPanel.style.display = 'none';
+        showFlagInfoBtn.innerHTML = '<i class="bi bi-info-circle"></i> What are flags?';
+      }
+    });
+  }
+  
+  // Update results when inputs change
+  function updateResults() {
+    if (!regexPattern || !testString || !regexResults || !regexMatchList) return;
     
-    // Function to run the regex test
-    function runRegexTest() {
-      // Clear previous results
-      regexResults.innerHTML = '';
+    const pattern = regexPattern.value;
+    const text = testString.value;
+    let activeFlags = '';
+    
+    regexFlags.forEach(flag => {
+      if (flag.checked) {
+        activeFlags += flag.value;
+      }
+    });
+    
+    if (!pattern) {
+      regexResults.innerHTML = '<span class="regex-no-match">Enter a regular expression pattern</span>';
       regexMatchList.innerHTML = '';
+      return;
+    }
+    
+    try {
+      const regex = new RegExp(pattern, activeFlags);
+      const matches = text.match(regex);
       
-      // Get regex pattern and flags
-      const pattern = regexPattern.value;
-      let flags = '';
-      
-      regexFlags.forEach(flag => {
-        if (flag.checked) {
-          flags += flag.value;
-        }
-      });
-      
-      // Validate input
-      if (!pattern) {
-        regexResults.innerHTML = '<div class="regex-no-match">Enter a regular expression pattern</div>';
+      if (!text) {
+        regexResults.innerHTML = '<span class="regex-no-match">Enter text to test against</span>';
+        regexMatchList.innerHTML = '';
         return;
       }
       
-      // Create regex and test string
-      try {
-        const regex = new RegExp(pattern, flags);
-        const string = testString.value;
-        
-        // Test for matches
-        const matches = [];
-        let match;
-        const globalRegex = new RegExp(pattern, flags.includes('g') ? flags : flags + 'g');
-        
-        while ((match = globalRegex.exec(string)) !== null) {
-          matches.push({
-            text: match[0],
-            index: match.index,
-            groups: match.slice(1),
-            groupCount: match.length - 1
-          });
-          
-          // Prevent infinite loops for zero-width matches
-          if (match.index === globalRegex.lastIndex) {
-            globalRegex.lastIndex++;
-          }
+      // Highlight matches in the test string
+      let highlightedText = text;
+      if (matches) {
+        if (activeFlags.includes('g')) {
+          // For global matches, replace all occurrences
+          highlightedText = text.replace(regex, match => `<span class="regex-match">${match}</span>`);
+        } else {
+          // For non-global matches, replace only the first occurrence
+          const firstMatch = matches[0];
+          const firstIndex = text.indexOf(firstMatch);
+          const beforeMatch = text.substring(0, firstIndex);
+          const afterMatch = text.substring(firstIndex + firstMatch.length);
+          highlightedText = `${beforeMatch}<span class="regex-match">${firstMatch}</span>${afterMatch}`;
         }
-        
-        // Display results
-        if (matches.length > 0) {
-          // Highlight matches in the original string
-          let highlightedString = string;
-          let offset = 0;
-          
-          // Sort matches by index (descending) to avoid offset issues
-          matches.sort((a, b) => b.index - a.index);
-          
-          // Add highlighting
-          matches.forEach(match => {
-            const before = highlightedString.substring(0, match.index + offset);
-            const after = highlightedString.substring(match.index + offset + match.text.length);
-            highlightedString = before + '<span class="regex-match">' + match.text + '</span>' + after;
-            offset += '<span class="regex-match"></span>'.length;
-          });
-          
-          regexResults.innerHTML = highlightedString || '<div class="regex-no-match">No matches found</div>';
-          
-          // Sort matches by index (ascending) for the list
-          matches.sort((a, b) => a.index - b.index);
-          
-          // Add match details to the list
-          matches.forEach((match, i) => {
-            const matchItem = document.createElement('li');
-            matchItem.className = 'regex-match-item';
-            
-            let matchDetails = `Match ${i + 1}: "${match.text}" at index ${match.index}`;
-            
-            if (match.groupCount > 0) {
-              matchDetails += '<ul>';
-              match.groups.forEach((group, j) => {
-                matchDetails += `<li>Group ${j + 1}: "${group}"</li>`;
-              });
-              matchDetails += '</ul>';
-            }
-            
-            matchItem.innerHTML = matchDetails;
-            regexMatchList.appendChild(matchItem);
+      }
+      
+      regexResults.innerHTML = highlightedText || '<span class="regex-no-match">No matches found</span>';
+      
+      // List all matches
+      regexMatchList.innerHTML = '';
+      
+      if (matches && matches.length > 0) {
+        if (activeFlags.includes('g')) {
+          matches.forEach((match, index) => {
+            const li = document.createElement('li');
+            li.className = 'regex-match-item';
+            li.textContent = `Match ${index + 1}: "${match}"`;
+            regexMatchList.appendChild(li);
           });
         } else {
-          regexResults.innerHTML = '<div class="regex-no-match">No matches found</div>';
-          regexMatchList.innerHTML = '';
+          // For non-global regex, the first element is the complete match
+          const li = document.createElement('li');
+          li.className = 'regex-match-item';
+          li.textContent = `Complete match: "${matches[0]}"`;
+          regexMatchList.appendChild(li);
+          
+          // Remaining elements are capturing groups
+          for (let i = 1; i < matches.length; i++) {
+            const li = document.createElement('li');
+            li.className = 'regex-match-item';
+            li.textContent = `Group ${i}: "${matches[i]}"`;
+            regexMatchList.appendChild(li);
+          }
         }
-      } catch (error) {
-        regexResults.innerHTML = `<div class="regex-error">Error: ${error.message}</div>`;
-        regexMatchList.innerHTML = '';
+      } else {
+        const li = document.createElement('li');
+        li.className = 'regex-no-match';
+        li.textContent = 'No matches found';
+        regexMatchList.appendChild(li);
+      }
+    } catch (error) {
+      regexResults.innerHTML = `<span class="regex-error">Error: ${error.message}</span>`;
+      regexMatchList.innerHTML = '';
+    }
+  }
+  
+  // Event listeners
+  if (regexPattern) regexPattern.addEventListener('input', updateResults);
+  if (testString) testString.addEventListener('input', updateResults);
+  regexFlags.forEach(flag => {
+    flag.addEventListener('change', updateResults);
+  });
+  
+  // Pattern buttons
+  patternButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const pattern = button.getAttribute('data-pattern');
+      regexPattern.value = pattern;
+      updateResults();
+    });
+  });
+  
+  // Initial update
+  updateResults();
+}
+
+// HTTP Request Tester Initialization
+function initHttpTester() {
+  // DOM Elements
+  const httpMethod = document.getElementById('http-method');
+  const requestUrl = document.getElementById('request-url');
+  const sendRequestBtn = document.getElementById('send-request');
+  const bodyContentType = document.getElementById('body-content-type');
+  const requestBody = document.getElementById('request-body');
+  
+  // Example endpoints
+  const exampleEndpointBtns = document.querySelectorAll('.example-endpoint-btn');
+  
+  // Add param/header buttons
+  const addParamBtn = document.getElementById('add-param');
+  const addHeaderBtn = document.getElementById('add-header');
+  
+  // Add parameter row
+  if (addParamBtn) {
+    addParamBtn.addEventListener('click', () => {
+      const paramsTable = document.querySelector('.params-table tbody');
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td><input type="text" class="param-key" placeholder="Parameter name"></td>
+        <td><input type="text" class="param-value" placeholder="Parameter value"></td>
+      `;
+      paramsTable.appendChild(newRow);
+    });
+  }
+  
+  // Add header row
+  if (addHeaderBtn) {
+    addHeaderBtn.addEventListener('click', () => {
+      const headersTable = document.querySelector('.headers-table tbody');
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td><input type="text" class="header-key" placeholder="Header name"></td>
+        <td><input type="text" class="header-value" placeholder="Header value"></td>
+      `;
+      headersTable.appendChild(newRow);
+    });
+  }
+  
+  // Example endpoint buttons
+  exampleEndpointBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      requestUrl.value = btn.getAttribute('data-url');
+    });
+  });
+  
+  // Send request
+  if (sendRequestBtn) {
+    sendRequestBtn.addEventListener('click', sendRequest);
+  }
+  
+  // Send request function
+  async function sendRequest() {
+    // Reset response display
+    const responseStatus = document.getElementById('response-status');
+    const responseTime = document.getElementById('response-time');
+    const responseBody = document.getElementById('response-body');
+    
+    if (!responseStatus || !responseTime || !responseBody) {
+      console.error('Response elements not found');
+      return;
+    }
+    
+    responseStatus.textContent = 'Sending request...';
+    responseStatus.className = 'response-status';
+    responseTime.textContent = '';
+    responseBody.textContent = '';
+    
+    // Get URL
+    let url = requestUrl.value.trim();
+    if (!url) {
+      responseStatus.textContent = 'Error: URL is required';
+      responseStatus.className = 'response-status status-error';
+      return;
+    }
+    
+    // Add query parameters
+    const paramRows = document.querySelectorAll('.params-table tbody tr');
+    const params = new URLSearchParams();
+    let hasParams = false;
+    
+    paramRows.forEach(row => {
+      const keyInput = row.querySelector('.param-key');
+      const valueInput = row.querySelector('.param-value');
+      
+      if (keyInput && valueInput) {
+        const key = keyInput.value.trim();
+        const value = valueInput.value.trim();
+        
+        if (key) {
+          params.append(key, value);
+          hasParams = true;
+        }
+      }
+    });
+    
+    if (hasParams) {
+      url += url.includes('?') ? '&' : '?';
+      url += params.toString();
+    }
+    
+    // Get headers
+    const headerRows = document.querySelectorAll('.headers-table tbody tr');
+    const headers = {};
+    
+    headerRows.forEach(row => {
+      const keyInput = row.querySelector('.header-key');
+      const valueInput = row.querySelector('.header-value');
+      
+      if (keyInput && valueInput) {
+        const key = keyInput.value.trim();
+        const value = valueInput.value.trim();
+        
+        if (key) {
+          headers[key] = value;
+        }
+      }
+    });
+    
+    // Build request options
+    const method = httpMethod.value;
+    const options = {
+      method,
+      headers,
+      mode: 'cors'
+    };
+    
+    // Add body for POST, PUT, PATCH
+    if (['POST', 'PUT', 'PATCH'].includes(method)) {
+      const contentType = bodyContentType.value;
+      headers['Content-Type'] = contentType;
+      
+      if (contentType === 'application/json') {
+        try {
+          // Try to parse JSON to validate
+          const body = requestBody.value.trim();
+          if (body) {
+            const jsonBody = JSON.parse(body);
+            options.body = JSON.stringify(jsonBody);
+          }
+        } catch (error) {
+          responseStatus.textContent = `Error: Invalid JSON - ${error.message}`;
+          responseStatus.className = 'response-status status-error';
+          return;
+        }
+      } else {
+        options.body = requestBody.value;
       }
     }
     
-    // Add event listeners
-    if (regexPattern) regexPattern.addEventListener('input', runRegexTest);
-    if (testString) testString.addEventListener('input', runRegexTest);
+    // Send request and measure time
+    const startTime = performance.now();
     
-    regexFlags.forEach(flag => {
-      flag.addEventListener('change', runRegexTest);
-    });
-    
-    // Common patterns
-    if (patternButtons.length) {
-      patternButtons.forEach(button => {
-        button.addEventListener('click', function() {
-          const pattern = this.getAttribute('data-pattern');
-          regexPattern.value = pattern;
-          runRegexTest();
+    try {
+      const response = await fetch(url, options);
+      const endTime = performance.now();
+      const duration = endTime - startTime;
+      
+      // Display response time
+      responseTime.textContent = `${duration.toFixed(0)}ms`;
+      
+      // Display status
+      const statusCode = response.status;
+      const statusText = `${statusCode} ${response.statusText}`;
+      responseStatus.textContent = statusText;
+      
+      // Set status color based on response code
+      if (statusCode >= 200 && statusCode < 300) {
+        responseStatus.className = 'response-status status-success';
+      } else if (statusCode >= 400) {
+        responseStatus.className = 'response-status status-error';
+      } else {
+        responseStatus.className = 'response-status';
+      }
+      
+      // Show combined headers and body
+      try {
+        const contentType = response.headers.get('content-type') || '';
+        
+        // Get headers text
+        let headersText = '// Response Headers:\n';
+        response.headers.forEach((value, key) => {
+          headersText += `// ${key}: ${value}\n`;
         });
-      });
+        headersText += '\n// Response Body:\n';
+        
+        // Get body
+        let bodyText = '';
+        if (contentType.includes('application/json')) {
+          const jsonResponse = await response.json();
+          bodyText = JSON.stringify(jsonResponse, null, 2);
+        } else {
+          bodyText = await response.text();
+        }
+        
+        // Set combined content
+        responseBody.textContent = headersText + bodyText;
+        
+      } catch (error) {
+        responseBody.textContent = `Error parsing response: ${error.message}`;
+      }
+      
+    } catch (error) {
+      responseStatus.textContent = `Error: ${error.message}`;
+      responseStatus.className = 'response-status status-error';
+      responseBody.textContent = `Request failed: ${error.message}`;
+      
+      // Check for CORS error
+      if (error.message.includes('CORS') || error.message.includes('cross-origin')) {
+        responseBody.textContent = `CORS Error: The request was blocked due to Cross-Origin Resource Sharing (CORS) policy restrictions.\n\nThis happens when the server doesn't allow requests from your browser's origin.\n\nTry one of the example CORS-friendly endpoints below instead.`;
+      }
     }
-    
-    // Add flag info toggle
-    const showFlagInfo = document.getElementById('show-flag-info');
-    const flagInfoPanel = document.getElementById('flag-info-panel');
-    
-    if (showFlagInfo && flagInfoPanel) {
-      showFlagInfo.addEventListener('click', function() {
-        const isVisible = flagInfoPanel.style.display !== 'none';
-        flagInfoPanel.style.display = isVisible ? 'none' : 'block';
-        this.innerHTML = isVisible ? 
-          '<i class="bi bi-info-circle"></i> What are flags?' : 
-          '<i class="bi bi-x-circle"></i> Hide flag info';
-      });
-    }
-    
-    // Initial run
-    runRegexTest();
   }
-}); 
+} 

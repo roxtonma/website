@@ -21,6 +21,9 @@
 
   <!-- Favicon (optional) -->
   <link rel="icon" href="../assets/icons/favicon.ico" />
+
+  <!-- Add this if it's not already included -->
+  <link rel="stylesheet" href="../css/components/playground.css" />
 </head>
 <body>
   <!-- =======================
@@ -34,11 +37,11 @@
       </div>
 
       <ul id="nav-links" class="nav-list">
-        <li class="nav-item"><a class="nav-link" href="../index">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="../index">About</a></li>
-        <li class="nav-item"><a class="nav-link" href="../index">Projects</a></li>
-        <li class="nav-item"><a class="nav-link" href="../index">Blog</a></li>
-        <li class="nav-item"><a class="nav-link" href="../index">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="../">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="../#about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="../#projects">Projects</a></li>
+        <li class="nav-item"><a class="nav-link" href="../#blog">Blog</a></li>
+        <li class="nav-item"><a class="nav-link" href="../#contact">Contact</a></li>
         <li class="nav-item dropdown">
           <button class="nav-link dropdown-toggle" aria-expanded="false">
             Tools <i class="bi bi-chevron-down"></i>
@@ -111,36 +114,18 @@
           </div>
         </div>
         
-        <!-- HTTP Request Tester -->
+        <!-- HTTPS Request Tester -->
         <div class="tool-card">
           <div class="tool-header">
-            <i class="bi bi-cloud-arrow-up-down tool-icon"></i>
-            <h3 class="tool-title">HTTP Request Tester</h3>
+            <i class="bi bi-globe tool-icon"></i>
+            <h3 class="tool-title">HTTPS Request Tester</h3>
           </div>
           <div class="tool-content">
             <p class="tool-description">
-              Send and test HTTP requests with different methods, custom headers, and request bodies. View formatted responses.
+              Send and test HTTPS requests with different methods, custom headers, and request bodies. View formatted responses.
             </p>
             <div class="tool-action">
               <button class="tool-btn" data-modal="http-tester-modal">
-                <i class="bi bi-arrow-right-circle"></i> Open Tool
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        <!-- SVG Editor -->
-        <div class="tool-card">
-          <div class="tool-header">
-            <i class="bi bi-bezier2 tool-icon"></i>
-            <h3 class="tool-title">SVG Editor</h3>
-          </div>
-          <div class="tool-content">
-            <p class="tool-description">
-              Create and edit SVG graphics with a simple code editor and live preview. Download or copy your SVG code.
-            </p>
-            <div class="tool-action">
-              <button class="tool-btn" data-modal="svg-editor-modal">
                 <i class="bi bi-arrow-right-circle"></i> Open Tool
               </button>
             </div>
@@ -159,24 +144,6 @@
             </p>
             <div class="tool-action">
               <button class="tool-btn" data-modal="mock-data-modal">
-                <i class="bi bi-arrow-right-circle"></i> Open Tool
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Algorithm Visualizer -->
-        <div class="tool-card">
-          <div class="tool-header">
-            <i class="bi bi-diagram-3 tool-icon"></i>
-            <h3 class="tool-title">Algorithm Visualizer</h3>
-          </div>
-          <div class="tool-content">
-            <p class="tool-description">
-              Visualize sorting, searching, and pathfinding algorithms with step-by-step animation and explanation.
-            </p>
-            <div class="tool-action">
-              <button class="tool-btn" data-modal="algorithm-visualizer-modal">
                 <i class="bi bi-arrow-right-circle"></i> Open Tool
               </button>
             </div>
@@ -238,7 +205,14 @@
               
               <div class="regex-test-string">
                 <label for="test-string">Test String:</label>
-                <textarea id="test-string" class="tool-input" rows="6" placeholder="Enter text to test against..."></textarea>
+                <textarea id="test-string" class="tool-input" rows="6" placeholder="Enter text to test against...">Hello, my name is Roxton. You can email me at roxtonmart@gmail.com for inquiries.
+Visit my website at https://roxtonma.github.io/website/
+My office IP is 192.168.1.100 and production server is 172.16.254.1.
+
+Call my US number at 555-123-4567 or my alternate line 123.456.7890.
+You can also reach my India number at +91-9123456789 or 09876543210.
+
+Here is a UUID for reference: 123e4567-e89b-12d3-a456-424614174000.</textarea>
               </div>
             </div>
             
@@ -254,12 +228,96 @@
               <label>Common Patterns:</label>
               <div class="pattern-buttons">
                 <button type="button" class="tool-btn pattern-btn" data-pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">Email</button>
-                <button type="button" class="tool-btn pattern-btn" data-pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$">IP Address</button>
-                <button type="button" class="tool-btn pattern-btn" data-pattern="^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$">URL</button>
-                <button type="button" class="tool-btn pattern-btn" data-pattern="^\d{3}-\d{3}-\d{4}$">Phone (US)</button>
-                <button type="button" class="tool-btn pattern-btn" data-pattern="^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$">Phone (India)</button>
-                <button type="button" class="tool-btn pattern-btn" data-pattern="^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$">UUID</button>
+                
+                <button type="button" class="tool-btn pattern-btn"
+                  data-pattern="(?:\b25[0-5]|\b2[0-4][0-9]|\b1?[0-9]{1,2})(?:\.(?:25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})){3}">IP Address</button>
+                
+                <button type="button" class="tool-btn pattern-btn"
+                  data-pattern="https?:\/\/[^\s/$.?#].[^\s]*">URL</button>
+                
+                <button type="button" class="tool-btn pattern-btn"
+                  data-pattern="\b\d{3}[-.\s]?\d{3}[-.\s]?\d{4}\b">Phone (US)</button>
+                
+                <button type="button" class="tool-btn pattern-btn"
+                  data-pattern="(\+91[\-\s]?|0)?[6-9]\d{9}">Phone (India)</button>
+                
+                <button type="button" class="tool-btn pattern-btn"
+                  data-pattern="\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b">UUID</button>
               </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- HTTPS Request Tester Modal -->
+    <div id="http-tester-modal" class="tool-modal">
+      <div class="modal-content">
+        <button class="close-modal">&times;</button>
+        <div class="modal-header">
+          <h2 class="modal-title"><i class="bi bi-globe"></i> HTTPS Request Tester</h2>
+        </div>
+        <div class="modal-body">
+          <!-- Request Section -->
+          <div class="postman-container">
+            <div class="postman-request">
+              <div class="request-url-bar">
+                <select id="http-method" class="http-method-select">
+                  <option value="GET">GET</option>
+                  <option value="POST">POST</option>
+                  <option value="PUT">PUT</option>
+                  <option value="DELETE">DELETE</option>
+                  <option value="PATCH">PATCH</option>
+                  <option value="HEAD">HEAD</option>
+                  <option value="OPTIONS">OPTIONS</option>
+                </select>
+                <input type="text" id="request-url" class="url-input" placeholder="https://api.example.com/data">
+                <button id="send-request" class="send-btn">Send</button>
+              </div>
+              
+              <div class="simple-request-options">
+                <div class="simple-headers">
+                  <h4>Headers</h4>
+                  <div class="simple-header-row">
+                    <input type="text" class="header-key" value="Content-Type" placeholder="Header name">
+                    <input type="text" class="header-value" value="application/json" placeholder="Header value">
+                    <button class="add-header">+</button>
+                  </div>
+                </div>
+                
+                <div class="simple-body">
+                  <h4>Request Body</h4>
+                  <select id="body-content-type" class="simple-select">
+                    <option value="application/json">JSON</option>
+                    <option value="application/x-www-form-urlencoded">Form URL Encoded</option>
+                    <option value="text/plain">Plain Text</option>
+                  </select>
+                  <textarea id="request-body" class="simple-textarea" placeholder="Enter request body here..."></textarea>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Response Section -->
+            <div class="postman-response">
+              <div class="response-container">
+                <div class="response-header">
+                  <span id="response-status" class="response-status">Send a request to see the response</span>
+                  <span id="response-time" class="response-time"></span>
+                </div>
+                <pre id="response-body" class="response-body">// Response will appear here after sending a request</pre>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Move the example endpoints inside the modal -->
+          <div class="example-endpoints">
+            <h4>Try these CORS-friendly endpoints:</h4>
+            <div class="endpoint-buttons">
+              <button class="example-endpoint-btn" data-url="https://jsonplaceholder.typicode.com/posts/1">JSONPlaceholder</button>
+              <button class="example-endpoint-btn" data-url="https://httpbin.org/get">HTTPBin</button>
+              <button class="example-endpoint-btn" data-url="https://api.publicapis.org/entries">Public APIs</button>
+              <button class="example-endpoint-btn" data-url="https://api.dictionaryapi.dev/api/v2/entries/en/hello">Dictionary API</button>
             </div>
           </div>
         </div>
@@ -267,7 +325,6 @@
     </div>
     
     <!-- Other tool modals will be added here later -->
-    
   </main>
 
   <!-- =======================
