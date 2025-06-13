@@ -42,6 +42,7 @@ body {
   color: var(--color-text);
   line-height: 1.6;
   min-height: 100vh;
+  display: block;
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
@@ -208,6 +209,9 @@ body {
   padding: 1rem 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  padding-left: 0;
+  padding-right: 0;
+  width: 100%;
 }
 
 #logo-container {
@@ -638,6 +642,8 @@ body {
   text-align: center;
   position: relative;
   overflow: hidden;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .bokeh-container {
@@ -709,6 +715,8 @@ body {
 .section-about {
   background-color: var(--color-bg);
   padding: 5rem 2rem;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .section-about .section-title {
@@ -724,19 +732,92 @@ body {
   gap: 2rem;
   align-items: center;
   justify-content: center;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
+/* Base styles for about-photo-container */
 .about-photo-container {
   flex: 1 1 250px;
   text-align: center;
+  margin: 0 auto;
+  max-width: 250px;
 }
 
 .about-photo {
-  max-width: 200px;
-  border-radius: 50%;
+  max-width: 100%;
   width: 100%;
   height: auto;
   object-fit: cover;
+  box-shadow: 0 4px 8px var(--color-shadow);
+  transition: transform 0.3s ease;
+}
+
+.about-image img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  mask-image: radial-gradient(circle, black 70%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle, black 70%, transparent 100%);
+}
+
+@media (max-width: 768px) {
+  .about-image img {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+/* Small mobile screens */
+@media (max-width: 480px) {
+  .about-photo-container {
+    max-width: 100%;
+  }
+  
+  .carousel-slide {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+/* Medium screens */
+@media (min-width: 481px) and (max-width: 767px) {
+  .about-photo-container {
+    max-width: 200px;
+  }
+}
+
+/* Desktop/tablet */
+@media (min-width: 768px) {
+  .carousel-slide {
+    flex-direction: row;
+    gap: 4rem;
+  }
+
+  .about-photo-container {
+    flex: 0 0 40%;
+    max-width: 300px;
+  }
+  
+  .about-text-container {
+    flex: 0 0 55%;
+    text-align: left;
+    align-items: flex-start;
+  }
+  
+  .about-photo:hover {
+    transform: scale(1.05);
+  }
+}
+
+/* Large screens */
+@media (min-width: 1200px) {
+  .about-photo-container {
+    max-width: 320px;
+  }
 }
 
 .about-text-container {
@@ -787,13 +868,6 @@ body {
   position: relative;
 }
 
-.about-photo-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
 .about-text-container {
   display: flex;
   flex-direction: column;
@@ -831,15 +905,6 @@ body {
     text-align: left;
     align-items: flex-start;
   }
-}
-
-/* Ensure images maintain aspect ratio */
-.about-photo {
-  max-width: 200px;
-  border-radius: 50%;
-  width: 100%;
-  height: auto;
-  object-fit: cover;
 }
 
 .carousel-controls {
@@ -904,6 +969,8 @@ body {
 .section-projects {
   background-color: var(--color-bg-alt);
   padding: 5rem 2rem;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .section-projects .section-title {
@@ -943,6 +1010,8 @@ body {
   gap: 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 .project-card {
@@ -1129,6 +1198,8 @@ body {
 .section-blog {
   background-color: var(--color-bg);
   padding: 5rem 2rem;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .section-blog .section-title {
@@ -1142,6 +1213,8 @@ body {
 .featured-post {
   max-width: 1000px;
   margin: 0 auto 3rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 .blog-post-featured {
@@ -1163,6 +1236,8 @@ body {
   padding: 2rem;
   display: flex;
   flex-direction: column;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 .featured-post-meta {
@@ -1283,6 +1358,8 @@ body {
   gap: 2rem;
   max-width: 1100px;
   margin: 0 auto 2rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 .blog-card {
@@ -1420,6 +1497,8 @@ body {
 .section-contact {
   background-color: var(--color-bg-alt);
   padding: 5rem 2rem;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .section-contact .section-title {
@@ -1435,6 +1514,8 @@ body {
   gap: 2rem;
   max-width: 1100px;
   margin: 0 auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 .contact-info {
@@ -1895,6 +1976,10 @@ body {
 .section {
   padding: 5rem 2rem;
   scroll-margin-top: 70px; /* Offset for fixed header */
+  padding-left: 0;
+  padding-right: 0;
+  max-width: 100%;
+  width: 100%;
 }
 
 .blog-cta {
@@ -1966,6 +2051,10 @@ body {
   max-width: 1100px;
   margin: 0 auto;
   padding: 5rem 2rem;
+  padding-left: 0;
+  padding-right: 0;
+  max-width: 100%;
+  width: 100%;
 }
 
 .tool-section .section-title {
@@ -1979,6 +2068,11 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 2.5rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 .tool-description {
@@ -2035,4 +2129,71 @@ body {
   .tool-features {
     padding: 1.5rem;
   }
+}
+
+/* Remove horizontal padding from all sections */
+.section-intro,
+.section-about,
+.section-projects,
+.section-blog,
+.section-contact {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Fix tool section padding */
+.tool-section,
+.playground-section,
+.visualizer-section,
+.utility-section {
+  padding-left: 0;
+  padding-right: 0;
+  max-width: 100%;
+  width: 100%;
+}
+
+/* Fix for main section containers */
+.section {
+  padding-left: 0;
+  padding-right: 0;
+  max-width: 100%;
+  width: 100%;
+}
+
+/* Fix navigation container */
+/* .nav-container {
+  padding-left: 0;
+  padding-right: 0;
+  max-width: 100%;
+  width: 100%;
+} */
+
+/* Move padding to content containers */
+.about-content,
+.projects-grid,
+.blog-grid,
+.featured-post,
+.contact-container,
+.tool-content,
+.playground-tools,
+.visualizer-container,
+.utility-tools,
+.tool-features {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+/* Remove flex centering that could be causing issues */
+body {
+  display: block;
+  min-height: 100vh;
+}
+
+/* Fix modal content */
+.modal-content {
+  max-width: 1200px;
+  box-sizing: border-box;
 }

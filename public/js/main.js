@@ -186,18 +186,22 @@ function bindScrollToTopButton() {
 function bindNavLinkSmoothScroll() {
   const navLinks = document.querySelectorAll('#site-nav .nav-link');
   navLinks.forEach((link) => {
-    link.addEventListener('click', (event) => {
-      event.preventDefault();
-      const targetId = link.getAttribute('href').substring(1);
-      const targetElement = document.getElementById(targetId);
-      if (targetElement) {
-        targetElement.scrollIntoView({ behavior: 'smooth' });
-        const navLinksContainer = document.getElementById('nav-links');
-        if (navLinksContainer.classList.contains('nav-open')) {
-          navLinksContainer.classList.remove('nav-open');
+    const href = link.getAttribute('href');
+    // Only apply to same-page anchor links
+    if (href && href.startsWith('#')) {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        const targetId = href.substring(1);
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+          const navLinksContainer = document.getElementById('nav-links');
+          if (navLinksContainer.classList.contains('nav-open')) {
+            navLinksContainer.classList.remove('nav-open');
+          }
         }
-      }
-    });
+      });
+    }
   });
 }
 
@@ -347,7 +351,7 @@ async function handleContactFormSubmission(event) {
     }
   } catch (error) {
     console.error('Contact form submission error:', error);
-    statusEl.textContent = 'Failed to send message. Please try again later or contact me via email.';
+    // statusEl.textContent = 'Failed to send message. Please try again later or contact me via email.';
     statusEl.style.color = varOrValue('--color-form-status-error', '#e74c3c');
   } finally {
     // Reset button state
@@ -770,9 +774,6 @@ function initDropdownMenus() {
   }
 }
 
-// Dropdown menus are initialized in initializeAllModules function
-// No need for a separate event listener here
-
 /**
  * Initializes project filtering functionality
  */
@@ -817,7 +818,6 @@ function initProjectFilters() {
   });
 }
 
-// Add this to your existing JavaScript
 document.addEventListener('DOMContentLoaded', function() {
   // Make only overflowing tool descriptions expandable
   const descriptions = document.querySelectorAll('.tool-description');
@@ -827,10 +827,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const hasOverflow = description.scrollHeight > description.clientHeight;
     
     if (hasOverflow) {
-      // Add indicator class for styling
+      // Indicator class for styling
       description.classList.add('has-overflow');
       
-      // Add click handler only to descriptions with overflow
+      // Click handler only to descriptions with overflow
       description.addEventListener('click', function() {
         this.classList.toggle('expanded');
       });
@@ -839,4 +839,115 @@ document.addEventListener('DOMContentLoaded', function() {
       description.style.cursor = 'default';
     }
   });
+});
+
+// Add this to the end of main.js (keep all existing validation code)
+function setupGoogleFormsIntegration() {
+  const contactForm = document.getElementById('contact-form');
+  if (!contactForm) return;
+  
+  // Store the original submit handler reference
+  const originalSubmitHandler = contactForm.onsubmit;
+  
+  // Replace the form action
+  contactForm.action = '#';
+  
+  // Override the submit event
+  contactForm.onsubmit = function(event) {
+    event.preventDefault();
+    
+    // Get form fields
+    const nameInput = document.getElementById('input-name');
+    const emailInput = document.getElementById('input-email');
+    const messageInput = document.getElementById('input-message');
+    
+    // Use the existing validation function (from your code)
+    const isNameValid = validateField(nameInput);
+    const isEmailValid = validateField(emailInput);
+    const isMessageValid = validateField(messageInput);
+    
+    // Only proceed if validation passes
+    if (!isNameValid || !isEmailValid || !isMessageValid) {
+      const statusEl = document.getElementById('form-status-message');
+      if (statusEl) {
+        statusEl.textContent = 'Please fix the errors in the form';
+        statusEl.classList.remove('hidden');
+        statusEl.style.color = varOrValue('--color-form-status-error', '#e74c3c');
+      }
+      return;
+    }
+    
+    // If validation passes, submit to Google Forms
+    submitToGoogleForms(nameInput.value, emailInput.value, messageInput.value);
+  };
+  
+  function submitToGoogleForms(name, email, message) {
+    const statusEl = document.getElementById('form-status-message');
+    if (statusEl) {
+      statusEl.textContent = 'Sending...';
+      // Use a slightly lighter shade of the success color for the "Sending..." state
+      statusEl.style.color = varOrValue('--color-form-status-success');
+      // Add a slight opacity to differentiate from the full success state
+      statusEl.style.opacity = '0.85';
+      statusEl.classList.remove('hidden');
+    }
+    
+    // Create an iframe for submission
+    const iframe = document.createElement('iframe');
+    iframe.name = 'hidden-form-iframe';
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+    
+    // Create the form
+    const googleForm = document.createElement('form');
+    googleForm.method = 'POST';
+    googleForm.action = 'https://docs.google.com/forms/d/e/1FAIpQLSe_3zzf6NzJxjBg9gWIARCx9hafre265RPMqsrgvtpJqEvDiQ/formResponse';
+    googleForm.target = 'hidden-form-iframe';
+    
+    // Add the form fields with your actual field IDs
+    const fields = [
+      { name: 'entry.67679542', value: name },     // Name field
+      { name: 'entry.755407269', value: email },   // Email field
+      { name: 'entry.474976637', value: message }, // Message field
+    ];
+    
+    fields.forEach(field => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = field.name;
+      input.value = field.value;
+      googleForm.appendChild(input);
+    });
+    
+    // Append the form
+    document.body.appendChild(googleForm);
+    
+    // Handle completion
+    iframe.onload = function() {
+      if (statusEl) {
+        statusEl.textContent = 'Message sent successfully!';
+        statusEl.style.color = varOrValue('--color-form-status-success', '#2ecc71');
+      }
+      
+      // Reset the form
+      contactForm.reset();
+      
+      // Clean up
+      setTimeout(() => {
+        document.body.removeChild(googleForm);
+        document.body.removeChild(iframe);
+      }, 1000);
+    };
+    
+    // Submit the form
+    googleForm.submit();
+  }
+}
+
+// Call this function when the DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+  // All your existing initialization code
+  
+  // Add Google Forms integration
+  setupGoogleFormsIntegration();
 });
