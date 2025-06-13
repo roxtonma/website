@@ -44,11 +44,8 @@
             Tools <i class="bi bi-chevron-down"></i>
           </button>
           <ul class="dropdown-menu" aria-label="Tools submenu">
-            <!-- <li><a class="dropdown-item" href="tools/ai-playground">AI Playground</a></li> -->
             <li><a class="dropdown-item" href="tools/playground">Playground</a></li>
-            <!-- <li><a class="dropdown-item" href="tools/code-analyzer">Code Analyzer</a></li> -->
             <li><a class="dropdown-item" href="tools/data-visualizer">Data Visualizer</a></li>
-            <!-- <li><a class="dropdown-item" href="tools/ml-models">ML Models</a></li> -->
             <li><a class="dropdown-item" href="tools/utility">Utility Tools</a></li>
           </ul>
         </li>
@@ -108,45 +105,70 @@
             <div class="carousel-slide active">
               <figure class="about-photo-container">
                 <img
-                  src="assets/images/prfoile-photo.jpg"
+                  src="assets/images/profile-photo1.jpg"
                   alt="Profile image"
                   class="about-photo"
                 />
               </figure>
               <div class="about-text-container">
                 <p class="about-paragraph">
-                  I'm a software developer specializing in building (and occasionally designing) workflows to improve productivity so you can spend more time doing the things you love more. Currently, I'm focused on testing the latest AI/ML models for analysis, content generation and more.
+                  I enjoy working across AI, systems, and backend dev — with a focus on building things that scale and run smoothly. Here's a snapshot of what I do:
                 </p>
+                <div class="skills-container">
+                  <div class="skill-item"><i class="bi bi-lightbulb"></i> <span>Prompt Engineering</span></div>
+                  <div class="skill-item"><i class="bi bi-robot"></i> <span>Generative AI</span></div>
+                  <div class="skill-item"><i class="bi bi-diagram-3"></i> <span>API Design</span></div>
+                  <div class="skill-item"><i class="bi bi-terminal-split"></i> <span>CI/CD & DevOps</span></div>
+                  <div class="skill-item"><i class="bi bi-box"></i> <span>Containerization</span></div>
+                  <div class="skill-item"><i class="bi bi-server"></i> <span>Backend Development</span></div>
+                  <div class="skill-item"><i class="bi bi-database"></i> <span>Database Design</span></div>
+                </div>
               </div>
             </div>
 
             <div class="carousel-slide">
               <figure class="about-photo-container">
                 <img
-                  src="assets/images/coding.jpg"
+                  src="assets/images/profile-photo1.jpg"
                   alt="Coding setup"
                   class="about-photo"
                 />
               </figure>
               <div class="about-text-container">
                 <p class="about-paragraph">
-                  Outside of coding, I'm a pretty big fan of the fine arts - I used to digitally paint portraits of people or anything in general I found interesting in a realistic style, reminiscent of the renaissance era.
+                  I try to keep things simple and stable—using automation, structure, and thoughtful iteration to build systems that work well and scale smoothly. Some of the tools I rely on:
                 </p>
+                <div class="skills-container">
+                  <div class="skill-item"><i class="bi bi-terminal"></i> <span>Python</span></div>
+                  <div class="skill-item"><i class="bi bi-code-slash"></i> <span>JavaScript</span></div>
+                  <div class="skill-item"><i class="bi bi-boxes"></i> <span>ComfyUI</span></div>
+                  <div class="skill-item"><i class="bi bi-git"></i> <span>Git</span></div>
+                  <div class="skill-item"><i class="bi bi-github"></i> <span>GitHub Actions</span></div>
+                  <div class="skill-item"><i class="bi bi-cpu"></i> <span>Hugging Face Transformers</span></div>
+                </div>
               </div>
             </div>
 
             <div class="carousel-slide">
               <figure class="about-photo-container">
                 <img
-                  src="assets/images/interests.jpg"
+                  src="assets/images/profile-photo1.jpg"
                   alt="Interests and hobbies"
                   class="about-photo"
                 />
               </figure>
               <div class="about-text-container">
                 <p class="about-paragraph">
-                  When I'm not coding, you'll find me exploring new technologies, reading tech blogs, and participating in online communities. I believe in continuous learning and staying up-to-date with industry trends. I was fairly active in online communities where I would share my findings and learnings.
+                  I aim to write clean, secure code, ship small improvements often, and keep systems easy to monitor and maintain.
                 </p>
+                <div class="skills-container">
+                  <div class="skill-item"><i class="bi bi-lightning-charge"></i> <span>Move Fast</span></div>
+                  <div class="skill-item"><i class="bi bi-check2-square"></i> <span>Test Everything</span></div>
+                  <div class="skill-item"><i class="bi bi-code-slash"></i> <span>Code with Care</span></div>
+                  <div class="skill-item"><i class="bi bi-upload"></i> <span>Ship Often</span></div>
+                  <div class="skill-item"><i class="bi bi-shield-lock"></i> <span>Secure by Default</span></div>
+                  <div class="skill-item"><i class="bi bi-bar-chart"></i> <span>Track What Matters</span></div>
+                </div>
               </div>
             </div>
           </div>
@@ -165,241 +187,6 @@
             </button>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- -----------------------
-         PROJECTS SECTION
-    --------------------------- -->
-    <section id="section-projects" class="section section-projects">
-      <h2 class="section-title">Projects</h2>
-      <div class="projects-filter">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="ai">AI/ML</button>
-        <button class="filter-btn" data-filter="web">Web</button>
-        <button class="filter-btn" data-filter="data">Data</button>
-      </div>
-      <div id="projects-grid" class="projects-grid">
-        <!-- Project 1 -->
-        <article class="project-card" data-category="ai">
-          <div class="project-card-inner">
-            <figure class="project-thumbnail-container">
-              <img
-                src="assets/images/project-1-thumbnail.png"
-                alt="AI Model Trainer"
-                class="project-thumbnail"
-              />
-              <div class="project-links">
-                <a href="https://github.com/username/ai-model-trainer" class="project-link-btn" target="_blank" rel="noopener" aria-label="View code on GitHub">
-                  <i class="bi bi-github"></i>
-                </a>
-                <a href="https://demo-url.com/ai-model-trainer" class="project-link-btn" target="_blank" rel="noopener" aria-label="View live demo">
-                  <i class="bi bi-box-arrow-up-right"></i>
-                </a>
-              </div>
-            </figure>
-            <div class="project-info">
-              <h3 class="project-title">AI Model Trainer</h3>
-              <div class="project-tags">
-                <span class="project-tag">Python</span>
-                <span class="project-tag">TensorFlow</span>
-                <span class="project-tag">React</span>
-              </div>
-              <p class="project-description">
-                A web application that allows users to train and deploy custom machine learning models without coding knowledge.
-              </p>
-              <ul class="project-features">
-                <li><i class="bi bi-check-circle"></i> Custom dataset upload</li>
-                <li><i class="bi bi-check-circle"></i> Real-time training visualization</li>
-                <li><i class="bi bi-check-circle"></i> One-click model deployment</li>
-              </ul>
-            </div>
-          </div>
-        </article>
-
-        <!-- Project 2 -->
-        <article class="project-card" data-category="web">
-          <div class="project-card-inner">
-            <figure class="project-thumbnail-container">
-              <img
-                src="assets/images/project-2-thumbnail.png"
-                alt="Portfolio Generator"
-                class="project-thumbnail"
-              />
-              <div class="project-links">
-                <a href="https://github.com/username/portfolio-generator" class="project-link-btn" target="_blank" rel="noopener" aria-label="View code on GitHub">
-                  <i class="bi bi-github"></i>
-                </a>
-                <a href="https://demo-url.com/portfolio-generator" class="project-link-btn" target="_blank" rel="noopener" aria-label="View live demo">
-                  <i class="bi bi-box-arrow-up-right"></i>
-                </a>
-              </div>
-            </figure>
-            <div class="project-info">
-              <h3 class="project-title">Portfolio Generator</h3>
-              <div class="project-tags">
-                <span class="project-tag">JavaScript</span>
-                <span class="project-tag">Vue.js</span>
-                <span class="project-tag">Firebase</span>
-              </div>
-              <p class="project-description">
-                Create beautiful, responsive portfolios in minutes by importing your GitHub projects and customizing templates.
-              </p>
-              <ul class="project-features">
-                <li><i class="bi bi-check-circle"></i> GitHub integration</li>
-                <li><i class="bi bi-check-circle"></i> Custom themes & templates</li>
-                <li><i class="bi bi-check-circle"></i> One-click deployment</li>
-              </ul>
-            </div>
-          </div>
-        </article>
-
-        <!-- Project 3 -->
-        <article class="project-card" data-category="data">
-          <div class="project-card-inner">
-            <figure class="project-thumbnail-container">
-              <img
-                src="assets/images/project-3-thumbnail.png"
-                alt="Data Visualizer"
-                class="project-thumbnail"
-              />
-              <div class="project-links">
-                <a href="https://github.com/username/data-visualizer" class="project-link-btn" target="_blank" rel="noopener" aria-label="View code on GitHub">
-                  <i class="bi bi-github"></i>
-                </a>
-                <a href="https://demo-url.com/data-visualizer" class="project-link-btn" target="_blank" rel="noopener" aria-label="View live demo">
-                  <i class="bi bi-box-arrow-up-right"></i>
-                </a>
-              </div>
-            </figure>
-            <div class="project-info">
-              <h3 class="project-title">Data Visualizer</h3>
-              <div class="project-tags">
-                <span class="project-tag">D3.js</span>
-                <span class="project-tag">React</span>
-                <span class="project-tag">Node.js</span>
-              </div>
-              <p class="project-description">
-                Interactive data visualization tool that transforms complex datasets into insightful, shareable charts and graphs.
-              </p>
-              <ul class="project-features">
-                <li><i class="bi bi-check-circle"></i> CSV/JSON import</li>
-                <li><i class="bi bi-check-circle"></i> 15+ chart types</li>
-                <li><i class="bi bi-check-circle"></i> Interactive filtering</li>
-              </ul>
-            </div>
-          </div>
-        </article>
-      </div>
-      <div class="projects-cta">
-        <a href="https://github.com/roxtonma" class="btn btn-secondary" target="_blank" rel="noopener">
-          View More on GitHub <i class="bi bi-arrow-right"></i>
-        </a>
-      </div>
-    </section>
-
-    <!-- -----------------------
-         BLOG SECTION
-    --------------------------- -->
-    <section id="section-blog" class="section section-blog">
-      <h2 class="section-title">Blog</h2>
-      
-      <!-- Featured/Latest Post -->
-      <div class="featured-post">
-        <article class="blog-post-featured">
-          <div class="featured-post-content">
-            <div class="featured-post-meta">
-              <span class="post-tag">Latest</span>
-              <time class="post-date" datetime="2025-06-12">June 12, 2025</time>
-            </div>
-            <h3 class="featured-post-title">
-              <a href="blog/machine-learning-techniques">Advanced Machine Learning Techniques for Developers</a>
-            </h3>
-            <p class="featured-post-excerpt">
-              Explore how recent breakthroughs in machine learning can be applied to everyday development workflows. This comprehensive guide covers practical applications of ML models without requiring a deep mathematical background.
-            </p>
-            <div class="post-footer">
-              <div class="post-meta">
-                <span class="reading-time"><i class="bi bi-clock"></i> 8 min read</span>
-                <span class="post-category"><i class="bi bi-tag"></i> AI/ML</span>
-              </div>
-              <a href="blog/machine-learning-techniques" class="read-more">Read Article <i class="bi bi-arrow-right"></i></a>
-            </div>
-          </div>
-          <div class="featured-post-image">
-            <img src="assets/images/blog/ml-techniques.jpg" alt="Machine Learning Techniques illustration" />
-          </div>
-        </article>
-      </div>
-      
-      <!-- Recent Posts Grid -->
-      <h3 class="blog-section-subtitle">Recent Articles</h3>
-      <div class="blog-grid">
-        <!-- Blog post 1 -->
-        <article class="blog-card">
-          <a href="blog/css-grid-layout" class="blog-card-link">
-            <div class="blog-card-image">
-              <img src="assets/images/blog/css-grid.jpg" alt="CSS Grid Layout" />
-              <div class="blog-card-category">Web Dev</div>
-            </div>
-            <div class="blog-card-content">
-              <h4 class="blog-card-title">Understanding CSS Grid Layout</h4>
-              <p class="blog-card-excerpt">
-                A deep dive into CSS Grid and how it can revolutionize your layouts with minimal effort.
-              </p>
-              <div class="blog-card-meta">
-                <time datetime="2025-05-15">May 15, 2025</time>
-                <span class="reading-time">5 min read</span>
-              </div>
-            </div>
-          </a>
-        </article>
-        
-        <!-- Blog post 2 -->
-        <article class="blog-card">
-          <a href="blog/react-hooks-guide" class="blog-card-link">
-            <div class="blog-card-image">
-              <img src="assets/images/blog/react-hooks.jpg" alt="React Hooks" />
-              <div class="blog-card-category">JavaScript</div>
-            </div>
-            <div class="blog-card-content">
-              <h4 class="blog-card-title">A Complete Guide to React Hooks</h4>
-              <p class="blog-card-excerpt">
-                Learn how to effectively use React Hooks to manage state and side effects in functional components.
-              </p>
-              <div class="blog-card-meta">
-                <time datetime="2025-04-22">April 22, 2025</time>
-                <span class="reading-time">7 min read</span>
-              </div>
-            </div>
-          </a>
-        </article>
-        
-        <!-- Blog post 3 -->
-        <article class="blog-card">
-          <a href="blog/web-performance" class="blog-card-link">
-            <div class="blog-card-image">
-              <img src="assets/images/blog/web-performance.jpg" alt="Web Performance" />
-              <div class="blog-card-category">Performance</div>
-            </div>
-            <div class="blog-card-content">
-              <h4 class="blog-card-title">Web Performance Optimization Techniques</h4>
-              <p class="blog-card-excerpt">
-                Practical strategies to improve your website's loading speed and overall performance.
-              </p>
-              <div class="blog-card-meta">
-                <time datetime="2025-03-10">March 10, 2025</time>
-                <span class="reading-time">6 min read</span>
-              </div>
-            </div>
-          </a>
-        </article>
-      </div>
-      
-      <div class="blog-cta">
-        <a class="btn btn-secondary" href="blog/">
-          View All Articles <i class="bi bi-arrow-right"></i>
-        </a>
       </div>
     </section>
 
@@ -461,16 +248,14 @@
             >
               <i class="bi bi-envelope-fill"></i>
             </a>
-            <!-- Add more social links as needed (e.g., <i class="bi bi-envelope"></i> for email) -->
           </div>
         </div>
 
-        <!-- Contact form with improved accessibility -->
+        <!-- Contact form -->
         <form
           id="contact-form"
           class="contact-form"
           method="POST"
-          action="https://example.com/api/contact"
           novalidate
         >
           <div class="form-group">
