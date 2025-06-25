@@ -1842,4 +1842,1022 @@ document.addEventListener('DOMContentLoaded', function() {
       // Initialize
       populateCurrencyDropdowns();
     }
+
+    // File Converter start
+    document.getElementById('open-file-converter').addEventListener('click', () => {
+      openModal('file-converter-modal');
+      initFileConverter();
+    });
+
+    // File Converter Logic
+    function initFileConverter() {
+      const fileInput = document.getElementById('file-upload');
+      const conversionOptions = document.getElementById('conversion-options');
+      const targetFormat = document.getElementById('target-format');
+      const conversionSettings = document.getElementById('conversion-settings');
+      const convertBtn = document.getElementById('convert-file-btn');
+      const conversionResult = document.getElementById('conversion-result');
+      const conversionStatus = document.getElementById('conversion-status');
+      const downloadActions = document.querySelector('.download-actions');
+      const downloadBtn = document.getElementById('download-converted');
+      
+      let currentFile = null;
+      let convertedFile = null;
+      
+      // Supported conversion types
+      const conversionTypes = {
+        // Image conversions
+        'image/jpeg': ['image/png', 'image/webp', 'image/gif', 'image/bmp'],
+        'image/png': ['image/jpeg', 'image/webp', 'image/gif', 'image/bmp'],
+        'image/webp': ['image/jpeg', 'image/png', 'image/gif', 'image/bmp'],
+        'image/gif': ['image/jpeg', 'image/png', 'image/webp', 'image/bmp'],
+        'image/bmp': ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+        
+        // Document conversions (requires external libraries)
+        'application/pdf': ['image/jpeg', 'image/png'],
+        'application/epub+zip': ['application/pdf', 'text/html', 'text/plain'],
+        'text/plain': ['application/pdf', 'text/html'],
+        'text/html': ['application/pdf', 'text/plain', 'text/markdown', 'application/epub+zip'],
+        'text/markdown': ['text/html', 'application/pdf', 'application/epub+zip'],
+        
+        // Audio conversions
+        'audio/mpeg': ['audio/wav', 'audio/ogg'],
+        'audio/wav': ['audio/mpeg', 'audio/ogg'],
+        'audio/ogg': ['audio/mpeg', 'audio/wav'],
+      };
+      
+      // Format display names
+      const formatNames = {
+        'image/jpeg': 'JPEG Image (.jpg)',
+        'image/png': 'PNG Image (.png)',
+        'image/webp': 'WebP Image (.webp)',
+        'image/gif': 'GIF Image (.gif)',
+        'image/bmp': 'Bitmap Image (.bmp)',
+        'application/pdf': 'PDF Document (.pdf)',
+        'application/epub+zip': 'EPUB eBook (.epub)',
+        'text/plain': 'Text File (.txt)',
+        'text/html': 'HTML Document (.html)',
+        'text/markdown': 'Markdown Document (.md)',
+        'audio/mpeg': 'MP3 Audio (.mp3)',
+        'audio/wav': 'WAV Audio (.wav)',
+        'audio/ogg': 'OGG Audio (.ogg)'
+      };
+      
+      // File extensions
+      const fileExtensions = {
+        'image/jpeg': 'jpg',
+        'image/png': 'png',
+        'image/webp': 'webp',
+        'image/gif': 'gif',
+        'image/bmp': 'bmp',
+        'application/pdf': 'pdf',
+        'application/epub+zip': 'epub',
+        'text/plain': 'txt',
+        'text/html': 'html',
+        'text/markdown': 'md',
+        'audio/mpeg': 'mp3',
+        'audio/wav': 'wav',
+        'audio/ogg': 'ogg'
+      };
+      
+      // Handle file selection
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+          currentFile = e.target.files[0];
+          
+          // Show conversion options based on file type
+          showConversionOptions(currentFile.type);
+          
+          // Reset previous results
+          conversionResult.style.display = 'none';
+          downloadActions.style.display = 'none';
+          convertedFile = null;
+        }
+      });
+      
+      // Show conversion options based on file type
+      function showConversionOptions(fileType) {
+        // Clear previous options
+        targetFormat.innerHTML = '';
+        conversionSettings.innerHTML = '';
+        
+        // Check if this file type is supported
+        if (!conversionTypes[fileType]) {
+          conversionOptions.style.display = 'none';
+          conversionResult.style.display = 'block';
+          conversionStatus.innerHTML = `
+            <div class="error-message">
+              <i class="bi bi-exclamation-triangle"></i>
+              Sorry, conversion from ${fileType} is not supported yet.
+            </div>
+          `;
+          return;
+        }
+        
+        // Populate conversion options
+        const targetFormats = conversionTypes[fileType];
+        targetFormats.forEach(format => {
+          const option = document.createElement('option');
+          option.value = format;
+          option.textContent = formatNames[format] || format;
+          targetFormat.appendChild(option);
+        });
+        
+        // Show conversion-specific settings
+        updateConversionSettings(fileType, targetFormat.value);
+        
+        // Show the options
+        conversionOptions.style.display = 'block';
+      }
+      
+      // Update settings based on conversion type
+      targetFormat.addEventListener('change', () => {
+        updateConversionSettings(currentFile.type, targetFormat.value);
+      });
+      
+      // Show settings specific to the conversion type
+      function updateConversionSettings(fromType, toType) {
+        conversionSettings.innerHTML = '';
+        
+        // Settings for image conversions
+        if (fromType.startsWith('image/') && toType.startsWith('image/')) {
+          // Quality setting for lossy formats
+          if (toType === 'image/jpeg' || toType === 'image/webp') {
+            conversionSettings.innerHTML = `
+              <div class="setting-group">
+                <label for="image-quality">Quality:</label>
+                <div class="quality-slider-container">
+                  <input type="range" id="image-quality" min="1" max="100" value="90" class="quality-slider">
+                  <span id="quality-value">90%</span>
+                </div>
+              </div>
+            `;
+            
+            // Update quality value display
+            const qualitySlider = document.getElementById('image-quality');
+            const qualityValue = document.getElementById('quality-value');
+            
+            qualitySlider.addEventListener('input', () => {
+              qualityValue.textContent = `${qualitySlider.value}%`;
+            });
+          }
+          
+          // Image dimensions
+          conversionSettings.innerHTML += `
+            <div class="setting-group">
+              <label for="resize-image">Resize image:</label>
+              <div class="resize-option">
+                <input type="checkbox" id="resize-image" class="resize-checkbox">
+                <div id="resize-dimensions" style="display: none; margin-top: 0.5rem;">
+                  <div style="display: flex; gap: 1rem;">
+                    <div>
+                      <label for="image-width">Width:</label>
+                      <input type="number" id="image-width" class="tool-input" placeholder="Width">
+                    </div>
+                    <div>
+                      <label for="image-height">Height:</label>
+                      <input type="number" id="image-height" class="tool-input" placeholder="Height">
+                    </div>
+                  </div>
+                  <div style="margin-top: 0.5rem;">
+                    <input type="checkbox" id="maintain-aspect-ratio" checked>
+                    <label for="maintain-aspect-ratio">Maintain aspect ratio</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          
+          // Toggle resize options
+          const resizeCheckbox = document.getElementById('resize-image');
+          const resizeDimensions = document.getElementById('resize-dimensions');
+          
+          resizeCheckbox.addEventListener('change', () => {
+            resizeDimensions.style.display = resizeCheckbox.checked ? 'block' : 'none';
+          });
+        }
+        
+        // Settings for PDF to image conversion
+        if (fromType === 'application/pdf' && toType.startsWith('image/')) {
+          conversionSettings.innerHTML = `
+            <div class="setting-group">
+              <label for="pdf-page">Page to convert:</label>
+              <input type="number" id="pdf-page" class="tool-input" value="1" min="1">
+            </div>
+            <div class="setting-group">
+              <label for="pdf-dpi">DPI (quality):</label>
+              <select id="pdf-dpi" class="tool-input">
+                <option value="72">72 DPI (screen resolution)</option>
+                <option value="150">150 DPI (medium quality)</option>
+                <option value="300" selected>300 DPI (print quality)</option>
+              </select>
+            </div>
+          `;
+        }
+        
+        // Settings for text to PDF conversion
+        if ((fromType === 'text/plain' || fromType === 'text/html' || fromType === 'text/markdown') && 
+            toType === 'application/pdf') {
+          conversionSettings.innerHTML = `
+            <div class="setting-group">
+              <label for="page-size">Page size:</label>
+              <select id="page-size" class="tool-input">
+                <option value="a4">A4</option>
+                <option value="letter">Letter</option>
+                <option value="legal">Legal</option>
+              </select>
+            </div>
+            <div class="setting-group">
+              <label for="page-orientation">Orientation:</label>
+              <select id="page-orientation" class="tool-input">
+                <option value="portrait">Portrait</option>
+                <option value="landscape">Landscape</option>
+              </select>
+            </div>
+          `;
+        }
+        
+        // Settings for audio conversions
+        if (fromType.startsWith('audio/') && toType.startsWith('audio/')) {
+          conversionSettings.innerHTML = `
+            <div class="setting-group">
+              <label for="audio-bitrate">Bitrate:</label>
+              <select id="audio-bitrate" class="tool-input">
+                <option value="128">128 kbps (standard quality)</option>
+                <option value="192">192 kbps (high quality)</option>
+                <option value="256">256 kbps (very high quality)</option>
+                <option value="320">320 kbps (maximum quality)</option>
+              </select>
+            </div>
+          `;
+        }
+      }
+      
+      // Convert button click handler
+      convertBtn.addEventListener('click', () => {
+        if (!currentFile) {
+          return;
+        }
+        
+        const fromFormat = currentFile.type;
+        const toFormat = targetFormat.value;
+        
+        conversionResult.style.display = 'block';
+        conversionStatus.innerHTML = `
+          <div class="progress-message">
+            <i class="bi bi-arrow-repeat spinner"></i>
+            Converting ${formatNames[fromFormat] || fromFormat} to ${formatNames[toFormat] || toFormat}...
+          </div>
+        `;
+        
+        // Perform the conversion based on file types
+        if (fromFormat.startsWith('image/') && toFormat.startsWith('image/')) {
+          convertImage(currentFile, toFormat);
+        } else if (fromFormat === 'application/pdf' && toFormat.startsWith('image/')) {
+          convertPdfToImage(currentFile, toFormat);
+        } else if (fromFormat === 'application/epub+zip') {
+          convertEpub(currentFile, toFormat);
+        } else if ((fromFormat === 'text/plain' || fromFormat === 'text/html' || fromFormat === 'text/markdown') && 
+                  toFormat === 'application/pdf') {
+          convertTextToPdf(currentFile, toFormat);
+        } else if ((fromFormat === 'text/html' || fromFormat === 'text/markdown') && 
+                  toFormat === 'application/epub+zip') {
+          convertTextToEpub(currentFile, toFormat);
+        } else if (fromFormat.startsWith('audio/') && toFormat.startsWith('audio/')) {
+          convertAudio(currentFile, toFormat);
+        } else {
+          conversionStatus.innerHTML = `
+            <div class="error-message">
+              <i class="bi bi-exclamation-triangle"></i>
+              Sorry, conversion from ${formatNames[fromFormat] || fromFormat} to ${formatNames[toFormat] || toFormat} is not implemented yet.
+            </div>
+          `;
+        }
+      });
+      
+      // Image conversion function
+      function convertImage(file, targetFormat) {
+        const reader = new FileReader();
+        
+        reader.onload = (event) => {
+          const img = new Image();
+          
+          img.onload = () => {
+            // Get settings
+            const quality = document.getElementById('image-quality') ? 
+              parseInt(document.getElementById('image-quality').value) / 100 : 0.9;
+            
+            const shouldResize = document.getElementById('resize-image') && 
+              document.getElementById('resize-image').checked;
+            
+            let width = img.width;
+            let height = img.height;
+            
+            if (shouldResize) {
+              const newWidth = parseInt(document.getElementById('image-width').value);
+              const newHeight = parseInt(document.getElementById('image-height').value);
+              const maintainRatio = document.getElementById('maintain-aspect-ratio').checked;
+              
+              if (newWidth && newHeight) {
+                width = newWidth;
+                height = newHeight;
+              } else if (newWidth) {
+                width = newWidth;
+                if (maintainRatio) {
+                  height = (img.height / img.width) * newWidth;
+                }
+              } else if (newHeight) {
+                height = newHeight;
+                if (maintainRatio) {
+                  width = (img.width / img.height) * newHeight;
+                }
+              }
+            }
+            
+            // Create canvas for the conversion
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            
+            // Draw image on canvas
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            // Convert to target format
+            let outputType = targetFormat;
+            let outputExt = fileExtensions[targetFormat];
+            
+            // Convert to target format
+            canvas.toBlob((blob) => {
+              if (blob) {
+                // Successfully converted
+                convertedFile = new File([blob], `converted.${outputExt}`, { type: targetFormat });
+                
+                // Show success message and download button
+                conversionStatus.innerHTML = `
+                  <div class="success-message">
+                    <i class="bi bi-check-circle"></i>
+                    Conversion successful! Your ${formatNames[targetFormat]} is ready to download.
+                  </div>
+                `;
+                
+                downloadActions.style.display = 'block';
+              } else {
+                // Conversion failed
+                conversionStatus.innerHTML = `
+                  <div class="error-message">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    Sorry, conversion failed. Please try a different format.
+                  </div>
+                `;
+              }
+            }, outputType, quality);
+          };
+          
+          img.onerror = () => {
+            conversionStatus.innerHTML = `
+              <div class="error-message">
+                <i class="bi bi-exclamation-triangle"></i>
+                Error loading image. The file may be corrupted.
+              </div>
+            `;
+          };
+          
+          img.src = event.target.result;
+        };
+        
+        reader.readAsDataURL(file);
+      }
+
+      // PDF to image conversion (simplified, would need a PDF.js library for real implementation)
+      function convertPdfToImage(file, targetFormat) {
+        // In a real implementation, you would use PDF.js or a similar library
+        conversionStatus.innerHTML = `
+          <div class="info-message">
+            <i class="bi bi-info-circle"></i>
+            PDF conversion requires the PDF.js library. This is a placeholder for demonstration.
+          </div>
+        `;
+        
+        // Simulate conversion for demo purposes
+        setTimeout(() => {
+          conversionStatus.innerHTML = `
+            <div class="info-message">
+              <i class="bi bi-info-circle"></i>
+              For PDF conversions, we recommend using a server-side solution or dedicated PDF.js implementation.
+            </div>
+          `;
+        }, 2000);
+      }
+      
+      // Text to PDF conversion (simplified, would need a PDF generation library)
+      function convertTextToPdf(file, targetFormat) {
+        // In a real implementation, you would use jsPDF or a similar library
+        conversionStatus.innerHTML = `
+          <div class="info-message">
+            <i class="bi bi-info-circle"></i>
+            Text to PDF conversion requires the jsPDF library. This is a placeholder for demonstration.
+          </div>
+        `;
+        
+        // Simulate conversion for demo purposes
+        setTimeout(() => {
+          conversionStatus.innerHTML = `
+            <div class="info-message">
+              <i class="bi bi-info-circle"></i>
+              For PDF generation, we recommend using jsPDF or a server-side solution.
+            </div>
+          `;
+        }, 2000);
+      }
+      
+      // Audio conversion (simplified, would need audio processing libraries)
+      function convertAudio(file, targetFormat) {
+        conversionStatus.innerHTML = `
+          <div class="info-message">
+            <i class="bi bi-info-circle"></i>
+            Audio conversion in the browser is limited. This is a placeholder for demonstration.
+          </div>
+        `;
+        
+        // Simulate conversion for demo purposes
+        setTimeout(() => {
+          conversionStatus.innerHTML = `
+            <div class="info-message">
+              <i class="bi bi-info-circle"></i>
+              For reliable audio conversion, we recommend using a server-side solution or WebAssembly-based libraries.
+            </div>
+          `;
+        }, 2000);
+      }
+      
+      // EPUB conversion function
+      function convertEpub(file, targetFormat) {
+        conversionStatus.innerHTML = `
+          <div class="progress-message">
+            <i class="bi bi-arrow-repeat spinner"></i>
+            Processing EPUB file...
+          </div>
+        `;
+        
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+          const data = e.target.result;
+          
+          try {
+            // Use epub.js to parse the EPUB file
+            const book = ePub(data);
+      
+            // Just test getting some basic info first
+            book.loaded.metadata.then(function(metadata) {
+              
+              // Now proceed with conversion based on target format
+              if (targetFormat === 'text/html') {
+                convertEpubToHtml(book);
+              } else if (targetFormat === 'application/pdf') {
+                convertEpubToPdf(book);
+              } else if (targetFormat === 'text/plain') {
+                convertEpubToText(book);
+              } else {
+                conversionStatus.innerHTML = `
+                  <div class="error-message">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    Conversion to ${formatNames[targetFormat]} is not supported yet.
+                  </div>
+                `;
+              }
+            }).catch(function(error) {
+              console.error('Error loading book metadata:', error);
+              conversionStatus.innerHTML = `
+                <div class="error-message">
+                  <i class="bi bi-exclamation-triangle"></i>
+                  Error processing EPUB: ${error.message}
+                </div>
+              `;
+            });
+          } catch (error) {
+            console.error('Error in EPUB processing:', error);
+            conversionStatus.innerHTML = `
+              <div class="error-message">
+                <i class="bi bi-exclamation-triangle"></i>
+                Error processing EPUB: ${error.message}
+              </div>
+            `;
+          }
+        };
+        reader.readAsArrayBuffer(file);
+      }
+
+      // EPUB to HTML conversion
+      function convertEpubToHtml(book) {
+        // Get spine items (chapters)
+        const chapters = [];
+        let chapterPromises = [];
+        
+        book.spine.each(function(item) {
+          chapterPromises.push(
+            item.load(book.load.bind(book))
+              .then(function(contents) {
+                chapters.push({
+                  id: item.idref,
+                  title: item.title || item.idref,
+                  content: contents.content || contents
+                });
+              })
+          );
+        });
+        
+        Promise.all(chapterPromises)
+          .then(function() {
+            // Create a single HTML document
+            let htmlContent = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>${book.packaging.metadata.title}</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 2em; }
+    h1, h2, h3 { color: #333; }
+    img { max-width: 100%; }
+  </style>
+</head>
+<body>
+  <h1>${book.packaging.metadata.title || 'Converted EPUB'}</h1>
+  <p><em>Author: ${book.packaging.metadata.creator || 'Unknown'}</em></p>
+`;
+
+            // Add all chapters
+            chapters.forEach(function(chapter) {
+              htmlContent += `<div class="chapter" id="${chapter.id}">
+  ${chapter.content}
+</div>
+`;
+            });
+            
+            htmlContent += `</body>
+</html>`;
+            
+            // Create file
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            convertedFile = new File([blob], 'converted.html', { type: 'text/html' });
+            
+            conversionStatus.innerHTML = `
+              <div class="success-message">
+                <i class="bi bi-check-circle"></i>
+                EPUB successfully converted to HTML!
+              </div>
+            `;
+            
+            downloadActions.style.display = 'block';
+          })
+          .catch(function(error) {
+            conversionStatus.innerHTML = `
+              <div class="error-message">
+                <i class="bi bi-exclamation-triangle"></i>
+                Error converting EPUB to HTML: ${error.message}
+              </div>
+            `;
+          });
+      }
+
+      // EPUB to PDF conversion
+      function convertEpubToPdf(book) {
+        const pageSize = document.getElementById('page-size') ? 
+            document.getElementById('page-size').value : 'a4';
+        const pageOrientation = document.getElementById('page-orientation') ? 
+            document.getElementById('page-orientation').value : 'portrait';
+
+        conversionStatus.innerHTML = `
+          <div class="info-message">
+            <i class="bi bi-info-circle"></i>
+            Converting EPUB to PDF requires processing all content and images. This may take a moment...
+          </div>
+        `;
+        
+        // This is a simplified implementation that would need improvement
+        // for a production-ready solution
+        try {
+          // Create a new PDF document
+          const pdf = new jspdf.jsPDF({
+              orientation: pageOrientation,
+              unit: 'mm',
+              format: pageSize
+          });
+
+          let y = 20;
+          
+          // Add title
+          pdf.setFontSize(24);
+          pdf.text(book.packaging.metadata.title || 'Converted EPUB', 20, y);
+          y += 10;
+          
+          // Add author
+          pdf.setFontSize(12);
+          pdf.text(`Author: ${book.packaging.metadata.creator || 'Unknown'}`, 20, y);
+          y += 20;
+          
+          // Get spine items and process one by one
+          let currentChapter = 0;
+          
+          function processNextChapter() {
+            if (currentChapter >= book.spine.length) {
+              // All chapters processed, save the PDF
+              try {
+                const pdfBlob = pdf.output('blob');
+                convertedFile = new File([pdfBlob], 'converted.pdf', { type: 'application/pdf' });
+                
+                conversionStatus.innerHTML = `
+                  <div class="success-message">
+                    <i class="bi bi-check-circle"></i>
+                    EPUB successfully converted to PDF!
+                  </div>
+                `;
+                
+                setTimeout(() => {
+                  const url = URL.createObjectURL(convertedFile);
+                  const link = document.createElement('a');
+                  link.href = url;
+                  link.download = 'converted.pdf';
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                  URL.revokeObjectURL(url);
+                }, 1000);
+
+                downloadActions.style.display = 'block';
+              } catch (error) {
+                console.error('Error saving PDF:', error);
+                conversionStatus.innerHTML = `
+                  <div class="error-message">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    Error saving PDF: ${error.message}
+                  </div>
+                `;
+              }
+              return;
+            }
+            
+            try {
+              // Get spine item
+              const item = book.spine.get(currentChapter);
+              
+              // Load content
+              book.load(item.href).then(function(content) {
+                
+                try {
+                  // Add chapter title if available
+                  if (item.label) {
+                    pdf.setFontSize(16);
+                    pdf.text(item.label, 20, y);
+                    y += 10;
+                  }
+                  
+                  // Create a temporary div to extract text
+                  let tempDiv = document.createElement('div');
+
+                  // Check if content is an object with content property
+                  if (content && typeof content === 'object' && content.content) {
+                    tempDiv.innerHTML = content.content;
+                  } else if (content && typeof content === 'object' && content.documentElement) {
+                    // Handle HTMLDocument objects
+                    tempDiv.innerHTML = content.documentElement.outerHTML;
+                  } else {
+                    tempDiv.innerHTML = content;
+                  }
+
+                  // Extract all text content
+                  const text = tempDiv.textContent || tempDiv.innerText;
+
+                  // Set page format - use A4 with proper margins
+                  if (currentChapter > 0) {
+                    pdf.addPage();
+                    y = 20; // Reset y position for new page
+                  }
+
+                  // Process paragraphs - split by newlines or reasonable chunks
+                  const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim());
+                  if (paragraphs.length === 0 && text.trim()) {
+                    // If no paragraphs detected but we have text, treat as one paragraph
+                    paragraphs.push(text.trim());
+                  }
+
+                  // Set text properties
+                  pdf.setFontSize(11);
+                  const lineHeight = 7;
+                  const pageWidth = pdf.internal.pageSize.width;
+                  const margin = 20;
+                  const textWidth = pageWidth - (margin * 2);
+
+                  // Process each paragraph with proper flow between pages
+                  for (let i = 0; i < paragraphs.length; i++) {
+                    const paragraph = paragraphs[i].trim();
+                    if (!paragraph) continue;
+                    
+                    const textLines = pdf.splitTextToSize(paragraph, textWidth);
+                    
+                    // Check if we need a new page based on actual remaining space
+                    if (y + (textLines.length * lineHeight) > pdf.internal.pageSize.height - margin) {
+                      pdf.addPage({format: pageSize});
+                      y = margin; // Reset to top of page with margin
+                    }
+                    
+                    pdf.text(textLines, margin, y);
+                    y += textLines.length * lineHeight + 3; // Small gap between paragraphs
+                  }
+
+                  // Process next chapter
+                  currentChapter++;
+                  setTimeout(processNextChapter, 0); // Use setTimeout to prevent stack overflow with large books
+                } catch (error) {
+                  console.error(`Error processing chapter ${currentChapter} content:`, error);
+                  currentChapter++;
+                  setTimeout(processNextChapter, 0);
+                }
+              }).catch(function(error) {
+                console.error(`Error loading chapter ${currentChapter}:`, error);
+                currentChapter++;
+                setTimeout(processNextChapter, 0);
+              });
+            } catch (error) {
+              console.error(`Error getting spine item ${currentChapter}:`, error);
+              currentChapter++;
+              setTimeout(processNextChapter, 0);
+            }
+          }
+          
+          // Start processing chapters
+          processNextChapter();
+        } catch (error) {
+          console.error('Error in convertEpubToPdf:', error);
+          conversionStatus.innerHTML = `
+            <div class="error-message">
+              <i class="bi bi-exclamation-triangle"></i>
+              Error converting EPUB to PDF: ${error.message}
+            </div>
+          `;
+        }
+      }
+
+      // EPUB to text conversion
+      function convertEpubToText(book) {
+        // Get spine items (chapters)
+        const chapters = [];
+        let chapterPromises = [];
+        
+        book.spine.each(function(item) {
+          chapterPromises.push(
+            item.load(book.load.bind(book))
+              .then(function(contents) {
+                let tempDiv = document.createElement('div');
+                tempDiv.innerHTML = contents.content || contents;
+                
+                chapters.push({
+                  title: item.title || item.idref,
+                  text: tempDiv.textContent || tempDiv.innerText
+                });
+              })
+          );
+        });
+
+        Promise.all(chapterPromises)
+          .then(function() {
+            // Create a text file with all content
+            let textContent = `${book.packaging.metadata.title || 'Converted EPUB'}\n`;
+            textContent += `Author: ${book.packaging.metadata.creator || 'Unknown'}\n\n`;
+            
+            // Add all chapters
+            chapters.forEach(function(chapter) {
+              textContent += `\n\n== ${chapter.title} ==\n\n`;
+              textContent += chapter.text;
+            });
+            
+            // Create file
+            const blob = new Blob([textContent], { type: 'text/plain' });
+            convertedFile = new File([blob], 'converted.txt', { type: 'text/plain' });
+            
+            conversionStatus.innerHTML = `
+              <div class="success-message">
+                <i class="bi bi-check-circle"></i>
+                EPUB successfully converted to text!
+              </div>
+            `;
+            
+            downloadActions.style.display = 'block';
+          })
+          .catch(function(error) {
+            conversionStatus.innerHTML = `
+              <div class="error-message">
+                <i class="bi bi-exclamation-triangle"></i>
+                Error converting EPUB to text: ${error.message}
+              </div>
+            `;
+          });
+      }
+
+      // Text/HTML to EPUB conversion
+      function convertTextToEpub(file, targetFormat) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+          const content = e.target.result;
+          
+          try {
+            // Create a new JSZip instance for the EPUB
+            const zip = new JSZip();
+            
+            // Add mimetype file (must be first and uncompressed)
+            zip.file("mimetype", "application/epub+zip");
+            
+            // Add META-INF directory
+            zip.file("META-INF/container.xml", `<?xml version="1.0" encoding="UTF-8"?>
+<container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
+  <rootfiles>
+    <rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/>
+  </rootfiles>
+</container>`);
+            
+            // Create OEBPS directory
+            const oebps = zip.folder("OEBPS");
+            
+            // Create content based on file type
+            let htmlContent;
+            let title = "Converted Document";
+            const now = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+            
+            if (file.type === 'text/html') {
+              htmlContent = content;
+              
+              // Try to extract title from HTML
+              const titleMatch = content.match(/<title>(.*?)<\/title>/i);
+              if (titleMatch && titleMatch[1]) {
+                title = titleMatch[1];
+              }
+            } else if (file.type === 'text/markdown') {
+              // Simple markdown to HTML conversion
+              htmlContent = `<!DOCTYPE html>
+<html>
+<head>
+  <title>Converted from Markdown</title>
+  <meta charset="utf-8">
+</head>
+<body>`;
+              
+              // Very basic markdown conversion
+              const lines = content.split('\n');
+              for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                
+                // Headers
+                if (line.startsWith('# ')) {
+                  htmlContent += `<h1>${line.substring(2)}</h1>`;
+                } else if (line.startsWith('## ')) {
+                  htmlContent += `<h2>${line.substring(3)}</h2>`;
+                } else if (line.startsWith('### ')) {
+                  htmlContent += `<h3>${line.substring(4)}</h3>`;
+                } else if (line.startsWith('- ')) {
+                  // List items
+                  htmlContent += `<ul><li>${line.substring(2)}</li></ul>`;
+                } else if (line.match(/^\d+\. /)) {
+                  // Numbered list
+                  htmlContent += `<ol><li>${line.replace(/^\d+\. /, '')}</li></ol>`;
+                } else if (line === '') {
+                  // Empty line
+                  htmlContent += '<br>';
+                } else {
+                  // Regular paragraph
+                  htmlContent += `<p>${line}</p>`;
+                }
+              }
+              
+              htmlContent += `</body></html>`;
+            } else {
+              // Plain text
+              htmlContent = `<!DOCTYPE html>
+<html>
+<head>
+  <title>Converted Text</title>
+  <meta charset="utf-8">
+</head>
+<body>
+  <pre>${content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+</body>
+</html>`;
+            }
+            
+            // Add the HTML content file
+            oebps.file("chapter1.html", htmlContent);
+            
+            // Add content.opf file
+            const contentOpf = `<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="BookID" version="2.0">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+    <dc:title>${title}</dc:title>
+    <dc:creator>Utility Tools Converter</dc:creator>
+    <dc:language>en</dc:language>
+    <dc:identifier id="BookID">urn:uuid:${generateUUID()}</dc:identifier>
+    <dc:date>${now}</dc:date>
+  </metadata>
+  <manifest>
+    <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+    <item id="chapter1" href="chapter1.html" media-type="application/xhtml+xml"/>
+  </manifest>
+  <spine toc="ncx">
+    <itemref idref="chapter1"/>
+  </spine>
+</package>`;
+            oebps.file("content.opf", contentOpf);
+            
+            // Add toc.ncx file
+            const tocNcx = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx 2005-1//EN" "http://www.daisy.org/z3986/2005/ncx-2005-1.dtd">
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+  <head>
+    <meta name="dtb:uid" content="urn:uuid:${generateUUID()}"/>
+    <meta name="dtb:depth" content="1"/>
+    <meta name="dtb:totalPageCount" content="0"/>
+    <meta name="dtb:maxPageNumber" content="0"/>
+  </head>
+  <docTitle>
+    <text>${title}</text>
+  </docTitle>
+  <navMap>
+    <navPoint id="navpoint-1" playOrder="1">
+      <navLabel>
+        <text>${title}</text>
+      </navLabel>
+      <content src="chapter1.html"/>
+    </navPoint>
+  </navMap>
+</ncx>`;
+            oebps.file("toc.ncx", tocNcx);
+            
+            // Generate EPUB file
+            zip.generateAsync({type: "blob"})
+              .then(function(blob) {
+                convertedFile = new File([blob], "converted.epub", {type: "application/epub+zip"});
+                
+                conversionStatus.innerHTML = `
+                  <div class="success-message">
+                    <i class="bi bi-check-circle"></i>
+                    Successfully converted to EPUB!
+                  </div>
+                `;
+                
+                downloadActions.style.display = 'block';
+              })
+              .catch(function(error) {
+                conversionStatus.innerHTML = `
+                  <div class="error-message">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    Error creating EPUB: ${error.message}
+                  </div>
+                `;
+              });
+          } catch (error) {
+            conversionStatus.innerHTML = `
+              <div class="error-message">
+                <i class="bi bi-exclamation-triangle"></i>
+                Error converting to EPUB: ${error.message}
+              </div>
+            `;
+          }
+        };
+        
+        // Read file as text
+        if (file.type === 'text/html' || file.type === 'text/markdown' || file.type === 'text/plain') {
+          reader.readAsText(file);
+        } else {
+          conversionStatus.innerHTML = `
+            <div class="error-message">
+              <i class="bi bi-exclamation-triangle"></i>
+              Unsupported file type for EPUB conversion.
+            </div>
+          `;
+        }
+      }
+
+      // Helper function to generate UUID for EPUB
+      function generateUUID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          const r = Math.random() * 16 | 0;
+          const v = c === 'x' ? r : (r & 0x3 | 0x8);
+          return v.toString(16);
+        });
+      }
+
+      // Download button handler
+      downloadBtn.addEventListener('click', () => {
+        if (convertedFile) {
+          const url = URL.createObjectURL(convertedFile);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = convertedFile.name;
+          link.click();
+          
+          // Clean up
+          URL.revokeObjectURL(url);
+        }
+      });
+    }
 });
