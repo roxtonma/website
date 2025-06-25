@@ -11,13 +11,20 @@
   <!-- Bootstrap Icons v1.10.5 -->
   <link
     rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
   />
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+
+  <!-- Utility Tools JavaScript -->
+
+  <!-- External libraries for EPUB handling -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 
   <!-- Favicon (optional) -->
   <link rel="icon" href="../assets/icons/favicon.ico" />
@@ -82,32 +89,50 @@
     --------------------------- -->
     <section class="section tool-section">
       <h1 class="section-title">Utility Tools</h1>
-      
+
       <div class="tool-description">
         <p>
           A collection of handy tools to boost your productivity. All tools work in your browser - no data is sent to any server.
         </p>
       </div>
-      
+
       <div class="utility-tools">
-        <!-- QR Code Generator -->
+        <!-- Currency Converter -->
         <div class="tool-card">
           <div class="tool-header">
-            <i class="bi bi-qr-code tool-icon"></i>
-            <h3 class="tool-title">QR Code Generator</h3>
+            <i class="bi bi-currency-exchange tool-icon"></i>
+            <h3 class="tool-title">Currency Converter</h3>
           </div>
           <div class="tool-content">
             <p class="tool-description">
-              Create QR codes for URLs, text, contact information, or Wi-Fi credentials.
+              Convert between different currencies using real-time exchange rates.
             </p>
             <div class="tool-action">
-              <button class="tool-btn" id="open-qr-generator">
+              <button class="tool-btn" id="open-currency-converter">
                 <i class="bi bi-arrow-right-circle"></i> Open Tool
               </button>
             </div>
           </div>
         </div>
-        
+
+        <!-- File Converter -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <i class="bi bi-file-earmark tool-icon"></i>
+            <h3 class="tool-title">File Converter</h3>
+          </div>
+          <div class="tool-content">
+            <p class="tool-description">
+              Convert file from epub to pdf. Experimental.
+            </p>
+            <div class="tool-action">
+              <button class="tool-btn" id="open-file-converter">
+                <i class="bi bi-arrow-right-circle"></i> Open Tool
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- Image Resizer -->
         <div class="tool-card">
           <div class="tool-header">
@@ -125,7 +150,7 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Image Compressor -->
         <div class="tool-card">
           <div class="tool-header">
@@ -143,7 +168,25 @@
             </div>
           </div>
         </div>
-        
+
+        <!-- QR Code Generator -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <i class="bi bi-qr-code tool-icon"></i>
+            <h3 class="tool-title">QR Code Generator</h3>
+          </div>
+          <div class="tool-content">
+            <p class="tool-description">
+              Create QR codes for URLs, text, contact information, or Wi-Fi credentials.
+            </p>
+            <div class="tool-action">
+              <button class="tool-btn" id="open-qr-generator">
+                <i class="bi bi-arrow-right-circle"></i> Open Tool
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- Text Formatter -->
         <div class="tool-card">
           <div class="tool-header">
@@ -228,24 +271,6 @@
             </p>
             <div class="tool-action">
               <button class="tool-btn" id="open-unit-converter">
-                <i class="bi bi-arrow-right-circle"></i> Open Tool
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Currency Converter -->
-        <div class="tool-card">
-          <div class="tool-header">
-            <i class="bi bi-currency-exchange tool-icon"></i>
-            <h3 class="tool-title">Currency Converter</h3>
-          </div>
-          <div class="tool-content">
-            <p class="tool-description">
-              Convert between different currencies using real-time exchange rates from a reliable API.
-            </p>
-            <div class="tool-action">
-              <button class="tool-btn" id="open-currency-converter">
                 <i class="bi bi-arrow-right-circle"></i> Open Tool
               </button>
             </div>
@@ -738,6 +763,46 @@
           </div>
           
           <div id="api-error" class="error-message" style="display: none;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- File Converter Modal -->
+    <div id="file-converter-modal" class="tool-modal">
+      <div class="modal-content">
+        <button class="close-modal">&times;</button>
+        <div class="modal-header">
+          <h2 class="modal-title"><i class="bi bi-file-earmark-arrow-right"></i> File Converter</h2>
+        </div>
+        <div class="modal-body">
+          <form class="tool-form" id="file-converter-form">
+            <label for="file-upload">Upload a file to convert:</label>
+            <input type="file" id="file-upload" class="tool-input">
+            
+            <div id="conversion-options" style="display: none;">
+              <label for="target-format">Convert to:</label>
+              <select id="target-format" class="tool-input">
+                <!-- Options will be populated based on the input file -->
+              </select>
+              
+              <div id="conversion-settings" class="conversion-settings">
+                <!-- Additional settings based on conversion type -->
+              </div>
+              
+              <button type="button" id="convert-file-btn" class="tool-btn">
+                <i class="bi bi-arrow-repeat"></i> Convert File
+              </button>
+            </div>
+          </form>
+          
+          <div id="conversion-result" class="tool-result">
+            <div id="conversion-status"></div>
+            <div class="download-actions" style="display: none;">
+              <button id="download-converted" class="tool-btn">
+                <i class="bi bi-download"></i> Download Converted File
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
