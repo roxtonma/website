@@ -1,0 +1,14 @@
+# dependencies and build output
+node_modules/
+dist/
+.wrangler/
+# local checks and their outputs stay on this machine, not in the repo
+check/
+# dead versions of the site
+archive/
+# working notes (private, not for a public repo)
+STATE.md
+BRIEF.md
+DESIGN.md
+REFERENCE.md
+.DS_Store

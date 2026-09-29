@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Roxton Ma</title>
+<meta name="description" content="Roxton Ma tests AI video models to their limit and builds the pipelines that turn them into content people watch. Mumbai, India.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Geist+Mono:wght@400;500;600&family=Geist:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="name" href="#top"><span class="dot" aria-hidden="true"></span>Roxton Ma</a>
+    <nav class="nav" aria-label="Main">
+      <a href="#work">Work</a>
+      <a href="#how">How it goes</a>
+      <a class="nav-cta" href="#contact">Email me</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Every section is one screen, stuck to the top of the viewport. The .hold
+     after it is the scroll that section owns: while the hold runs, the screen
+     is locked and the section's own animation plays. Then the next screen
+     rises over it. No scroll position ever shows two half sections. -->
+<main id="top">
+
+  <!-- 1. the name, a take growing to full bleed -->
+  <section class="stage intro" aria-label="Intro">
+    <div class="intro-in">
+      <div class="tile">
+        <video id="intro-video" src="/media/tower-dive-take-10.mp4" poster="/media/tower-dive-take-10.jpg" muted loop playsinline autoplay preload="auto"></video>
+      </div>
+      <div class="wrap">
+        <div class="intro-type">
+          <h1 class="display wordmark" aria-label="Roxton Ma"><span class="split" aria-hidden="true">Roxton Ma</span></h1>
+          <p class="display d2 long tagline">I test AI video models to their limit.</p>
+        </div>
+      </div>
+      <div class="intro-foot">
+        <p class="eyebrow">Tower dive, a Wan 3.0 test</p>
+        <p class="eyebrow">Scroll</p>
+      </div>
+    </div>
+  </section>
+  <div class="hold" data-hold="intro" aria-hidden="true"></div>
+
+  <!-- 2. the question people ask -->
+  <section class="stage talk" aria-label="The question">
+    <div class="talk-in">
+      <div class="wrap">
+        <div class="talk-row">
+          <span class="who">Client:</span>
+          <p class="display talk-line long split" id="line-1">Hold on. So you just type a prompt and the AI does the rest?</p>
+        </div>
+        <div class="talk-aside">
+          <span class="who">Me:</span>
+          <p class="display aside split" id="line-2">No.</p>
+        </div>
+        <div class="talk-row">
+          <span class="who">Client:</span>
+          <p class="display talk-line long split" id="line-3">Then what do you actually make?</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="hold" data-hold="talk" aria-hidden="true"></div>
+
+  <!-- 3. the answer and the work, on one screen: the panel opens, holds, then
+       wipes away as the word and the clips rise under it -->
+  <section class="stage explode" id="work" aria-label="Watch the work">
+    <div class="explode-in">
+      <h2 class="display big-word"><span class="split">Watch.</span></h2>
+      <div class="cards" id="cards"></div>
+      <p class="eyebrow explode-hint">Click any clip to watch it</p>
+      <div class="panel">
+        <div class="flash-rows display" aria-hidden="true">
+          <div class="flash-row"><span>Watch. Watch. Watch. Watch. Watch. </span></div>
+          <div class="flash-row"><span>Watch. Watch. Watch. Watch. Watch. </span></div>
+          <div class="flash-row"><span>Watch. Watch. Watch. Watch. Watch. </span></div>
+          <div class="flash-row"><span>Watch. Watch. Watch. Watch. Watch. </span></div>
+          <div class="flash-row"><span>Watch. Watch. Watch. Watch. Watch. </span></div>
+        </div>
+      </div>
+      <div class="glitch" aria-hidden="true"><i></i><i></i><i></i></div>
+    </div>
+  </section>
+  <div class="hold" data-hold="work" aria-hidden="true"></div>
+
+  <!-- 4. what you can hire me for -->
+  <section class="stage doors" id="make">
+    <div class="doors-in">
+      <div class="wrap doors-head">
+        <h2 class="display d1">What you can hire me for</h2>
+        <p class="eyebrow">Three kinds of work</p>
+      </div>
+      <div class="wrap">
+        <div class="door-grid">
+          <article class="door">
+            <div class="door-media solid"></div>
+            <div class="door-text">
+              <h3 class="display">Performance ads.</h3>
+              <p>Ad creative for paid social, made in batches so you can test what works and scale it.</p>
+              <span class="pill static">Samples on the demo call</span>
+            </div>
+          </article>
+          <article class="door">
+            <div class="door-media"><img src="/media/course-video-pilot.jpg" alt="" loading="lazy"></div>
+            <div class="door-text">
+              <h3 class="display">AI avatars.</h3>
+              <p>A presenter who stays the same person across your content, so you can publish without a shoot every time.</p>
+              <button class="pill" type="button" data-open="course-video:0">Watch one</button>
+            </div>
+          </article>
+          <article class="door">
+            <div class="door-media"><img src="/media/beach-waterline-wan3-15s.jpg" alt="" loading="lazy"></div>
+            <div class="door-text">
+              <h3 class="display">Short &amp; long form.</h3>
+              <p>Reels and shorts that hold attention, and longer pieces like lessons and explainers.</p>
+              <button class="pill" type="button" data-open="beach-waterline:0">Watch one</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="hold" data-hold="make" aria-hidden="true"></div>
+
+  <!-- 5. clients, through Frameo. Size shows how widely known each one is. -->
+  <section class="stage clients" aria-label="Clients">
+    <div class="clients-in">
+      <p class="eyebrow clients-top">Core team at Frameo. Teams we work with there:</p>
+      <h2 class="display big-word">Clients:</h2>
+      <ul class="names" id="names">
+        <li class="t1">DramaBox</li>
+        <li class="t2">Seekho</li>
+        <li class="t3">Bulb Chamka AI</li>
+        <li class="t1">Jio Hotstar</li>
+        <li class="t2">Lokal</li>
+        <li class="t3">FOID Design Studio</li>
+        <li class="t1">Pocket FM</li>
+        <li class="t2">Animaster</li>
+        <li class="t3">Resonance Media</li>
+        <li class="t3">Lumio</li>
+        <li class="t3">Om Tatava Digitals</li>
+        <li class="t3">KirSa Studio</li>
+        <li class="t3">Novaryx AI Videos</li>
+        <li class="t3">Optimist</li>
+        <li class="t3">Smiley Films</li>
+      </ul>
+      <div class="clients-foot">
+        <p class="eyebrow">Frameo&rsquo;s clients, not solo projects of mine.</p>
+        <a href="https://frameo.ai" target="_blank" rel="noopener">Want the whole tool? frameo.ai &nearr;</a>
+      </div>
+    </div>
+  </section>
+  <div class="hold" data-hold="clients" aria-hidden="true"></div>
+
+  <!-- 6. why me, lit as you read -->
+  <section class="stage why" aria-label="Why me">
+    <div class="wrap">
+      <p class="split">I&rsquo;ve worked with these models since prompting was the least of your worries, and built pipelines before consistency was solved.</p>
+      <p class="split">Being on Frameo&rsquo;s core team means when an agency needs something, we build it fast, instead of making you fit a workflow Runway already decided for you.</p>
+    </div>
+  </section>
+  <div class="hold" data-hold="why" aria-hidden="true"></div>
+
+  <!-- 7. how it goes -->
+  <section class="stage how" id="how">
+    <div class="wrap">
+      <h2 class="display d1">How we&rsquo;d work</h2>
+      <ol class="steps">
+        <li><h3 class="display split">Brief</h3><p>You tell me what you need. I ask questions until I actually understand it.</p></li>
+        <li><h3 class="display split">Bounce ideas</h3><p>We go back and forth so I know my understanding matches yours before anything gets made.</p></li>
+        <li><h3 class="display split">Scope</h3><p>Scope, price and dates agreed before anything starts. Want it on your own brief first, we run a small paid pilot.</p></li>
+        <li><h3 class="display split">Deliver</h3><p>You get the finished piece.</p></li>
+        <li><h3 class="display split">Iterate</h3><p>If something&rsquo;s off, tell me and we go another round.</p></li>
+      </ol>
+    </div>
+  </section>
+  <div class="hold" data-hold="how" aria-hidden="true"></div>
+
+  <!-- 8. contact -->
+  <section class="stage contact" id="contact">
+    <div class="wrap">
+      <p class="eyebrow">Contact</p>
+      <h2 class="display">Send me the <span class="hl">brief.</span></h2>
+      <div class="contact-mail">
+        <a class="mail" id="mail" href="mailto:roxton05@gmail.com">roxton05@gmail.com</a>
+        <button class="pill" id="copy-mail" type="button">Copy email</button>
+      </div>
+      <div class="contact-side">
+        <p><strong>What to send:</strong> what you&rsquo;re making, who it&rsquo;s for, and when you need it. I&rsquo;ll reply with how I&rsquo;d approach it, then we set up a demo call.</p>
+        <p>Based in Mumbai. Open to teams anywhere, US included.</p>
+      </div>
+    </div>
+  </section>
+  <div class="hold" data-hold="contact" aria-hidden="true"></div>
+
+</main>
+
+<div class="marquee" aria-hidden="true">
+  <div class="track" id="track">
+    <span class="group"><span>Roxton.Ma.</span><span>Down.The.Rabbit.Hole.</span></span>
+  </div>
+</div>
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Roxton Ma</span>
+    <span>Mumbai, India</span>
+    <a href="#top">Back to top &uarr;</a>
+  </div>
+</footer>
+
+<dialog class="player" id="player" aria-labelledby="player-title">
+  <div class="player-head">
+    <h3 class="display" id="player-title"></h3>
+    <div class="switch" id="player-switch" role="group" aria-label="Versions"></div>
+    <button class="close" id="player-close" type="button">Close</button>
+  </div>
+  <video id="player-video" controls playsinline></video>
+  <div class="player-foot">
+    <div class="slate" id="player-slate"></div>
+    <p id="player-what"></p>
+  </div>
+</dialog>
+
+<script type="module" src="/main.js"></script>
+</body>
+</html>
