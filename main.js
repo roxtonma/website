@@ -10,25 +10,25 @@ const PIECES = [
     what: "A frozen windscreen on a winter morning. A gloved hand pushes the whole sheet of ice off in one piece and it bursts on the gravel. One still, one prompt, one continuous shot.",
     variants: [
       { label: "Take", kind: "take", src: "media/ice-sheet.mp4", poster: "media/ice-sheet.jpg", aspect: "16 / 9",
-        slate: ["Wan 3.0", "5 s", "1080p", "1 still, GPT Image 2.5", "$1.00 list", "2026-09-30"] }
+        slate: [] }
     ]
   },
   {
     id: "sozu-can",
     title: "Sozu, a spec ad",
-    what: "A made-up yuzu ginger soda. The tab cracks on a frosted can and the cold comes off it in the back light. Performance ad product moment, sound from the model.",
+    what: "A made-up yuzu ginger soda. The tab cracks on a frosted can and the cold comes off it in the back light. A performance ad product moment, sound and all.",
     variants: [
       { label: "Take", kind: "take", src: "media/sozu-can.mp4", poster: "media/sozu-can.jpg", aspect: "16 / 9",
-        slate: ["Wan 3.0", "5 s", "1080p", "1 still, GPT Image 2.5", "$1.00 list", "2026-09-30"] }
+        slate: [] }
     ]
   },
   {
     id: "potter-avatar",
     title: "Potter, an AI presenter",
-    what: "An original presenter, not a real person, in her workshop. One line to camera, lip sync and voice from the model, made to read as a real take.",
+    what: "An original presenter, not a real person, in her workshop. One line to camera, voice and lip sync generated with the picture, made to read as a real take.",
     variants: [
       { label: "Take", kind: "take", src: "media/potter-avatar.mp4", poster: "media/potter-avatar.jpg", aspect: "16 / 9",
-        slate: ["Wan 3.0", "5 s", "1080p", "1 still, GPT Image 2.5", "$1.00 list", "2026-09-30"] }
+        slate: [] }
     ]
   },
   {
@@ -38,7 +38,7 @@ const PIECES = [
     long: true,
     variants: [
       { label: "Lesson", kind: "take", src: "media/course-video-pilot.mp4", poster: "media/course-video-pilot.jpg", aspect: "16 / 9",
-        slate: ["Generated teacher + rendered IDE", "2 min 39 s", "480p on this page"] }
+        slate: ["2 min 39 s"] }
     ]
   }
 ];
@@ -81,6 +81,7 @@ function split(el) {
 
 const cardsEl = document.getElementById("cards");
 const cards = [];
+const cardVideos = [];
 for (const p of TAKES) {
   p.takes.forEach((v, i) => {
     const b = document.createElement("button");
@@ -97,29 +98,29 @@ for (const p of TAKES) {
     const l = document.createElement("span");
     l.textContent = p.takes.length > 1 ? `${p.title}, ${v.label}` : p.title;
     const r = document.createElement("span");
-    r.textContent = v.slate[0].length <= 14 ? v.slate[0] : "";
+    r.textContent = "";
     label.append(l, r);
     b.append(img, label);
-    if (matchMedia("(hover: hover)").matches && !p.long) {
-      b.addEventListener("pointerenter", () => {
-        let vid = b.querySelector("video");
-        if (!vid) {
-          vid = document.createElement("video");
-          Object.assign(vid, { src: v.src, muted: true, loop: true, playsInline: true });
-          b.append(vid);
-        }
-        vid.play().then(() => b.classList.add("playing")).catch(() => {});
-      });
-      b.addEventListener("pointerleave", () => {
-        const vid = b.querySelector("video");
-        if (vid) vid.pause();
-        b.classList.remove("playing");
-      });
+    // Short clips loop on their card, muted, whenever the cards are on screen.
+    // The long lesson stays a still until it is opened.
+    if (!p.long) {
+      const vid = document.createElement("video");
+      Object.assign(vid, { src: v.src, muted: true, loop: true, playsInline: true, preload: "metadata" });
+      vid.setAttribute("muted", "");
+      b.append(vid);
+      cardVideos.push([b, vid]);
     }
     cardsEl.append(b);
     cards.push(b);
   });
 }
+
+new IntersectionObserver(([e]) => {
+  for (const [b, vid] of cardVideos) {
+    if (e.isIntersecting) vid.play().then(() => b.classList.add("playing")).catch(() => {});
+    else { vid.pause(); b.classList.remove("playing"); }
+  }
+}).observe(cardsEl);
 
 const dlg = document.getElementById("player");
 const pv = document.getElementById("player-video");
@@ -261,9 +262,7 @@ const stepItems = [...document.querySelectorAll(".steps li")];
 // a sticky element's offsetTop is still its resting place in the document
 const docTop = el => { let y = 0; for (let n = el; n; n = n.offsetParent) y += n.offsetTop; return y; };
 
-if (reduce) {
-  document.getElementById("intro-video").removeAttribute("autoplay");
-} else {
+if (!reduce) {
   gsap.registerPlugin(ScrollTrigger);
 
   // Lenis carries the inertia. ScrollTrigger reads from it, so scrubbed
