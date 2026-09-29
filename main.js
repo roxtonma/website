@@ -5,40 +5,30 @@ import Lenis from "lenis";
 // Facts for every test. Numbers and inputs come from the attempt records; do not edit by hand.
 const PIECES = [
   {
-    id: "tower-dive",
-    title: "Tower dive",
-    what: "A woman films herself on a tower roof, runs, leaps off the parapet, falls down the facade and dives into a pool far below. 15 seconds, three cameras, cuts on the stage's clock.",
+    id: "ice-sheet",
+    title: "Ice sheet",
+    what: "A frozen windscreen on a winter morning. A gloved hand pushes the whole sheet of ice off in one piece and it bursts on the gravel. One still, one prompt, one continuous shot.",
     variants: [
-      { label: "Take", kind: "take", src: "media/tower-dive-take-10.mp4", poster: "media/tower-dive-take-10.jpg", aspect: "16 / 9",
-        slate: ["Wan 3.0", "15 s", "720p", "stage video + 6 images", "$1.44 list", "2026-09-18"] },
-      { label: "Stage vs take", kind: "stage", src: "media/tower-dive-stage-vs-take.mp4", poster: "media/tower-dive-stage-vs-take.jpg", aspect: "32 / 9",
-        slate: ["Blender stage left, take right", "15 s", "cuts land within 42 ms"] },
-      { label: "Prompt only", kind: "take", src: "media/tower-dive-take-11.mp4", poster: "media/tower-dive-take-11.jpg", aspect: "16 / 9",
-        slate: ["Wan 3.0", "15 s", "720p", "6 images, no video", "$1.44 list", "2026-09-18"] }
+      { label: "Take", kind: "take", src: "media/ice-sheet.mp4", poster: "media/ice-sheet.jpg", aspect: "16 / 9",
+        slate: ["Wan 3.0", "5 s", "1080p", "1 still, GPT Image 2.5", "$1.00 list", "2026-09-30"] }
     ]
   },
   {
-    id: "beach-waterline",
-    title: "Beach waterline",
-    what: "An empty beach at last light. She runs the tideline, stops hard to get her breath back, then walks down to the water. Nothing but two images and a prompt went to the model.",
+    id: "sozu-can",
+    title: "Sozu, a spec ad",
+    what: "A made-up yuzu ginger soda. The tab cracks on a frosted can and the cold comes off it in the back light. Performance ad product moment, sound from the model.",
     variants: [
-      { label: "15 s, four cuts", kind: "take", src: "media/beach-waterline-wan3-15s.mp4", poster: "media/beach-waterline-wan3-15s.jpg", aspect: "16 / 9",
-        slate: ["Wan 3.0", "15 s", "720p", "2 images", "$1.44 list", "2026-09-21"] },
-      { label: "Walk, Wan 3", kind: "take", src: "media/beach-waterline-wan3-10s.mp4", poster: "media/beach-waterline-wan3-10s.jpg", aspect: "16 / 9",
-        slate: ["Wan 3.0", "10 s", "720p", "2 images", "$0.96 list", "2026-09-20"] },
-      { label: "Walk, H3", kind: "take", src: "media/beach-waterline-h3-10s.mp4", poster: "media/beach-waterline-h3-10s.jpg", aspect: "16 / 9",
-        slate: ["MiniMax H3", "10 s", "768p", "2 images", "$0.66 list", "2026-09-20"] }
+      { label: "Take", kind: "take", src: "media/sozu-can.mp4", poster: "media/sozu-can.jpg", aspect: "16 / 9",
+        slate: ["Wan 3.0", "5 s", "1080p", "1 still, GPT Image 2.5", "$1.00 list", "2026-09-30"] }
     ]
   },
   {
-    id: "sunset-overlook",
-    title: "Sunset overlook",
-    what: "A father and his daughter at a rooftop railing in a big Indian city at golden hour. She points at the skyline, he sinks to her level and puts a hand on her shoulder. Five cameras, cut in one build.",
+    id: "potter-avatar",
+    title: "Potter, an AI presenter",
+    what: "An original presenter, not a real person, in her workshop. One line to camera, lip sync and voice from the model, made to read as a real take.",
     variants: [
-      { label: "Take", kind: "take", src: "media/sunset-overlook-take.mp4", poster: "media/sunset-overlook-take.jpg", aspect: "16 / 9",
-        slate: ["Seedance 2.5", "14 s", "720p", "stage video + 3 images", "$3.92 list", "2026-09-15"] },
-      { label: "Stage reveal", kind: "stage", src: "media/sunset-overlook-stage-reveal.mp4", poster: "media/sunset-overlook-stage-reveal.jpg", aspect: "16 / 9",
-        slate: ["Edit, nothing generated", "14 s", "each shot opens on the stage, the take wipes over it"] }
+      { label: "Take", kind: "take", src: "media/potter-avatar.mp4", poster: "media/potter-avatar.jpg", aspect: "16 / 9",
+        slate: ["Wan 3.0", "5 s", "1080p", "1 still, GPT Image 2.5", "$1.00 list", "2026-09-30"] }
     ]
   },
   {
@@ -453,9 +443,10 @@ if (reduce) {
     // 3. the answer panel opens, holds, then wipes away as the word and the
     // clips rise under it. One screen, so a fast flick cannot skip the panel
     // and land in the middle of the clips.
+    // One spot per clip, four clips since 2026-09-30: one in each corner around the word.
     const SPOTS = wide
-      ? [[-35, -27, -7], [-2, -33, 4], [33, -25, -4], [-38, 22, 6], [-12, 31, -5], [13, 27, 8], [37, 21, -6]]
-      : [[-24, -37, -5], [24, -34, 4], [-25, -21, 5], [25, -18, -4], [-24, 21, -3], [24, 24, 6], [0, 37, -4]];
+      ? [[-33, -26, -6], [33, -24, 5], [-31, 25, 5], [31, 27, -5]]
+      : [[-24, -34, -5], [24, -31, 4], [-24, 27, 4], [24, 30, -4]];
     gsap.set(cards, { xPercent: -50, yPercent: -50, rotation: i => (i % 2 ? 1 : -1) * (2 + i), scale: 0.9 });
 
     gsap.set(bigChars, { opacity: 0 });
