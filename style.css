@@ -114,9 +114,8 @@ body::after {                                   /* grain, over everything */
 .hold[data-hold="talk"]    { --h: 2.4; }
 .hold[data-hold="work"]    { --h: 1.6; }
 .hold[data-hold="make"]    { --h: 1.6; }
-.hold[data-hold="clients"] { --h: 1.4; }
 .hold[data-hold="why"]     { --h: 0.9; }
-.hold[data-hold="how"]     { --h: 1.2; }
+.hold[data-hold="how"]     { --h: 0.5; }
 .hold[data-hold="contact"] { --h: 0.35; }
 .stage.gone { visibility: hidden; }             /* fully covered, stop painting it */
 
@@ -385,46 +384,6 @@ body::after {                                   /* grain, over everything */
 .pill:hover { background: var(--ink); color: var(--deep); border-color: var(--ink); }
 .pill.static, .pill.static:hover { cursor: default; background: none; color: inherit; }
 
-/* ---------------- 6. clients ---------------- */
-.clients-in { position: relative; height: 100%; display: grid; align-content: center; }
-.clients-in .big-word { font-size: var(--d0); opacity: 0.9; }
-.clients-top, .clients-foot { position: absolute; left: 50%; translate: -50% 0; width: min(100% - 2 * var(--gutter), var(--max)); max-width: none; z-index: 3; }
-.clients-top { top: calc(var(--s5) + env(safe-area-inset-top, 0px)); }
-.clients-foot { bottom: var(--s3); display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--gap); }
-.clients-foot .eyebrow { grid-column: 1 / span 7; }
-.clients-foot a { grid-column: 9 / -1; text-align: right; font: 600 var(--meta)/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; }
-.names {
-  position: relative;
-  z-index: 2;
-  list-style: none;
-  margin: 0 auto;
-  padding: 0 var(--gutter);
-  width: min(100%, var(--max));
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  align-content: center;
-  justify-content: center;
-  max-width: 44rem;
-  max-height: 76svh;
-  column-gap: 0.7rem;
-  row-gap: 1.5rem;
-}
-/* size carries how widely known the client is, nothing else */
-.names li {
-  font-family: var(--display);
-  font-weight: 900;
-  text-transform: uppercase;
-  line-height: 0.92;
-  letter-spacing: -0.005em;
-  white-space: nowrap;
-  color: var(--ink);
-  text-shadow: 0 2px 22px rgba(17, 19, 18, 0.75);
-}
-.names .t1 { font-size: clamp(1.6rem, min(4.4vw, 6.4vh), 4.6rem); }
-.names .t2 { font-size: clamp(1.1rem, min(2.4vw, 3.6vh), 2.6rem); }
-.names .t3 { font-size: clamp(0.95rem, min(1.6vw, 2.4vh), 1.8rem); color: #cfcabf; }
-
 /* ---------------- why ---------------- */
 .why { display: grid; align-content: center; border-top: 1px solid var(--line); }
 .why p { font-size: var(--quote); line-height: 1.25; max-width: 26ch; margin: 0; }
@@ -492,11 +451,10 @@ html.static .card { position: relative; left: auto; top: auto; translate: none; 
 html.static .stage { position: static; height: auto; overflow: visible; padding-block: var(--s6); }
 html.static .hold { display: none; }
 html.static .intro-in, html.static .talk-in, html.static .explode-in,
-html.static .doors-in, html.static .clients-in { height: auto; }
+html.static .doors-in { height: auto; }
 html.static .panel { position: relative; translate: none; left: auto; top: auto; margin-inline: auto; }
 html.static .flash-row span { animation: none; }
 html.static .big-word { position: relative; }
-html.static .clients-top, html.static .clients-foot { position: static; translate: none; width: auto; margin-inline: auto; }
 html.static .door-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); width: auto; transform: none; }
 html.static .door { width: auto; }
 html.static .track { animation: none; }
@@ -526,7 +484,6 @@ html.static .track { animation: none; }
   .steps li { grid-template-columns: 2.2rem minmax(0, 1fr); gap: var(--s1) var(--s2); }
   .steps h3, .steps p { grid-column: 2; }
   .contact-mail, .contact-side { grid-column: 1 / -1; }
-  .clients-foot .eyebrow, .clients-foot a { grid-column: 1 / -1; text-align: left; }
   .intro-foot .eyebrow:first-child { grid-column: 1 / span 7; }
   .intro-foot .eyebrow:last-child { grid-column: 9 / -1; }
   .nav a:not(.nav-cta) { display: none; }

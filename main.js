@@ -268,8 +268,6 @@ const whyWords = readLines.filter(([el]) => el.closest(".why")).map(([, w]) => w
 const stepWords = readLines.filter(([el]) => el.closest(".steps")).map(([, w]) => w);
 const stepItems = [...document.querySelectorAll(".steps li")];
 
-const names = [...document.querySelectorAll("#names li")];
-
 // a sticky element's offsetTop is still its resting place in the document
 const docTop = el => { let y = 0; for (let n = el; n; n = n.offsetParent) y += n.offsetTop; return y; };
 
@@ -378,6 +376,46 @@ if (reduce) {
     });
   });
 
+  // A screen that plays itself: arriving is the only input. Committing to it
+  // (the snap's 8%) starts its paused timeline and glides the page to the lock
+  // over a fixed 0.5 s, holds the page while the timeline plays at its own
+  // speed, and lets go on complete. Not held on a nav jump, a reload further
+  // down, or once it has played. Reset only when fully covered on the way up.
+  const playsItself = (name, tl) => {
+    const stage = holds[name].previousElementSibling;
+    // let go only of a hold this screen made: the banner can still be playing
+    // unheld (after a reload further up) when How commits and holds
+    let held = false;
+    tl.eventCallback("onComplete", () => { if (held) { held = false; releasePage(); } });
+    ScrollTrigger.create({
+      trigger: holds[name], start: "top bottom+=92%", end: "bottom bottom",   // matches the snap threshold
+      onEnter: () => {
+        const lockY = docTop(stage);
+        if (jumping || tl.progress() > 0 || scrollY >= lockY - 2) { tl.play(); return; }
+        // it starts now, not at the lock: the glide is a fixed 0.5 s, so the
+        // timing is the same at any scroll speed
+        tl.play();
+        stopSnap(); snapping = true;
+        // a native jump (scrollbar, End key) can arrive here before Lenis has
+        // caught up; gliding from its stale spot swept the page back up through
+        // the banner and held it there
+        lenis.scrollTo(scrollY, { immediate: true, force: true });
+        lenis.scrollTo(lockY, {
+          duration: 0.5, easing: t => 1 - Math.pow(1 - t, 3), lock: true, force: true,
+          // a long stalled frame (a hidden tab) can finish the timeline before
+          // the glide lands; holding then would never be released
+          onComplete: () => { snapping = false; if (tl.progress() < 1) { held = true; holdPage(lockY); } },
+        });
+      },
+    });
+    // the reset waits until the screen is fully covered on the way back up;
+    // at the 8% mark a strip of it still shows and the start state popped on it
+    ScrollTrigger.create({
+      trigger: holds[name], start: "top bottom+=100%",
+      onLeaveBack: () => { tl.pause(0); if (held) { held = false; releasePage(); } },
+    });
+  };
+
   const mm = gsap.matchMedia();
 
   mm.add({ wide: "(min-width: 52.01rem)", narrow: "(max-width: 52rem)" }, ctx => {
@@ -469,31 +507,7 @@ if (reduce) {
     // the page still while the banner plays at its own speed, then lets go. A
     // fast scroll cannot outrun it and a slow one does not watch it play behind
     // a half open curtain. A nav jump or a reload further down is not held.
-    const workStage = holds.work.previousElementSibling;
-    banner.eventCallback("onComplete", releasePage);
-    ScrollTrigger.create({
-      trigger: holds.work, start: "top bottom+=92%", end: "bottom bottom",   // matches the snap threshold
-      onEnter: () => {
-        const lockY = docTop(workStage);
-        if (jumping || banner.progress() > 0 || scrollY >= lockY - 2) { banner.play(); return; }
-        // the banner starts now, not at the lock: the glide is a fixed 0.5 s, so
-        // the timing is the same at any scroll speed and the rows are already rising
-        banner.play();
-        stopSnap(); snapping = true;
-        lenis.scrollTo(lockY, {
-          duration: 0.5, easing: t => 1 - Math.pow(1 - t, 3), lock: true, force: true,
-          // a long stalled frame (a hidden tab) can finish the banner before the
-          // glide lands; holding then would never be released
-          onComplete: () => { snapping = false; if (banner.progress() < 1) holdPage(lockY); },
-        });
-      },
-    });
-    // the reset waits until the screen is fully covered on the way back up;
-    // at the 8% mark a strip of it still shows and the panel popped back on it
-    ScrollTrigger.create({
-      trigger: holds.work, start: "top bottom+=100%",
-      onLeaveBack: () => { banner.pause(0); releasePage(); },
-    });
+    playsItself("work", banner);
 
     // The scroll owns almost nothing on this screen: the banner runs itself and
     // the clips are left sitting there to be clicked. It keeps a slow drift so
@@ -527,13 +541,7 @@ if (reduce) {
         .to({}, { duration: 0.15 });
     }
 
-    // 5. clients: the word rises, the names pop in one at a time
-    gsap.timeline({ scrollTrigger: owns("clients", { scrub: 0.5 }) })
-      .from(".clients-in .big-word", { yPercent: 30, opacity: 0.15, duration: 0.4 })
-      .from(names, { scale: 0.4, opacity: 0, stagger: 0.06, duration: 0.2, ease: "back.out(2)" }, ">")
-      .to({}, { duration: 0.35 });
-
-    // 6. why me: the words light up as they are read
+    // 5. why me: the words light up as they are read
     const why = gsap.timeline({ scrollTrigger: owns("why", { scrub: 0.5 }) });
     whyWords.forEach((words, i) => {
       gsap.set(words, { opacity: 0.16 });
@@ -541,13 +549,18 @@ if (reduce) {
     });
     why.to({}, { duration: 0.2 });
 
-    // 7. the steps, one at a time
-    const how = gsap.timeline({ scrollTrigger: owns("how", { scrub: 0.5 }) });
+    // 6. the steps, one at a time. They play themselves like the banner: the
+    // same reveal, as one paused timeline at a fixed HOW_S seconds from the
+    // commit, with the page held while it plays.
+    const HOW_S = 2.4;
+    const how = gsap.timeline({ paused: true });
+    gsap.set(stepItems, { opacity: 0, yPercent: 25 });   // set outright: a staggered from state only reaches the first
     stepItems.forEach((li, i) => {
       gsap.set(stepWords[i], { opacity: 0.16 });
-      how.from(li, { opacity: 0, yPercent: 25, duration: 0.25, ease: "power2.out" }, i * 0.2)
+      how.to(li, { opacity: 1, yPercent: 0, duration: 0.25, ease: "power2.out" }, i * 0.2)
         .to(stepWords[i], { opacity: 1, stagger: 0.04, duration: 0.04, ease: "none" }, i * 0.2 + 0.08);
     });
-    how.to({}, { duration: 0.25 });
+    how.duration(HOW_S);
+    playsItself("how", how);
   });
 }
