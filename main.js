@@ -5,15 +5,6 @@ import Lenis from "lenis";
 // Facts for every test. Numbers and inputs come from the attempt records; do not edit by hand.
 const PIECES = [
   {
-    id: "sozu-spot",
-    title: "Sozu",
-    what: "A spec ad for a made-up yuzu ginger soda. A hot, loud city afternoon, and the can is the one cold, quiet moment in it.",
-    variants: [
-      { label: "Take", kind: "take", src: "media/sozu-spot.mp4", poster: "media/sozu-spot.jpg", aspect: "16 / 9",
-        slate: [] }
-    ]
-  },
-  {
     id: "potter-spot",
     title: "The potter",
     what: "An original AI presenter, not a real person, in her workshop. She stays the same woman across three shots and speaks three lines in her own voice.",
@@ -459,8 +450,8 @@ if (!reduce) {
     // One spot per clip, five clips since 2026-09-30: one in each corner around the
     // word and the long lesson centred under it, clear of the word and the hint.
     const SPOTS = wide
-      ? [[-33, -26, -6], [33, -24, 5], [-31, 25, 5], [31, 27, -5], [0, 27, -2]]
-      : [[-24, -30, -5], [24, -27, 4], [-24, 32, 4], [24, 34, -4], [0, 14, -2]];
+      ? [[-33, -26, -6], [33, -24, 5], [-31, 25, 5], [31, 27, -5]]
+      : [[-24, -34, -5], [24, -31, 4], [-24, 27, 4], [24, 30, -4]];
     gsap.set(cards, { xPercent: -50, yPercent: -50, rotation: i => (i % 2 ? 1 : -1) * (2 + i), scale: 0.9 });
 
     gsap.set(bigChars, { opacity: 0 });
