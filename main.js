@@ -5,29 +5,38 @@ import Lenis from "lenis";
 // Facts for every test. Numbers and inputs come from the attempt records; do not edit by hand.
 const PIECES = [
   {
-    id: "ice-sheet",
-    title: "Ice sheet",
-    what: "A frozen windscreen on a winter morning. A gloved hand pushes the whole sheet of ice off in one piece and it bursts on the gravel. One still, one prompt, one continuous shot.",
+    id: "sozu-spot",
+    title: "Sozu",
+    what: "A spec ad for a made-up yuzu ginger soda. A hot, loud city afternoon, and the can is the one cold, quiet moment in it.",
     variants: [
-      { label: "Take", kind: "take", src: "media/ice-sheet.mp4", poster: "media/ice-sheet.jpg", aspect: "16 / 9",
+      { label: "Take", kind: "take", src: "media/sozu-spot.mp4", poster: "media/sozu-spot.jpg", aspect: "16 / 9",
         slate: [] }
     ]
   },
   {
-    id: "sozu-can",
-    title: "Sozu, a spec ad",
-    what: "A made-up yuzu ginger soda. The tab cracks on a frosted can and the cold comes off it in the back light. A performance ad product moment, sound and all.",
+    id: "potter-spot",
+    title: "The potter",
+    what: "An original AI presenter, not a real person, in her workshop. She stays the same woman across three shots and speaks three lines in her own voice.",
     variants: [
-      { label: "Take", kind: "take", src: "media/sozu-can.mp4", poster: "media/sozu-can.jpg", aspect: "16 / 9",
+      { label: "Take", kind: "take", src: "media/potter-spot.mp4", poster: "media/potter-spot.jpg", aspect: "16 / 9",
         slate: [] }
     ]
   },
   {
-    id: "potter-avatar",
-    title: "Potter, an AI presenter",
-    what: "An original presenter, not a real person, in her workshop. One line to camera, voice and lip sync generated with the picture, made to read as a real take.",
+    id: "tarn-spot",
+    title: "Tarn",
+    what: "A spec ad for a made-up focus app. Late at night in bed, the app stops the scroll, she breathes, puts the phone down and sleeps.",
     variants: [
-      { label: "Take", kind: "take", src: "media/potter-avatar.mp4", poster: "media/potter-avatar.jpg", aspect: "16 / 9",
+      { label: "Take", kind: "take", src: "media/tarn-spot.mp4", poster: "media/tarn-spot.jpg", aspect: "16 / 9",
+        slate: [] }
+    ]
+  },
+  {
+    id: "spin-cycle-teaser",
+    title: "Spin cycle",
+    what: "A short anime scene. Late at night in an empty laundromat, a girl reads by the one running dryer until it stops.",
+    variants: [
+      { label: "Take", kind: "take", src: "media/spin-cycle-teaser.mp4", poster: "media/spin-cycle-teaser.jpg", aspect: "16 / 9",
         slate: [] }
     ]
   },
@@ -105,7 +114,9 @@ for (const p of TAKES) {
     // The long lesson stays a still until it is opened.
     if (!p.long) {
       const vid = document.createElement("video");
-      Object.assign(vid, { src: v.src, muted: true, loop: true, playsInline: true, preload: "metadata" });
+      // no src until the cards come into view, so nothing competes with the intro reel on first load
+      Object.assign(vid, { muted: true, loop: true, playsInline: true, preload: "none" });
+      vid.dataset.src = v.src;
       vid.setAttribute("muted", "");
       b.append(vid);
       cardVideos.push([b, vid]);
@@ -117,7 +128,10 @@ for (const p of TAKES) {
 
 new IntersectionObserver(([e]) => {
   for (const [b, vid] of cardVideos) {
-    if (e.isIntersecting) vid.play().then(() => b.classList.add("playing")).catch(() => {});
+    if (e.isIntersecting) {
+      if (!vid.src) vid.src = vid.dataset.src;
+      vid.play().then(() => b.classList.add("playing")).catch(() => {});
+    }
     else { vid.pause(); b.classList.remove("playing"); }
   }
 }).observe(cardsEl);
@@ -442,10 +456,11 @@ if (!reduce) {
     // 3. the answer panel opens, holds, then wipes away as the word and the
     // clips rise under it. One screen, so a fast flick cannot skip the panel
     // and land in the middle of the clips.
-    // One spot per clip, four clips since 2026-09-30: one in each corner around the word.
+    // One spot per clip, five clips since 2026-09-30: one in each corner around the
+    // word and the long lesson centred under it, clear of the word and the hint.
     const SPOTS = wide
-      ? [[-33, -26, -6], [33, -24, 5], [-31, 25, 5], [31, 27, -5]]
-      : [[-24, -34, -5], [24, -31, 4], [-24, 27, 4], [24, 30, -4]];
+      ? [[-33, -26, -6], [33, -24, 5], [-31, 25, 5], [31, 27, -5], [0, 27, -2]]
+      : [[-24, -30, -5], [24, -27, 4], [-24, 32, 4], [24, 34, -4], [0, 14, -2]];
     gsap.set(cards, { xPercent: -50, yPercent: -50, rotation: i => (i % 2 ? 1 : -1) * (2 + i), scale: 0.9 });
 
     gsap.set(bigChars, { opacity: 0 });
